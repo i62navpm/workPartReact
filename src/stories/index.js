@@ -2,13 +2,11 @@ import React from 'react'
 
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { linkTo } from '@storybook/addon-links'
 
-import { Button, Welcome } from '@storybook/react/demo'
+import { Button } from '@storybook/react/demo'
+import App from '../components/App'
 
-storiesOf('Welcome', module).add('to Storybook', () => (
-  <Welcome showApp={linkTo('Button')} />
-))
+storiesOf('Welcome', module).add('React App', () => <App />)
 
 storiesOf('Button', module)
   .add('with text', () => (
