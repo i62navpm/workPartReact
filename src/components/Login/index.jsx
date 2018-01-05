@@ -5,7 +5,7 @@ import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
 import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
-import { AccountCircle, Send } from 'material-ui-icons'
+import { Mood, Send } from 'material-ui-icons'
 
 const styles = theme => ({
   paper: {
@@ -67,10 +67,10 @@ class Login extends React.Component {
     return (
       <div>
         <Grid container justify="center" alignItems="center">
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={8}>
             <AppBar position="static" color="primary">
               <Toolbar>
-                <AccountCircle className={this.classes.iconLeft}/>
+                <Mood className={this.classes.iconLeft}/>
                 <Typography type="title" color="inherit">
                   Login
                 </Typography>
@@ -116,7 +116,7 @@ class Login extends React.Component {
                 >
                   <Grid item>
                     <Button component={Link} to="register" color="primary">
-                      Register
+                      You don't have an account yet?
                     </Button>
                   </Grid>
                   <Grid item>

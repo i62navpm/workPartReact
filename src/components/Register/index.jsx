@@ -1,15 +1,147 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { Button } from 'material-ui'
+import { ValidatorForm } from 'react-form-validator-core'
+import { TextValidator } from 'react-material-ui-form-validator'
+import { withStyles } from 'material-ui/styles'
+import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
+import { GroupAdd, Send } from 'material-ui-icons'
 
-export default function Register() {
-  return (
-    <div>
-      <Button component={Link} to="login" raised color="primary">
-        Login
-      </Button>
+const styles = theme => ({
+  paper: {
+    padding: 16,
+    textAlign: 'center'
+  },
+  form: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  rowButtons: {
+    marginTop: 30
+  },
+  iconRight: {
+    marginLeft: theme.spacing.unit
+  },
+  iconLeft: {
+    marginRight: theme.spacing.unit,
+    width: 32,
+    height: 32,
+  }
+})
 
-      <p>Register</p>
-    </div>
-  )
+class Register extends React.Component {
+  constructor(props) {
+    super(props)
+
+    const { classes } = props
+    this.classes = classes
+
+    this.state = {
+      formData: {
+        email: '',
+        password: ''
+      },
+      submitted: false
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleChange(event) {
+    const { formData } = this.state
+    formData[event.target.name] = event.target.value
+    this.setState({ formData })
+  }
+
+  handleSubmit() {
+    this.setState({ submitted: true }, async () => {
+      await this.props.onSubmit(this.state.formData)
+      this.setState({ submitted: false })
+    })
+  }
+
+  render() {
+    const { formData, submitted } = this.state
+
+    return (
+      <div>
+        <Grid container justify="center" alignItems="center">
+          <Grid item xs={12} sm={8}>
+            <AppBar position="static" color="primary">
+              <Toolbar>
+                <GroupAdd className={this.classes.iconLeft} />
+                <Typography type="title" color="inherit">
+                  Register
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <Paper className={this.classes.paper}>
+              <ValidatorForm
+                className={this.classes.form}
+                ref="form"
+                onSubmit={this.handleSubmit}
+                noValidate
+              >
+                <TextValidator
+                  id="email"
+                  name="email"
+                  autoComplete="email"
+                  label="Email"
+                  onChange={this.handleChange}
+                  value={formData.email}
+                  validators={['required', 'isEmail']}
+                  errorMessages={['Email is required', 'Email is not valid']}
+                  fullWidth
+                  required
+                />
+                <TextValidator
+                  id="password"
+                  name="password"
+                  autoComplete="password"
+                  label="Password"
+                  onChange={this.handleChange}
+                  value={formData.password}
+                  validators={['required']}
+                  errorMessages={['Password is required']}
+                  margin="normal"
+                  fullWidth
+                  required
+                />
+                <Grid
+                  className={this.classes.rowButtons}
+                  container
+                  justify="space-between"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <Button component={Link} to="login" color="primary">
+                      Have you an account?
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      type="submit"
+                      raised
+                      color="primary"
+                      disabled={submitted}
+                    >
+                      Register
+                      <Send className={this.classes.iconRight} />
+                    </Button>
+                  </Grid>
+                </Grid>
+              </ValidatorForm>
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>
+    )
+  }
 }
+
+Register.propTypes = {
+  classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(Register)
