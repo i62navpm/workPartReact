@@ -6,8 +6,8 @@ import { Button } from '@storybook/react/demo'
 import { MemoryRouter } from 'react-router'
 
 import App from '../components/App'
-import Login from '../components/Auth/Login'
-import Register from '../components/Auth/Register'
+import Login from '../components/Login'
+import Register from '../components/Register'
 
 storiesOf('Welcome', module).add('React App', () => <App />)
 

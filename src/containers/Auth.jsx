@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
-import Login from './Login'
-import Register from './Register'
+import Login from '../components/Login'
+import Register from '../components/Register'
 
 export default function Auth({ match }) {
   return (

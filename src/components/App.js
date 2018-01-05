@@ -5,7 +5,7 @@ import './App.css'
 import Loadable from 'react-loadable'
 
 const Auth = Loadable({
-  loader: () => import(/* webpackChunkName: "auth" */ './Auth'),
+  loader: () => import(/* webpackChunkName: "auth" */ '../containers/Auth'),
   loading() {
     return <div>Loading...</div>
   }
