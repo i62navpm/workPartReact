@@ -55,8 +55,9 @@ class Login extends React.Component {
   }
 
   handleSubmit () {
-    this.setState({ submitted: true }, () => {
-      setTimeout(() => this.setState({ submitted: false }), 5000)
+    this.setState({ submitted: true }, async () => {
+      await this.props.onSubmit(this.state.formData)
+      this.setState({ submitted: false })
     })
   }
 
