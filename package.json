@@ -13,7 +13,8 @@
     "react-material-ui-form-validator": "^2.0.0-beta.3",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "redux-logger": "^3.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
