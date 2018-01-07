@@ -16,8 +16,11 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap'
   },
-  rowButtons: {
+  rowSubmit: {
     marginTop: 30
+  },
+  rowButtons: {
+    marginTop: 10
   },
   iconRight: {
     marginLeft: theme.spacing.unit,
@@ -112,6 +115,24 @@ class Login extends React.Component {
                   required
                 />
                 <Grid
+                  className={this.classes.rowSubmit}
+                  container
+                  justify="flex-end"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <Button
+                      type="submit"
+                      raised
+                      color="primary"
+                      disabled={submitted}
+                    >
+                      Login
+                      <Send className={this.classes.iconRight}/>
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Grid
                   className={this.classes.rowButtons}
                   container
                   justify="space-between"
@@ -123,14 +144,8 @@ class Login extends React.Component {
                     </Button>
                   </Grid>
                   <Grid item>
-                    <Button
-                      type="submit"
-                      raised
-                      color="primary"
-                      disabled={submitted}
-                    >
-                      Login
-                      <Send className={this.classes.iconRight}/>
+                    <Button component={Link} to="forgotPassword" color="primary">
+                      Forgot the password?
                     </Button>
                   </Grid>
                 </Grid>
