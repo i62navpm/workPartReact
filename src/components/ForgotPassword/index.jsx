@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
@@ -114,13 +115,18 @@ class ForgotPassword extends React.Component {
 
     switch (step) {
       case 0:
-        return [<Button
-          onClick={this.handleNext}
-          color="primary"
-          disabled={submitted}
-        >
-          Next Step
-        </Button>]
+        return [
+          <Button component={Link} to="login" color="primary">
+            Have you an account?
+          </Button>,
+          <Button
+            onClick={this.handleNext}
+            color="primary"
+            disabled={submitted}
+          >
+            Next Step
+          </Button>
+        ]
       case 1:
         return [
           <Button
