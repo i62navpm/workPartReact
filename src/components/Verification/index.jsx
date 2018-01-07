@@ -39,7 +39,7 @@ class Verification extends React.Component {
 
     this.state = {
       formData: {
-        verificationCode: ''
+        code: ''
       },
       submitted: false
     }
@@ -56,8 +56,14 @@ class Verification extends React.Component {
 
   handleSubmit() {
     this.setState({ submitted: true }, async () => {
-      await this.props.onSubmit(this.state.formData)
-      this.setState({ submitted: false })
+      try {
+        await this.props.onSubmit(this.state.formData)
+        this.setState({ submitted: false })
+        this.props.history.push('/auth/login')
+      } catch (err) {
+        this.setState({ submitted: false })
+        console.log(err.message)
+      }
     })
   }
 
@@ -85,11 +91,11 @@ class Verification extends React.Component {
               >
                 <TextValidator
                   id="verificationCode"
-                  name="verificationCode"
+                  name="code"
                   autoComplete="verificationCode"
                   label="Verification Code"
                   onChange={this.handleChange}
-                  value={formData.verificationCode}
+                  value={formData.code}
                   validators={['required']}
                   errorMessages={['Code is required']}
                   fullWidth

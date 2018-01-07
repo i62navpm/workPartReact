@@ -35,7 +35,7 @@ const styles = theme => ({
 })
 
 class Login extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     const { classes } = props
@@ -43,7 +43,7 @@ class Login extends React.Component {
 
     this.state = {
       formData: {
-        email: '',
+        username: '',
         password: ''
       },
       submitted: false
@@ -53,20 +53,26 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange (event) {
+  handleChange(event) {
     const { formData } = this.state
     formData[event.target.name] = event.target.value
     this.setState({ formData })
   }
 
-  handleSubmit () {
+  handleSubmit() {
     this.setState({ submitted: true }, async () => {
-      await this.props.onSubmit(this.state.formData)
-      this.setState({ submitted: false })
+      try {
+        await this.props.onSubmit(this.state.formData)
+        this.setState({ submitted: false })
+        this.props.history.push('/')
+      } catch (err) {
+        this.setState({ submitted: false })
+        console.log(err.message)
+      }
     })
   }
 
-  render () {
+  render() {
     const { formData, submitted } = this.state
 
     return (
@@ -75,7 +81,7 @@ class Login extends React.Component {
           <Grid item xs={12} sm={8}>
             <AppBar position="static" color="primary">
               <Toolbar>
-                <Mood className={this.classes.iconLeft}/>
+                <Mood className={this.classes.iconLeft} />
                 <Typography type="title" color="inherit">
                   Login
                 </Typography>
@@ -89,12 +95,12 @@ class Login extends React.Component {
                 noValidate
               >
                 <TextValidator
-                  id="email"
-                  name="email"
-                  autoComplete="email"
+                  id="username"
+                  name="username"
+                  autoComplete="username"
                   label="Email"
                   onChange={this.handleChange}
-                  value={formData.email}
+                  value={formData.username}
                   validators={['required', 'isEmail']}
                   errorMessages={['Email is required', 'Email is not valid']}
                   fullWidth
@@ -108,8 +114,8 @@ class Login extends React.Component {
                   type="password"
                   onChange={this.handleChange}
                   value={formData.password}
-                  validators={['required']}
-                  errorMessages={['Password is required']}
+                  validators={['required', 'matchRegexp:^.{8,}$']}
+                  errorMessages={['Password is required', 'The length must be more than 8 characters']}
                   margin="normal"
                   fullWidth
                   required
@@ -128,7 +134,7 @@ class Login extends React.Component {
                       disabled={submitted}
                     >
                       Login
-                      <Send className={this.classes.iconRight}/>
+                      <Send className={this.classes.iconRight} />
                     </Button>
                   </Grid>
                 </Grid>

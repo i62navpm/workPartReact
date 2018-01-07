@@ -40,6 +40,7 @@ class ForgotPassword extends React.Component {
     this.state = {
       formData: {
         email: '',
+        code: '',
         password: ''
       },
       activeStep: 0,
@@ -74,19 +75,36 @@ class ForgotPassword extends React.Component {
           required
         />
       case 1:
-        return <TextValidator
-          id="password"
-          name="password"
-          autoComplete="new-password"
-          label="New password"
-          type="password"
-          onChange={this.handleChange}
-          value={formData.password}
-          validators={['required']}
-          errorMessages={['Password is required']}
-          fullWidth
-          required
-        />
+        return (
+          <React.Fragment>
+            <TextValidator
+              id="verificationCode"
+              name="code"
+              autoComplete="verificationCode"
+              label="Verification Code"
+              onChange={this.handleChange}
+              value={formData.code}
+              validators={['required']}
+              errorMessages={['Code is required']}
+              fullWidth
+              required
+            />
+            <TextValidator
+              id="password"
+              name="password"
+              autoComplete="new-password"
+              label="New password"
+              type="password"
+              onChange={this.handleChange}
+              value={formData.password}
+              validators={['required', 'matchRegexp:^.{8,}$']}
+              errorMessages={['Password is required', 'The length must be more than 8 characters']}
+              margin="normal"
+              fullWidth
+              required
+            />
+          </React.Fragment>
+        )
       default:
         return 'Unknown step'
     }

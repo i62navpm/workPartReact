@@ -40,7 +40,7 @@ class Register extends React.Component {
 
     this.state = {
       formData: {
-        email: '',
+        username: '',
         password: ''
       },
       submitted: false
@@ -58,8 +58,14 @@ class Register extends React.Component {
 
   handleSubmit() {
     this.setState({ submitted: true }, async () => {
-      await this.props.onSubmit(this.state.formData)
-      this.setState({ submitted: false })
+      try {
+        await this.props.onSubmit(this.state.formData)
+        this.setState({ submitted: false })
+        this.props.history.push('/auth/verification')
+      } catch (err) {
+        this.setState({ submitted: false })
+        console.log(err.message)
+      }
     })
   }
 
@@ -87,11 +93,11 @@ class Register extends React.Component {
               >
                 <TextValidator
                   id="email"
-                  name="email"
+                  name="username"
                   autoComplete="email"
                   label="Email"
                   onChange={this.handleChange}
-                  value={formData.email}
+                  value={formData.username}
                   validators={['required', 'isEmail']}
                   errorMessages={['Email is required', 'Email is not valid']}
                   fullWidth
@@ -105,8 +111,8 @@ class Register extends React.Component {
                   type="password"
                   onChange={this.handleChange}
                   value={formData.password}
-                  validators={['required']}
-                  errorMessages={['Password is required']}
+                  validators={['required', 'matchRegexp:^.{8,}$']}
+                  errorMessages={['Password is required', 'The length must be more than 8 characters']}
                   margin="normal"
                   fullWidth
                   required
