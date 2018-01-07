@@ -100,6 +100,7 @@ class Register extends React.Component {
                   name="password"
                   autoComplete="password"
                   label="Password"
+                  type="password"
                   onChange={this.handleChange}
                   value={formData.password}
                   validators={['required']}
