@@ -9,6 +9,7 @@ import App from '../components/App'
 import Login from '../components/Login'
 import Register from '../components/Register'
 import Verification from '../components/Verification'
+import ForgotPassword from '../components/ForgotPassword'
 
 storiesOf('Welcome', module).add('React App', () => <App />)
 
@@ -27,3 +28,4 @@ storiesOf('Auth', module)
   .add('Login', () => <Login />)
   .add('Register', () => <Register />)
   .add('Verification', () => <Verification />)
+  .add('ForgotPassword', () => <ForgotPassword />)

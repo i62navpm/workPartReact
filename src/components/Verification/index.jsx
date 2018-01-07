@@ -19,7 +19,9 @@ const styles = theme => ({
     marginTop: 30
   },
   iconRight: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing.unit,
+    width: 20,
+    height: 20
   },
   iconLeft: {
     marginRight: theme.spacing.unit,
@@ -28,7 +30,7 @@ const styles = theme => ({
   }
 })
 
-class Register extends React.Component {
+class Verification extends React.Component {
   constructor(props) {
     super(props)
 
@@ -120,8 +122,8 @@ class Register extends React.Component {
   }
 }
 
-Register.propTypes = {
+Verification.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Register)
+export default withStyles(styles)(Verification)
