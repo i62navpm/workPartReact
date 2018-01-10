@@ -116,15 +116,15 @@ class ForgotPassword extends React.Component {
     switch (step) {
       case 0:
         return [
-          <Button component={Link} to="login" color="primary">
-            Have you an account?
-          </Button>,
           <Button
             onClick={this.handleNext}
             color="primary"
             disabled={submitted}
           >
             Next Step
+          </Button>,
+          <Button component={Link} to="login" color="primary">
+            Have you an account?
           </Button>
         ]
       case 1:
