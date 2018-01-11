@@ -151,8 +151,15 @@ class ForgotPassword extends React.Component {
   }
 
   handleNext() {
-    this.setState({
-      activeStep: this.state.activeStep + 1
+    this.setState({ submitted: true }, async () => {
+      try {
+        await this.props.onNextStep(this.state.formData)
+        this.setState({ activeStep: this.state.activeStep + 1 })
+      } catch (err) {
+        console.log(err.message)
+      } finally {
+        this.setState({ submitted: false })
+      }
     })
   }
 
@@ -171,8 +178,14 @@ class ForgotPassword extends React.Component {
 
   handleSubmit() {
     this.setState({ submitted: true }, async () => {
-      await this.props.onSubmit(this.state.formData)
-      this.setState({ submitted: false })
+      try {
+        await this.props.onSubmit(this.state.formData)
+        this.setState({ submitted: false })
+        this.props.history.push('/auth/login')
+      } catch (err) {
+        this.setState({ submitted: false })
+        console.log(err.message)
+      }
     })
   }
 

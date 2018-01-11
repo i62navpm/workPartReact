@@ -5,9 +5,9 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import Verification from '../components/Verification'
 import ForgotPassword from '../components/ForgotPassword'
-import { loginUser, registerUser, verificationUser } from '../actions/auth'
+import { loginUser, registerUser, verificationUser, forgotPasswordUser, confirmPasswordUser } from '../actions/auth'
 
-function Auth({ match, onLoginClick, onRegisterClick, onVerificationClick }) {
+function Auth({ match, onLoginClick, onRegisterClick, onVerificationClick, onForgotPasswordClick, onConfirmPasswordClick }) {
   return (
     <div>
       <p>{}</p>
@@ -15,7 +15,7 @@ function Auth({ match, onLoginClick, onRegisterClick, onVerificationClick }) {
         <Route path={`${match.url}/login`} render={withRouter(({history}) => <Login onSubmit={onLoginClick} history={history}/>)} />
         <Route path={`${match.url}/register`} render={withRouter(({history}) => <Register onSubmit={onRegisterClick} history={history}/>)} />
         <Route path={`${match.url}/verification`} render={withRouter(({history}) => <Verification onSubmit={onVerificationClick} history={history}/>)} />
-        <Route path={`${match.url}/forgotPassword`} render={withRouter(({history}) => <ForgotPassword onSubmit={onLoginClick} history={history}/>)} />
+        <Route path={`${match.url}/forgotPassword`} render={withRouter(({ history }) => <ForgotPassword onSubmit={onConfirmPasswordClick} onNextStep={onForgotPasswordClick} history={history}/>)} />
         <Redirect from={`${match.url}/`} to={`${match.url}/login`} />
       </Switch>
     </div>
@@ -33,7 +33,8 @@ const mapDispatchToProps = (dispatch) => {
     onLoginClick: (user = {}) => dispatch(loginUser(user)),
     onRegisterClick: (user = {}) => dispatch(registerUser(user)),
     onVerificationClick: (user = {}) => dispatch(verificationUser(user)),
-    onForgotPasswordClick: (user = {}) => dispatch(loginUser(user)),
+    onForgotPasswordClick: (user = {}) => dispatch(forgotPasswordUser(user)),
+    onConfirmPasswordClick: (user = {}) => dispatch(confirmPasswordUser(user))
   }
 }
 
