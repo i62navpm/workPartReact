@@ -1,5 +1,6 @@
 import React from 'react'
 import { DateTime } from 'luxon'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import Card, { CardHeader, CardMedia } from 'material-ui/Card'
@@ -52,11 +53,13 @@ class Business extends React.Component {
             title={this.data.name}
             subheader={this.data.date}
           />
+          <Link to="/">
           <CardMedia
             className={this.classes.media}
             image={this.data.image}
             title={this.data.name}
           />
+          </Link>
         </Card>
       </div>
     )
