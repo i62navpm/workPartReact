@@ -23,9 +23,14 @@ storiesOf('Button', module)
 
 storiesOf('Auth', module)
   .addDecorator(story => (
-    <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+    <MemoryRouter initialEntries={['/auth']}>{story()}</MemoryRouter>
   ))
-  .add('Login', () => <Login />)
-  .add('Register', () => <Register />)
-  .add('Verification', () => <Verification />)
-  .add('ForgotPassword', () => <ForgotPassword />)
+  .add('Login', () => <Login onSubmit={action('clicked')} />)
+  .add('Register', () => <Register onSubmit={action('clicked')} />)
+  .add('Verification', () => <Verification onSubmit={action('clicked')} />)
+  .add('ForgotPassword', () => (
+    <ForgotPassword
+      onSubmit={action('clicked')}
+      onNextStep={action('clicked')}
+    />
+  ))
