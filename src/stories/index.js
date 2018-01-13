@@ -10,6 +10,7 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import Verification from '../components/Verification'
 import ForgotPassword from '../components/ForgotPassword'
+import Business from '../components/Business'
 
 storiesOf('Welcome', module).add('React App', () => <App />)
 
@@ -34,3 +35,9 @@ storiesOf('Auth', module)
       onNextStep={action('clicked')}
     />
   ))
+
+storiesOf('Business', module)
+  .addDecorator(story => (
+    <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+  ))
+  .add('Card business', () => <Business />)

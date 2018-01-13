@@ -1,43 +1,63 @@
 import React from 'react'
+import { DateTime } from 'luxon'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
-import {  Grid } from 'material-ui'
+import Card, { CardHeader, CardMedia } from 'material-ui/Card'
+import { Avatar, IconButton } from 'material-ui'
+import { red } from 'material-ui/colors'
+import { Edit } from 'material-ui-icons'
+import imageBusiness from '../../assets/images/businessDefault.png'
 
-const styles = theme => ({
-  paper: {
-    padding: 16,
-    textAlign: 'center'
+const styles = () => ({
+  card: {
+    maxWidth: 400,
   },
-  form: {
-    display: 'flex',
-    flexWrap: 'wrap'
+  media: {
+    height: 194,
   },
-  rowButtons: {
-    marginTop: 30
-  },
-  iconRight: {
-    marginLeft: theme.spacing.unit,
-    width: 20,
-    height: 20
-  },
-  iconLeft: {
-    marginRight: theme.spacing.unit,
-    width: 32,
-    height: 32,
+  avatar: {
+    backgroundColor: red[500],
   }
 })
 
 class Business extends React.Component {
   constructor(props) {
     super(props)
+    
+    const { classes } = props
+    this.classes = classes
+
+    this.data = {
+      name: 'Example business Manuel',
+      date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
+      image: imageBusiness
+    }
   }
 
   render() {
     return (
       <div>
-        <Grid container justify="center" alignItems="center">
-          Hola
-        </Grid>
+        <Card className={this.classes.card}>
+          <CardHeader
+            avatar={
+              <Avatar aria-label="Business" className={this.classes.avatar}>
+                {this.data.name[0]}
+              </Avatar>
+            }
+            action={
+              <IconButton>
+                <Edit />
+              </IconButton>
+            }
+            title={this.data.name}
+            subheader={this.data.date}
+          />
+          <CardMedia
+            className={this.classes.media}
+            image={this.data.image}
+            title={this.data.name}
+          />
+        </Card>
       </div>
     )
   }
