@@ -12,13 +12,12 @@ import Verification from '../components/Verification'
 import ForgotPassword from '../components/ForgotPassword'
 import { BusinessCard, BusinessForm } from '../components/Business'
 import UploadImage from '../components/UploadImage'
+import AddBusiness from '../components/Business/BusinessAddButton'
 
 storiesOf('Welcome', module).add('React App', () => <App />)
 
 storiesOf('Button', module)
-  .add('with text', () => (
-    <Button onClick={action('clicked')}>Hello Button</Button>
-  ))
+  .add('Add business', () => <AddBusiness onClick={action('clicked')} />)
   .add('with some emoji', () => (
     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
   ))
