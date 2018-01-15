@@ -11,6 +11,7 @@ import Register from '../components/Register'
 import Verification from '../components/Verification'
 import ForgotPassword from '../components/ForgotPassword'
 import { BusinessCard, BusinessForm } from '../components/Business'
+import UploadImage from '../components/UploadImage'
 
 storiesOf('Welcome', module).add('React App', () => <App />)
 
@@ -21,6 +22,10 @@ storiesOf('Button', module)
   .add('with some emoji', () => (
     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
   ))
+
+storiesOf('Upload', module).add('Upload image', () => (
+  <UploadImage image="" name="image" handleChange={action('clicked')} />
+))
 
 storiesOf('Auth', module)
   .addDecorator(story => (
