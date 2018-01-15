@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
-import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
-import { Mood, Send } from 'material-ui-icons'
+import { Button, Grid, Paper, AppBar, Toolbar, Typography, IconButton } from 'material-ui'
+import { Domain, Save, Close } from 'material-ui-icons'
 
 const styles = theme => ({
   paper: {
@@ -16,11 +15,14 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap'
   },
+  flex: {
+    flex: 1
+  },
+  media: {
+    height: 100,
+  },
   rowSubmit: {
     marginTop: 30
-  },
-  rowButtons: {
-    marginTop: 10
   },
   iconRight: {
     marginLeft: theme.spacing.unit,
@@ -86,10 +88,16 @@ class BusinessForm extends React.Component {
           <Grid item xs={12} sm={8}>
             <AppBar position="static" color="primary">
               <Toolbar>
-                <Mood className={this.classes.iconLeft} />
-                <Typography type="title" color="inherit">
+                <Domain className={this.classes.iconLeft} />
+                <Typography type="title" color="inherit" className={this.classes.flex}>
                   Business form
                 </Typography>
+                <IconButton
+                  onClick={this.closeForm}
+                  color="contrast"
+                >
+                  <Close />
+                </IconButton>
               </Toolbar>
             </AppBar>
             <Paper className={this.classes.paper}>
@@ -99,32 +107,100 @@ class BusinessForm extends React.Component {
                 onSubmit={this.handleSubmit}
                 noValidate
               >
-                <TextValidator
-                  id="username"
-                  name="username"
-                  autoComplete="username"
-                  label="Email"
-                  onChange={this.handleChange}
-                  value={formData.username}
-                  validators={['required', 'isEmail']}
-                  errorMessages={['Email is required', 'Email is not valid']}
-                  fullWidth
-                  required
-                />
-                <TextValidator
-                  id="password"
-                  name="password"
-                  autoComplete="password"
-                  label="Password"
-                  type="password"
-                  onChange={this.handleChange}
-                  value={formData.password}
-                  validators={['required', 'matchRegexp:^.{8,}$']}
-                  errorMessages={['Password is required', 'The length must be more than 8 characters']}
-                  margin="normal"
-                  fullWidth
-                  required
-                />
+                <Grid container 
+                  direction="column"
+                  alignItems="center"
+                  justify="center"
+                >
+                  <Grid item xs={12} sm={6}>
+                    Image
+                  </ Grid>
+                </ Grid>
+                <Grid container>
+                  <Grid item xs={12} sm={6}>
+                    <TextValidator
+                      id="name"
+                      name="name"
+                      autoComplete="name"
+                      label="Name"
+                      onChange={this.handleChange}
+                      value={formData.name}
+                      validators={['required']}
+                      errorMessages={['Name is required']}
+                      fullWidth
+                      required
+                    />
+                  </ Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextValidator
+                      id="cif"
+                      name="cif"
+                      autoComplete="cif"
+                      label="Cif"
+                      type="cif"
+                      onChange={this.handleChange}
+                      value={formData.cif}
+                      validators={['required', 'matchRegexp:^.{9,}$']}
+                      errorMessages={['Cif is required', 'The length must be 9 characters']}
+                      fullWidth
+                      required
+                    />
+                  </ Grid>
+                </ Grid>
+                <Grid container>
+                  <Grid item xs={12} sm={6}>
+                    <TextValidator
+                      id="address"
+                      name="address"
+                      autoComplete="address"
+                      label="Address"
+                      onChange={this.handleChange}
+                      value={formData.address}
+                      fullWidth
+                    />
+                  </ Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextValidator
+                      id="phone"
+                      name="phone"
+                      autoComplete="phone"
+                      label="Phone"
+                      type="phone"
+                      onChange={this.handleChange}
+                      value={formData.phone}
+                      validators={['matchRegexp:^\\d{9}$']}
+                      errorMessages={['The length must be 9 numbers']}
+                      fullWidth
+                    />
+                  </ Grid>
+                </ Grid>
+                <Grid container>
+                  <Grid item xs={12} sm={6}>
+                    <TextValidator
+                      id="email"
+                      name="email"
+                      autoComplete="email"
+                      label="Email"
+                      validators={['isEmail']}
+                      errorMessages={['Email is not valid']}
+                      onChange={this.handleChange}
+                      value={formData.email}
+                      fullWidth
+                    />
+                  </ Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextValidator
+                      id="web"
+                      name="web"
+                      autoComplete="web"
+                      label="Web"
+                      type="web"
+                      onChange={this.handleChange}
+                      value={formData.web}
+                      fullWidth
+                    />
+                  </ Grid>
+                </ Grid>
                 <Grid
                   className={this.classes.rowSubmit}
                   container
@@ -138,25 +214,8 @@ class BusinessForm extends React.Component {
                       color="primary"
                       disabled={submitted}
                     >
-                      BusinessForm
-                      <Send className={this.classes.iconRight} />
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Grid
-                  className={this.classes.rowButtons}
-                  container
-                  justify="space-between"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <Button component={Link} to="register" color="primary">
-                      You don't have an account yet?
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button component={Link} to="forgotPassword" color="primary">
-                      Forgot the password?
+                      Save
+                      <Save className={this.classes.iconRight} />
                     </Button>
                   </Grid>
                 </Grid>
