@@ -17,14 +17,13 @@ class BusinessAddButton extends React.Component {
   constructor(props) {
     super(props)
     
-    const { classes, onClick } = props
+    const { classes } = props
     this.classes = classes
-    this.onClick = onClick
   }
 
   render() {
     return (
-      <Button fab onClick={this.onClick} className={this.classes.fab} color="primary">
+      <Button fab onClick={this.props.onClick} className={this.classes.fab} color="primary">
         <Add />
       </Button>
     )

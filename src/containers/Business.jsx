@@ -9,7 +9,7 @@ function Business({ match, business = [], onNewBusinessClick }) {
     <div>
       <Switch>
         <Route path={`${match.url}/list`} render={withRouter(({ history }) => <BusinessList business={business} history={history} />)} />
-        <Route path={`${match.url}/new`} render={withRouter(({ history }) => <BusinessForm onSubmit={onNewBusinessClick} history={history} />)} />
+        <Route path={`${match.url}/new`} render={withRouter(({ history }) => <BusinessForm onSubmit={onNewBusinessClick} closeForm={() => history.push('/business/list')} history={history} />)} />
         <Redirect from={`${match.url}/`} to={`${match.url}/list`} />
       </Switch>
     </div>

@@ -90,7 +90,7 @@ class BusinessForm extends React.Component {
                 Business form
                 </Typography>
               <IconButton
-                onClick={this.closeForm}
+                onClick={this.props.closeForm}
                 color="contrast"
               >
                 <Close />
