@@ -3,10 +3,10 @@ import { DateTime } from 'luxon'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
-import Card, { CardHeader, CardMedia } from 'material-ui/Card'
+import Card, { CardHeader, CardMedia, CardActions } from 'material-ui/Card'
 import { Avatar, IconButton } from 'material-ui'
-import { red } from 'material-ui/colors'
-import { Edit } from 'material-ui-icons'
+import { amber } from 'material-ui/colors'
+import { Edit, Delete } from 'material-ui-icons'
 import imageBusiness from '../../assets/images/businessDefault.png'
 
 const styles = () => ({
@@ -17,7 +17,10 @@ const styles = () => ({
     height: 194,
   },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: amber[500],
+  },
+  flexGrow: {
+    flex: '1 1 auto'
   }
 })
 
@@ -45,11 +48,6 @@ class Business extends React.Component {
                 {this.data.name[0]}
               </Avatar>
             }
-            action={
-              <IconButton>
-                <Edit />
-              </IconButton>
-            }
             title={this.data.name}
             subheader={this.data.date}
           />
@@ -60,6 +58,15 @@ class Business extends React.Component {
             title={this.data.name}
           />
           </Link>
+          <CardActions disableActionSpacing>
+            <div className={this.classes.flexGrow} /> 
+            <IconButton color="accent">
+              <Delete />
+            </IconButton>
+            <IconButton color="primary">
+              <Edit />
+            </IconButton>
+          </ CardActions>
         </Card>
       </div>
     )
