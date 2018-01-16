@@ -1,23 +1,23 @@
 import React from 'react'
-import { DateTime } from 'luxon'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import Card, { CardHeader, CardMedia, CardActions } from 'material-ui/Card'
 import { Avatar, IconButton } from 'material-ui'
-import { amber } from 'material-ui/colors'
+import { colors } from 'material-ui'
 import { Edit, Delete } from 'material-ui-icons'
-import imageBusiness from '../../assets/images/businessDefault.png'
+
+const randomColor = function (obj) {
+  const keys = Object.keys(obj)
+  return obj[keys[keys.length * Math.random() << 0]]
+}
 
 const styles = () => ({
   card: {
-    maxWidth: 400,
+    width: 400,
   },
   media: {
     height: 194,
-  },
-  avatar: {
-    backgroundColor: amber[500],
   },
   flexGrow: {
     flex: '1 1 auto'
@@ -27,15 +27,10 @@ const styles = () => ({
 class Business extends React.Component {
   constructor(props) {
     super(props)
-    
-    const { classes } = props
-    this.classes = classes
 
-    this.data = {
-      name: 'Example business Manuel',
-      date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
-      image: imageBusiness
-    }
+    const { classes, data } = props
+    this.classes = classes
+    this.data = data
   }
 
   render() {
@@ -44,7 +39,7 @@ class Business extends React.Component {
         <Card className={this.classes.card}>
           <CardHeader
             avatar={
-              <Avatar aria-label="Business" className={this.classes.avatar}>
+              <Avatar aria-label="Business" style={{backgroundColor: randomColor(colors)[500]}}>
                 {this.data.name[0]}
               </Avatar>
             }
@@ -52,14 +47,14 @@ class Business extends React.Component {
             subheader={this.data.date}
           />
           <Link to="/">
-          <CardMedia
-            className={this.classes.media}
-            image={this.data.image}
-            title={this.data.name}
-          />
+            <CardMedia
+              className={this.classes.media}
+              image={this.data.image}
+              title={this.data.name}
+            />
           </Link>
           <CardActions disableActionSpacing>
-            <div className={this.classes.flexGrow} /> 
+            <div className={this.classes.flexGrow} />
             <IconButton color="accent">
               <Delete />
             </IconButton>
@@ -74,7 +69,8 @@ class Business extends React.Component {
 }
 
 Business.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(Business)

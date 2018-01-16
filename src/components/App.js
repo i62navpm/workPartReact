@@ -11,6 +11,14 @@ const Auth = Loadable({
   }
 })
 
+const Business = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "business" */ '../containers/Business'),
+  loading() {
+    return <div>Loading...</div>
+  }
+})
+
 class App extends Component {
   render() {
     return (
@@ -23,6 +31,7 @@ class App extends Component {
           <Router>
             <div>
               <Route path="/auth" component={Auth} />
+              <Route path="/business" component={Business} />
               <Route exact path="/" render={() => <h3>Main App</h3>} />
             </div>
           </Router>
