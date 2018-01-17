@@ -3,6 +3,7 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import BusinessList from '../components/Business/BusinessList'
 import BusinessForm from '../components/Business/BusinessForm'
+
 function Business({ match, business = [], onNewBusinessClick }) {
   return (
     <Switch>
