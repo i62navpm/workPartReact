@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import PrivateRoute from './PrivateRoute'
 import logo from '../logo.svg'
 import './App.css'
 import Loadable from 'react-loadable'
@@ -31,7 +32,7 @@ class App extends Component {
           <Router>
             <div>
               <Route path="/auth" component={Auth} />
-              <Route path="/business" component={Business} />
+              <PrivateRoute path="/business" component={Business} />
               <Route exact path="/" render={() => <h3>Main App</h3>} />
             </div>
           </Router>
