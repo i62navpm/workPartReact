@@ -64,7 +64,7 @@ class Login extends React.Component {
       try {
         await this.props.onSubmit(this.state.formData)
         this.setState({ submitted: false })
-        this.props.history.push('/')
+        this.props.history.push('/business/list')
       } catch (err) {
         this.setState({ submitted: false })
         console.log(err.message)
