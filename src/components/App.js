@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import PrivateRoute from './PrivateRoute'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import logo from '../logo.svg'
 import './App.css'
 import Loadable from 'react-loadable'
-
+import PrivateRoute from './PrivateRoute'
 const Auth = Loadable({
   loader: () => import(/* webpackChunkName: "auth" */ '../containers/Auth'),
   loading() {
@@ -30,11 +29,11 @@ class App extends Component {
         </header>
         <div className="App-intro">
           <Router>
-            <div>
+            <Switch>
               <Route path="/auth" component={Auth} />
               <PrivateRoute path="/business" component={Business} />
               <Route exact path="/" render={() => <h3>Main App</h3>} />
-            </div>
+            </Switch>
           </Router>
         </div>
       </div>
