@@ -84,3 +84,15 @@ export function confirmPasswordUser({ email, code, password }) {
     }
   }
 }
+
+export function getSessionUser() {
+  return async dispatch => {
+    try {
+      let { email, token } = await cognito.getUserSession()
+      dispatch(setUser(email))
+      return token
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+}
