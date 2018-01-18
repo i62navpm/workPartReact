@@ -61,7 +61,6 @@ class BusinessForm extends React.Component {
   handleChange(event) {
     const { formData } = this.state
     formData[event.target.name] = event.target.value
-    debugger
     this.setState({ formData })
   }
 
