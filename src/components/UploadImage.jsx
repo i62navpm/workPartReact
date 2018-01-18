@@ -33,6 +33,7 @@ class UploadImage extends React.Component {
   async onUpload(file) {
     const { handleChange, name, s3 } = this.state
     const [Body] = file
+    if(!Body) return
     const prefix = DateTime.local().ts
     const folder = this.props.folder + '/'
     const Key = `${folder + prefix}__${Body.name}`
