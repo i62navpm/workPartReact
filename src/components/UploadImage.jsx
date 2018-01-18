@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { DateTime } from 'luxon'
 import { withStyles } from 'material-ui/styles'
 import Card, { CardMedia } from 'material-ui/Card'
 import { UploadField } from '@navjobs/upload'
 import imageBusiness from '../assets/images/businessDefault.png'
+import s3Sdk from '../utils/s3.service'
 
 const styles = () => ({
   media: {
@@ -21,18 +23,28 @@ class UploadImage extends React.Component {
     this.state = {
       image: image || imageBusiness,
       name,
-      handleChange
+      handleChange,
+      s3: new s3Sdk()
     }
 
     this.onUpload = this.onUpload.bind(this)
   }
 
-  onUpload() {
-    const { handleChange, name } = this.state
+  async onUpload(file) {
+    const { handleChange, name, s3 } = this.state
+    const [Body] = file
+    const prefix = DateTime.local().ts
+    const folder = this.props.folder + '/'
+    const Key = `${folder + prefix}__${Body.name}`
+
+    const { Location } = await s3.uploadObject({ Key, Body, ACL: 'public-read' })
+    
+    this.setState({image: Location})
+
     handleChange({
       target: {
         name,
-        value: 'Value image'
+        value: Location
       }
     })
   }

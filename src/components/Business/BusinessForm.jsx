@@ -61,6 +61,7 @@ class BusinessForm extends React.Component {
   handleChange(event) {
     const { formData } = this.state
     formData[event.target.name] = event.target.value
+    debugger
     this.setState({ formData })
   }
 
@@ -108,7 +109,7 @@ class BusinessForm extends React.Component {
                 justify="center"
               >
                 <Grid item xs={10} sm={6}>
-                  <UploadImage image={formData.image} name="image" handleChange={this.handleChange} />
+                  <UploadImage image={formData.image} folder="business" name="image" handleChange={this.handleChange} />
                 </ Grid>
               </ Grid>
               <Grid container>
