@@ -6,6 +6,8 @@ import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
 import { Button, Grid, Paper, AppBar, Stepper, Step, StepLabel, Toolbar, Typography } from 'material-ui'
 import { MoodBad, Send } from 'material-ui-icons'
+const debug = require('debug')
+const error = debug('authForgotPassword:error')
 
 const styles = theme => ({
   paper: {
@@ -155,8 +157,8 @@ class ForgotPassword extends React.Component {
       try {
         await this.props.onNextStep(this.state.formData)
         this.setState({ activeStep: this.state.activeStep + 1 })
-      } catch (err) {
-        console.log(err.message)
+      } catch ({message}) {
+        error(message)
       } finally {
         this.setState({ submitted: false })
       }
@@ -182,9 +184,9 @@ class ForgotPassword extends React.Component {
         await this.props.onSubmit(this.state.formData)
         this.setState({ submitted: false })
         this.props.history.push('/auth/login')
-      } catch (err) {
+      } catch ({message}) {
         this.setState({ submitted: false })
-        console.log(err.message)
+        error(message)
       }
     })
   }

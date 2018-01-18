@@ -3,6 +3,7 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import BusinessList from '../components/Business/BusinessList'
 import BusinessForm from '../components/Business/BusinessForm'
+const debug = require('debug')('bussiness')
 
 function Business({ match, business = [], onNewBusinessClick }) {
   return (
@@ -22,7 +23,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = () => {
   return {
-    onNewBusinessClick: () => console.log('new Business')
+    onNewBusinessClick: () => debug('new Business')
   }
 }
 

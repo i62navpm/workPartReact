@@ -6,6 +6,8 @@ import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
 import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
 import { Mood, Send } from 'material-ui-icons'
+const debug = require('debug')
+const error = debug('authLogin:error')
 
 const styles = theme => ({
   paper: {
@@ -65,9 +67,9 @@ class Login extends React.Component {
         await this.props.onSubmit(this.state.formData)
         this.setState({ submitted: false })
         this.props.history.push('/business/list')
-      } catch (err) {
+      } catch ({message}) {
         this.setState({ submitted: false })
-        console.log(err.message)
+        error(message)
       }
     })
   }
