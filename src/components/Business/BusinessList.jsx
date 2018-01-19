@@ -32,7 +32,7 @@ class Business extends React.Component {
             ))}
           </Grid>
         </Grid>
-        <BusinessAddButton onClick={() => this.props.history.push('/business/new')}/>
+        <BusinessAddButton onClick={() => this.props.history.push('/business/company')}/>
       </Grid>
     )
   }
