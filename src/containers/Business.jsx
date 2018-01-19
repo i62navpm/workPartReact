@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import BusinessList from '../components/Business/BusinessList'
 import BusinessForm from '../components/Business/BusinessForm'
@@ -14,9 +14,8 @@ function Business({ match, onNewBusinessClick, data}) {
 
   return (
     <Switch>
-      <Route path={`${match.url}/list`} render={withRouter(({ history }) => <BusinessList business={business} history={history} />)} />
-      <Route path={`${match.url}/new`} render={withRouter(({ history }) => <BusinessForm onSubmit={onNewBusinessClick} closeForm={() => history.push('/business/list')} history={history} />)} />
-      <Redirect from={`${match.url}/`} to={`${match.url}/list`} />
+      <Route exact path={`${match.url}/`} render={withRouter(({ history }) => <BusinessList business={business} history={history} />)} />
+      <Route path={`${match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={onNewBusinessClick} closeForm={() => history.push('/business')} history={history} {...rest}/>)} />
     </Switch>
   )
 }
@@ -34,7 +33,7 @@ const mapDispatchToProps = () => {
 }
 
 export default graphql(gql`
-  query getBusiness {
+  {
     business {
       id,
       name,
