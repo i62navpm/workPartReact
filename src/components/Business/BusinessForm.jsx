@@ -6,6 +6,10 @@ import { withStyles } from 'material-ui/styles'
 import { Button, Grid, Paper, AppBar, Toolbar, Typography, IconButton } from 'material-ui'
 import { Domain, Save, Close } from 'material-ui-icons'
 import UploadImage from '../UploadImage'
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
+const debug = require('debug')
+const error = debug('businessForm:error')
 
 const styles = theme => ({
   paper: {
@@ -69,16 +73,25 @@ class BusinessForm extends React.Component {
       try {
         await this.props.onSubmit(this.state.formData)
         this.setState({ submitted: false })
-        this.props.history.push('/')
+        this.props.history.push('/business')
       } catch (err) {
         this.setState({ submitted: false })
-        console.log(err.message)
+        error(err.message)
       }
     })
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {data: {company}} = nextProps
+    if(!company) return
+    this.setState({formData: {...company}})
+  }
+
   render() {
-    const { formData, submitted } = this.state
+    let { formData, submitted } = this.state
+    const { loading } = this.props.data
+
+    if (loading) return <div>Loading...</div>
 
     return (
       <Grid container justify="center" alignItems="center">
@@ -210,7 +223,7 @@ class BusinessForm extends React.Component {
                     disabled={submitted}
                   >
                     Save
-                      <Save className={this.classes.iconRight} />
+                    <Save className={this.classes.iconRight} />
                   </Button>
                 </Grid>
               </Grid>
@@ -226,4 +239,24 @@ BusinessForm.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(BusinessForm)
+export default graphql(gql`
+  query getCompany($companyId: ID) {
+    company(id: $companyId) {
+      id,
+      name,
+      cif,
+      date,
+      address,
+      phone,
+      email,
+      web,
+      image
+    }
+  }
+  `, {
+    options: ({match}) => {
+      return { variables: { companyId: match.params.companyId } }
+    }
+  })(
+  withStyles(styles)(BusinessForm)
+  )
