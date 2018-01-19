@@ -58,9 +58,11 @@ class Business extends React.Component {
             <IconButton color="accent">
               <Delete />
             </IconButton>
-            <IconButton color="primary">
-              <Edit />
-            </IconButton>
+            <Link to={`/business/company/${this.data.id}`}>
+              <IconButton color="primary">
+                <Edit />
+              </IconButton>
+            </Link>
           </ CardActions>
         </Card>
       </div>
