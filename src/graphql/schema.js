@@ -13,7 +13,12 @@ const BusinessType = new GraphQLObjectType({
   fields: {
     id: { type: GraphQLID },
     name: { type: GraphQLString },
+    cif: { type: GraphQLString },
     date: { type: GraphQLString },
+    address: { type: GraphQLString },
+    phone: { type: GraphQLString },
+    email: { type: GraphQLString },
+    web: { type: GraphQLString },
     image: { type: GraphQLString }
   }
 })
@@ -23,18 +28,33 @@ const businessData = [
     id: '1',
     name: 'Business example 1',
     date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
+    cif: 'X14111222',
+    address: 'Company address',
+    phone: '000000000',
+    email: 'company@email.com',
+    web: 'http://www.companyweb.com',
     image: imageBusiness
   },
   {
     id: '2',
     name: 'New business example 2',
     date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
+    cif: 'X14111222',
+    address: 'Company address',
+    phone: '000000000',
+    email: 'company@email.com',
+    web: 'http://www.companyweb.com',
     image: imageBusiness
   },
   {
     id: '3',
     name: 'Example business 3',
     date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
+    cif: 'X14111222',
+    address: 'Company address',
+    phone: '000000000',
+    email: 'company@email.com',
+    web: 'http://www.companyweb.com',
     image: imageBusiness
   }
 ]
