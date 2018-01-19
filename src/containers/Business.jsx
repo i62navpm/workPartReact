@@ -3,9 +3,15 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import BusinessList from '../components/Business/BusinessList'
 import BusinessForm from '../components/Business/BusinessForm'
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
 const debug = require('debug')('bussiness')
 
-function Business({ match, business = [], onNewBusinessClick }) {
+function Business({ match, onNewBusinessClick, data}) {
+  const {loading, business=[]} = data
+  
+  if (loading) return <div>Loading...</div> 
+
   return (
     <Switch>
       <Route path={`${match.url}/list`} render={withRouter(({ history }) => <BusinessList business={business} history={history} />)} />
@@ -17,7 +23,7 @@ function Business({ match, business = [], onNewBusinessClick }) {
 
 const mapStateToProps = state => {
   return {
-    business: state.business
+    user: state.user
   }
 }
 
@@ -27,7 +33,18 @@ const mapDispatchToProps = () => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Business)
+export default graphql(gql`
+  query getBusiness {
+    business {
+      id,
+      name,
+      date,
+      image
+    }
+  }
+  `)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Business)
+)
