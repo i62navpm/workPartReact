@@ -45,6 +45,14 @@ const QueryType = new GraphQLObjectType({
     business: {
       type: new GraphQLList(BusinessType),
       resolve: () => businessData
+    },
+    company: {
+      type: BusinessType,
+      args: {
+        id: { type: GraphQLID }
+      },
+      resolve: (root, args) =>
+        businessData.find(company => company.id === args.id)
     }
   }
 })
