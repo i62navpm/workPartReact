@@ -15,6 +15,10 @@ import ForgotPassword from '../components/ForgotPassword'
 import { BusinessCard, BusinessForm } from '../components/Business'
 import UploadImage from '../components/UploadImage'
 import AddBusiness from '../components/Business/BusinessAddButton'
+import ApolloProvider from 'react-apollo/ApolloProvider'
+import ApolloClient from 'apollo-client'
+import { MockHttpLink } from '../graphql/mockHttpLink'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 
 const initialState = {
   id: '1',
@@ -22,6 +26,11 @@ const initialState = {
   date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
   image: imageBusiness
 }
+
+const client = new ApolloClient({
+  link: MockHttpLink,
+  cache: new InMemoryCache()
+})
 
 storiesOf('Welcome', module).add('React App', () => <App />)
 
@@ -51,7 +60,11 @@ storiesOf('Auth', module)
 
 storiesOf('Business', module)
   .addDecorator(story => (
-    <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+    <ApolloProvider client={client}>
+      <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+    </ApolloProvider>
   ))
   .add('Card business', () => <BusinessCard data={initialState} />)
-  .add('Form business', () => <BusinessForm />)
+  .add('Form business', () => (
+    <BusinessForm match={{ params: { companyId: '1' } }} />
+  ))
