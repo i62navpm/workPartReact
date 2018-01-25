@@ -12,9 +12,12 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import Verification from '../components/Verification'
 import ForgotPassword from '../components/ForgotPassword'
-import { BusinessCard, BusinessForm } from '../components/Business'
+import {
+  BusinessCard,
+  BusinessForm,
+  BusinessAddButton
+} from '../components/Business'
 import UploadImage from '../components/UploadImage'
-import AddBusiness from '../components/Business/BusinessAddButton'
 import ApolloProvider from 'react-apollo/ApolloProvider'
 import ApolloClient from 'apollo-client'
 import { MockHttpLink } from '../graphql/mockHttpLink'
@@ -35,7 +38,7 @@ const client = new ApolloClient({
 storiesOf('Welcome', module).add('React App', () => <App />)
 
 storiesOf('Button', module)
-  .add('Add business', () => <AddBusiness onClick={action('clicked')} />)
+  .add('Add business', () => <BusinessAddButton onClick={action('clicked')} />)
   .add('with some emoji', () => (
     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
   ))

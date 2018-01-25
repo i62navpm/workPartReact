@@ -1,21 +1,20 @@
 import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import BusinessList from '../components/Business/BusinessList'
-import BusinessForm from '../components/Business/BusinessForm'
+import { BusinessList, BusinessForm } from '../components/Business'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 const debug = require('debug')('bussiness')
 
-function Business({ match, onNewBusinessClick, data}) {
-  const {loading, business=[]} = data
-  
-  if (loading) return <div>Loading...</div> 
+function Business({ match, onNewBusinessClick, data }) {
+  const { loading, business = [] } = data
+
+  if (loading) return <div>Loading...</div>
 
   return (
     <Switch>
       <Route exact path={`${match.url}/`} render={withRouter(({ history }) => <BusinessList business={business} history={history} />)} />
-      <Route path={`${match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={onNewBusinessClick} closeForm={() => history.push('/business')} history={history} {...rest}/>)} />
+      <Route path={`${match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={onNewBusinessClick} closeForm={() => history.push('/business')} history={history} {...rest} />)} />
     </Switch>
   )
 }
@@ -46,4 +45,4 @@ export default graphql(gql`
     mapStateToProps,
     mapDispatchToProps
   )(Business)
-)
+  )
