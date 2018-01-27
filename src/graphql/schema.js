@@ -33,6 +33,7 @@ const EmployeeType = new GraphQLObjectType({
     address: { type: GraphQLString },
     phone: { type: GraphQLString },
     email: { type: GraphQLString },
+    description: { type: GraphQLString },
     image: { type: GraphQLString },
     fullSalary: { type: GraphQLFloat },
     halfSalary: { type: GraphQLFloat }

@@ -9,6 +9,7 @@ export default [
     address: 'Employee address1',
     phone: '110000000',
     email: 'employee1@email.com',
+    description: 'This is the employee1 description',
     image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25
@@ -21,6 +22,7 @@ export default [
     address: 'Employee address2',
     phone: '220000000',
     email: 'employee2@email.com',
+    description: 'This is the employee2 description',
     image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25
@@ -33,6 +35,7 @@ export default [
     address: 'Employee address3',
     phone: '330000000',
     email: 'employee3@email.com',
+    description: 'This is the employee3 description',
     image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25

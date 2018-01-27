@@ -55,6 +55,7 @@ class EmployeeForm extends React.Component {
         address: '',
         phone: '',
         email: '',
+        description: '',
         fullSalary: 0,
         halfSalary: 0
       },
@@ -161,14 +162,16 @@ class EmployeeForm extends React.Component {
               <Grid container>
                 <Grid item xs={12} sm={6}>
                   <TextValidator
-                    id="address"
-                    name="address"
-                    autoComplete="address"
-                    label="Address"
+                    id="email"
+                    name="email"
+                    autoComplete="email"
+                    label="Email"
+                    validators={['isEmail']}
+                    errorMessages={['Email is not valid']}
                     onChange={this.handleChange}
-                    value={formData.address}
+                    value={formData.email}
                     fullWidth
-                  />
+                  />                  
                 </ Grid>
                 <Grid item xs={12} sm={6}>
                   <TextValidator
@@ -186,23 +189,36 @@ class EmployeeForm extends React.Component {
                 </ Grid>
               </ Grid>
               <Grid container>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextValidator
-                    id="email"
-                    name="email"
-                    autoComplete="email"
-                    label="Email"
-                    validators={['isEmail']}
-                    errorMessages={['Email is not valid']}
+                    id="address"
+                    name="address"
+                    autoComplete="address"
+                    label="Address"
                     onChange={this.handleChange}
-                    value={formData.email}
+                    value={formData.address}
+                    fullWidth
+                  />
+                </ Grid>
+              </ Grid>
+              <Grid container>
+                <Grid item xs={12}>
+                  <TextValidator
+                    id="description"
+                    name="description"
+                    autoComplete="description"
+                    label="Description"
+                    onChange={this.handleChange}
+                    value={formData.description}
+                    multiline
+                    rows="4"
                     fullWidth
                   />
                 </ Grid>
               </ Grid>
               <Grid container>
                 <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth margin="normal">
                     <InputLabel htmlFor="fullSalary">Full Salary</InputLabel>
                     <Input
                       id="fullSalary"
@@ -215,7 +231,7 @@ class EmployeeForm extends React.Component {
                   </FormControl>
                 </ Grid>
                 <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth margin="normal">
                     <InputLabel htmlFor="halfSalary">Half Salary</InputLabel>
                     <Input
                       id="halfSalary"
@@ -268,6 +284,7 @@ export default graphql(gql`
       phone,
       email,
       image,
+      description,
       fullSalary,
       halfSalary
     }
