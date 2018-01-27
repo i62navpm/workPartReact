@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import imageBusiness from '../assets/images/businessDefault.png'
+import imageEmployee from '../assets/images/employeeDefault.jpg'
 
 export default [
   {
@@ -9,7 +9,7 @@ export default [
     address: 'Employee address1',
     phone: '110000000',
     email: 'employee1@email.com',
-    image: imageBusiness,
+    image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25
   },
@@ -21,7 +21,7 @@ export default [
     address: 'Employee address2',
     phone: '220000000',
     email: 'employee2@email.com',
-    image: imageBusiness,
+    image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25
   },
@@ -33,7 +33,7 @@ export default [
     address: 'Employee address3',
     phone: '330000000',
     email: 'employee3@email.com',
-    image: imageBusiness,
+    image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25
   }
