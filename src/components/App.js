@@ -4,6 +4,7 @@ import logo from '../logo.svg'
 import './App.css'
 import Loadable from 'react-loadable'
 import PrivateRoute from './PrivateRoute'
+
 const Auth = Loadable({
   loader: () => import(/* webpackChunkName: "auth" */ '../containers/Auth'),
   loading() {
@@ -14,6 +15,14 @@ const Auth = Loadable({
 const Business = Loadable({
   loader: () =>
     import(/* webpackChunkName: "business" */ '../containers/Business'),
+  loading() {
+    return <div>Loading...</div>
+  }
+})
+
+const Workforce = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "workforce" */ '../containers/Workforce'),
   loading() {
     return <div>Loading...</div>
   }
@@ -32,6 +41,7 @@ class App extends Component {
             <Switch>
               <Route path="/auth" component={Auth} />
               <PrivateRoute path="/business" component={Business} />
+              <PrivateRoute path="/workforce" component={Workforce} />
               <Route exact path="/" render={() => <h3>Main App</h3>} />
             </Switch>
           </Router>
