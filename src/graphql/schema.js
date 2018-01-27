@@ -1,10 +1,11 @@
-import { DateTime } from 'luxon'
-import imageBusiness from '../assets/images/businessDefault.png'
+import businessData from './businessMock'
+import workforceData from './workforceMock'
 import {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLID,
   GraphQLString,
+  GraphQLFloat,
   GraphQLList
 } from 'graphql'
 
@@ -23,41 +24,20 @@ const BusinessType = new GraphQLObjectType({
   }
 })
 
-const businessData = [
-  {
-    id: '1',
-    name: 'Business example 1',
-    date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
-    cif: 'X14111211',
-    address: 'Company address1',
-    phone: '110000000',
-    email: 'company1@email.com',
-    web: 'http://www.companyweb1.com',
-    image: imageBusiness
-  },
-  {
-    id: '2',
-    name: 'New business example 2',
-    date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
-    cif: 'X14111222',
-    address: 'Company address2',
-    phone: '220000000',
-    email: 'company2@email.com',
-    web: 'http://www.companyweb2.com',
-    image: imageBusiness
-  },
-  {
-    id: '3',
-    name: 'Example business 3',
-    date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
-    cif: 'X14111223',
-    address: 'Company address3',
-    phone: '330000000',
-    email: 'company3@email.com',
-    web: 'http://www.companyweb3.com',
-    image: imageBusiness
+const EmployeeType = new GraphQLObjectType({
+  name: 'Employee',
+  fields: {
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    nif: { type: GraphQLString },
+    address: { type: GraphQLString },
+    phone: { type: GraphQLString },
+    email: { type: GraphQLString },
+    image: { type: GraphQLString },
+    fullSalary: { type: GraphQLFloat },
+    halfSalary: { type: GraphQLFloat }
   }
-]
+})
 
 const QueryType = new GraphQLObjectType({
   name: 'Query',
@@ -73,6 +53,18 @@ const QueryType = new GraphQLObjectType({
       },
       resolve: (root, args) =>
         businessData.find(company => company.id === args.id)
+    },
+    workforce: {
+      type: new GraphQLList(EmployeeType),
+      resolve: () => workforceData
+    },
+    employee: {
+      type: EmployeeType,
+      args: {
+        id: { type: GraphQLID }
+      },
+      resolve: (root, args) =>
+        workforceData.find(employee => employee.id === args.id)
     }
   }
 })
