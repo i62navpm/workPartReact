@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { Grid } from 'material-ui'
 import BusinessCard from './BusinessCard'
-import BusinessAddButton from './BusinessAddButton'
+import AddButton from '../AddButton'
 
 const styles = () => ({
   root: {
@@ -32,7 +32,7 @@ class Business extends React.Component {
             ))}
           </Grid>
         </Grid>
-        <BusinessAddButton onClick={() => this.props.history.push('/business/company')}/>
+        <AddButton onClick={() => this.props.history.push('/business/company')}/>
       </Grid>
     )
   }
