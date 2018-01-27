@@ -4,31 +4,22 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { Button } from '@storybook/react/demo'
 import { MemoryRouter } from 'react-router'
-import { DateTime } from 'luxon'
-import imageBusiness from '../assets/images/businessDefault.png'
 
 import App from '../components/App'
 import Login from '../components/Login'
 import Register from '../components/Register'
 import Verification from '../components/Verification'
 import ForgotPassword from '../components/ForgotPassword'
-import {
-  BusinessCard,
-  BusinessForm,
-  BusinessAddButton
-} from '../components/Business'
+import { BusinessCard, BusinessForm } from '../components/Business'
+import { EmployeeCard, EmployeeForm } from '../components/Employee'
+import AddButton from '../components/AddButton'
 import UploadImage from '../components/UploadImage'
 import ApolloProvider from 'react-apollo/ApolloProvider'
 import ApolloClient from 'apollo-client'
 import { MockHttpLink } from '../graphql/mockHttpLink'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-
-const initialState = {
-  id: '1',
-  name: 'Business example 1',
-  date: DateTime.local().toLocaleString(DateTime.DATETIME_MED),
-  image: imageBusiness
-}
+import businessMockData from '../graphql/businessMock'
+import workforceMockData from '../graphql/workforceMock'
 
 const client = new ApolloClient({
   link: MockHttpLink,
@@ -38,7 +29,7 @@ const client = new ApolloClient({
 storiesOf('Welcome', module).add('React App', () => <App />)
 
 storiesOf('Button', module)
-  .add('Add business', () => <BusinessAddButton onClick={action('clicked')} />)
+  .add('Add button', () => <AddButton onClick={action('clicked')} />)
   .add('with some emoji', () => (
     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
   ))
@@ -67,7 +58,18 @@ storiesOf('Business', module)
       <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
     </ApolloProvider>
   ))
-  .add('Card business', () => <BusinessCard data={initialState} />)
+  .add('Card business', () => <BusinessCard data={businessMockData[0]} />)
   .add('Form business', () => (
     <BusinessForm match={{ params: { companyId: '1' } }} />
+  ))
+
+storiesOf('Workforce', module)
+  .addDecorator(story => (
+    <ApolloProvider client={client}>
+      <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+    </ApolloProvider>
+  ))
+  .add('Card employee', () => <EmployeeCard data={workforceMockData[0]} />)
+  .add('Form employee', () => (
+    <EmployeeForm match={{ params: { employeeId: '1' } }} />
   ))
