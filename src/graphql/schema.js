@@ -9,21 +9,6 @@ import {
   GraphQLList
 } from 'graphql'
 
-const BusinessType = new GraphQLObjectType({
-  name: 'Business',
-  fields: {
-    id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    cif: { type: GraphQLString },
-    date: { type: GraphQLString },
-    address: { type: GraphQLString },
-    phone: { type: GraphQLString },
-    email: { type: GraphQLString },
-    web: { type: GraphQLString },
-    image: { type: GraphQLString }
-  }
-})
-
 const EmployeeType = new GraphQLObjectType({
   name: 'Employee',
   fields: {
@@ -37,6 +22,22 @@ const EmployeeType = new GraphQLObjectType({
     image: { type: GraphQLString },
     fullSalary: { type: GraphQLFloat },
     halfSalary: { type: GraphQLFloat }
+  }
+})
+
+const BusinessType = new GraphQLObjectType({
+  name: 'Business',
+  fields: {
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    cif: { type: GraphQLString },
+    date: { type: GraphQLString },
+    address: { type: GraphQLString },
+    phone: { type: GraphQLString },
+    email: { type: GraphQLString },
+    web: { type: GraphQLString },
+    image: { type: GraphQLString },
+    workforce: { type: new GraphQLList(EmployeeType) }
   }
 })
 

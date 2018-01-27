@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import workforceMock from './workforceMock'
 import imageBusiness from '../assets/images/businessDefault.png'
 
 export default [
@@ -11,7 +12,8 @@ export default [
     phone: '110000000',
     email: 'company1@email.com',
     web: 'http://www.companyweb1.com',
-    image: imageBusiness
+    image: imageBusiness,
+    workforce: [workforceMock[0]]
   },
   {
     id: '2',
@@ -22,7 +24,8 @@ export default [
     phone: '220000000',
     email: 'company2@email.com',
     web: 'http://www.companyweb2.com',
-    image: imageBusiness
+    image: imageBusiness,
+    workforce: [workforceMock[1]]
   },
   {
     id: '3',
@@ -33,6 +36,7 @@ export default [
     phone: '330000000',
     email: 'company3@email.com',
     web: 'http://www.companyweb3.com',
-    image: imageBusiness
+    image: imageBusiness,
+    workforce: [workforceMock[1]]
   }
 ]

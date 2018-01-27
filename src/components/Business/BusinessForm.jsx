@@ -90,7 +90,7 @@ class BusinessForm extends React.Component {
   render() {
     let { formData, submitted } = this.state
     const { loading } = this.props.data
-
+    
     if (loading) return <div>Loading...</div>
 
     return (
@@ -250,7 +250,12 @@ export default graphql(gql`
       phone,
       email,
       web,
-      image
+      image,
+      workforce {
+        id,
+        name,
+        image
+      }
     }
   }
   `, {
