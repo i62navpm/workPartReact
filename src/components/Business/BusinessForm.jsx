@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import BusinessEmployeeList from './BusinessEmployeeList'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
@@ -209,6 +210,9 @@ class BusinessForm extends React.Component {
                   />
                 </ Grid>
               </ Grid>
+              <Grid item xs={12}>
+                <BusinessEmployeeList />
+              </Grid>
               <Grid
                 className={this.classes.rowSubmit}
                 container
