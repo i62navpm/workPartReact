@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
-import Checkbox from 'material-ui/Checkbox'
-import Avatar from 'material-ui/Avatar'
+import { Avatar, Divider, Checkbox, Typography } from 'material-ui'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
@@ -14,6 +13,9 @@ const styles = theme => ({
   },
   listItem: {
     textAlign: 'left'
+  },
+  title: {
+    marginTop: 30
   }
 })
 
@@ -62,18 +64,24 @@ class BusinessEmployeeList extends React.Component {
 
     return (
       <div className={this.classes.root}>
+        <Typography type="subheading" color="inherit" className={this.classes.title}>
+          Employees
+        </Typography>
         <List>
           {workforce.map(employee => (
-            <ListItem key={employee.id} dense button className={this.classes.listItem}>
-              <Avatar alt={employee.name} src={employee.image} />
-              <ListItemText primary={employee.name} />
-              <ListItemSecondaryAction>
-                <Checkbox
-                  onChange={() => this.handleToggle(employee)}
-                  checked={this.state.activeWorkforce.indexOf(employee.id) !== -1}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
+            <React.Fragment key={employee.id}>
+              <ListItem dense button className={this.classes.listItem}>
+                <Avatar alt={employee.name} src={employee.image} />
+                <ListItemText primary={employee.name} />
+                <ListItemSecondaryAction>
+                  <Checkbox
+                    onChange={() => this.handleToggle(employee)}
+                    checked={this.state.activeWorkforce.indexOf(employee.id) !== -1}
+                  />
+                </ListItemSecondaryAction>
+              </ListItem>
+              <Divider inset />
+            </React.Fragment>
           ))}
         </List>
       </div>
