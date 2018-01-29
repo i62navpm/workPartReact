@@ -54,8 +54,10 @@ class BusinessForm extends React.Component {
         address: '',
         phone: '',
         email: '',
-        web: ''
+        web: '',
+        workforce: [],
       },
+      loading: true,
       submitted: false
     }
 
@@ -83,14 +85,13 @@ class BusinessForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {data: {company}} = nextProps
-    if(!company) return
-    this.setState({formData: {...company}})
+    const { data: { company, loading } } = nextProps
+    this.setState({ loading })
+    if (company) this.setState({ formData: { ...company } })
   }
 
   render() {
-    let { formData, submitted } = this.state
-    const { loading } = this.props.data
+    let { formData, submitted, loading } = this.state
     
     if (loading) return <div>Loading...</div>
 
@@ -211,7 +212,7 @@ class BusinessForm extends React.Component {
                 </ Grid>
               </ Grid>
               <Grid item xs={12}>
-                <BusinessEmployeeList />
+                <BusinessEmployeeList activeWorkforce={formData.workforce.map(employee => employee.id)} name="workforce" handleChange={this.handleChange} />
               </Grid>
               <Grid
                 className={this.classes.rowSubmit}
@@ -256,14 +257,12 @@ export default graphql(gql`
       web,
       image,
       workforce {
-        id,
-        name,
-        image
+        id
       }
     }
   }
   `, {
-    options: ({match}) => {
+    options: ({ match }) => {
       return { variables: { companyId: match.params.companyId } }
     }
   })(

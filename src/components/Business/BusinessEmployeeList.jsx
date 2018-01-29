@@ -24,8 +24,7 @@ class BusinessEmployeeList extends React.Component {
     const { classes } = props
     this.classes = classes
 
-    this.state = { workforce: [], activeWorkforce: [] }
-
+    this.state = { workforce: [], activeWorkforce: [...props.activeWorkforce] || [] }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,18 +33,25 @@ class BusinessEmployeeList extends React.Component {
     this.setState({ workforce: [...workforce] })
   }
 
-  handleToggle(value) {
+  handleToggle({ id }) {
     const { activeWorkforce } = this.state
-    const currentIndex = activeWorkforce.indexOf(value)
+    const currentIndex = activeWorkforce.indexOf(id)
     const newChecked = [...activeWorkforce]
 
     if (currentIndex === -1) {
-      newChecked.push(value)
+      newChecked.push(id)
     } else {
       newChecked.splice(currentIndex, 1)
     }
 
     this.setState({ activeWorkforce: newChecked })
+
+    this.props.handleChange({
+      target: {
+        name: this.props.name,
+        value: newChecked
+      }
+    })
   }
 
   render() {
@@ -64,7 +70,7 @@ class BusinessEmployeeList extends React.Component {
               <ListItemSecondaryAction>
                 <Checkbox
                   onChange={() => this.handleToggle(employee)}
-                  checked={this.state.activeWorkforce.indexOf(employee) !== -1}
+                  checked={this.state.activeWorkforce.indexOf(employee.id) !== -1}
                 />
               </ListItemSecondaryAction>
             </ListItem>

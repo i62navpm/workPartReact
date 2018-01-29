@@ -37,6 +37,6 @@ export default [
     email: 'company3@email.com',
     web: 'http://www.companyweb3.com',
     image: imageBusiness,
-    workforce: [workforceMock[1]]
+    workforce: [workforceMock[2]]
   }
 ]
