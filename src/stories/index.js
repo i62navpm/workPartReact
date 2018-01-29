@@ -10,7 +10,11 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import Verification from '../components/Verification'
 import ForgotPassword from '../components/ForgotPassword'
-import { BusinessCard, BusinessForm } from '../components/Business'
+import {
+  BusinessCard,
+  BusinessForm,
+  BusinessEmployeeList
+} from '../components/Business'
 import { EmployeeCard, EmployeeForm } from '../components/Employee'
 import AddButton from '../components/AddButton'
 import UploadImage from '../components/UploadImage'
@@ -61,6 +65,13 @@ storiesOf('Business', module)
   .add('Card business', () => <BusinessCard data={businessMockData[0]} />)
   .add('Form business', () => (
     <BusinessForm match={{ params: { companyId: '1' } }} />
+  ))
+  .add('Business employees list', () => (
+    <BusinessEmployeeList
+      activeWorkforce={[1, 2]}
+      name="workforce"
+      handleChange={action('clicked')}
+    />
   ))
 
 storiesOf('Workforce', module)
