@@ -1,9 +1,15 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import logo from '../logo.svg'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  withRouter
+} from 'react-router-dom'
+import { connect } from 'react-redux'
 import './App.css'
 import Loadable from 'react-loadable'
 import PrivateRoute from './PrivateRoute'
+import MenuAppBar from './MenuAppBar'
 
 const Auth = Loadable({
   loader: () => import(/* webpackChunkName: "auth" */ '../containers/Auth'),
@@ -29,21 +35,29 @@ const Workforce = Loadable({
 })
 
 class App extends Component {
+  showAppBar() {
+    return !window.location.pathname.includes('/auth') && this.props.user.email
+  }
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
         <div className="App-intro">
           <Router>
-            <Switch>
-              <Route path="/auth" component={Auth} />
-              <PrivateRoute path="/business" component={Business} />
-              <PrivateRoute path="/workforce" component={Workforce} />
-              <Route exact path="/" render={() => <h3>Main App</h3>} />
-            </Switch>
+            <div>
+              {this.showAppBar() && (
+                <Route
+                  render={withRouter(({ history }) => (
+                    <MenuAppBar history={history} />
+                  ))}
+                />
+              )}
+              <Switch>
+                <Route path="/auth" component={Auth} />
+                <PrivateRoute path="/business" component={Business} />
+                <PrivateRoute path="/workforce" component={Workforce} />
+                <Route exact path="/" render={() => <h3>Main App</h3>} />
+              </Switch>
+            </div>
           </Router>
         </div>
       </div>
@@ -51,4 +65,10 @@ class App extends Component {
   }
 }
 
-export default App
+const mapStateToProps = state => {
+  return {
+    user: state.auth
+  }
+}
+
+export default connect(mapStateToProps)(App)
