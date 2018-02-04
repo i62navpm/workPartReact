@@ -64,9 +64,9 @@ class Login extends React.Component {
   handleSubmit() {
     this.setState({ submitted: true }, async () => {
       try {
-        await this.props.onSubmit(this.state.formData)
         this.setState({ submitted: false })
-        this.props.history.push('/business/list')
+        await this.props.onSubmit(this.state.formData)
+        this.props.history.push('/business')
       } catch ({message}) {
         this.setState({ submitted: false })
         error(message)
