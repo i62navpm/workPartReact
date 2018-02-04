@@ -22,7 +22,7 @@ export function loginUser({ username, password }) {
     try {
       let email = await cognito.login(username, password)
       dispatch({ type: LOGIN_USER })
-      dispatch(setUser(email))
+      dispatch(setUser({ email }))
     } catch (error) {
       throw new Error(error)
     }
@@ -89,8 +89,19 @@ export function getSessionUser() {
   return async dispatch => {
     try {
       let { email, token } = await cognito.getUserSession()
-      dispatch(setUser(email))
+      dispatch(setUser({ email }))
       return token
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+}
+
+export function logoutUser() {
+  return async (dispatch, getState) => {
+    try {
+      await cognito.logoutUser(getState().auth.email)
+      return dispatch({ type: LOGOUT_USER })
     } catch (error) {
       throw new Error(error)
     }
