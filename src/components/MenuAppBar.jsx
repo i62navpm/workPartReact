@@ -124,7 +124,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // onLogoutClick: (user = {}) => dispatch(LogoutUser(user))
     onLogoutClick: () => dispatch(logoutUser())
   }
 }
