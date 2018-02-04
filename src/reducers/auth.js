@@ -1,11 +1,6 @@
 import { SET_USER, LOGOUT_USER } from '../actions/auth'
 
-const initialState = {
-  username: 'Manuel Navarro',
-  email: 'manuelnavarro1987@gmail.com'
-}
-
-const auth = (state = initialState, action) => {
+const auth = (state = {}, action) => {
   switch (action.type) {
     case SET_USER:
       return action.user
