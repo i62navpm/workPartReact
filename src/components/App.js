@@ -34,6 +34,14 @@ const Workforce = Loadable({
   }
 })
 
+const Worksheet = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "worksheet" */ '../containers/Worksheet'),
+  loading() {
+    return <div>Loading...</div>
+  }
+})
+
 class App extends Component {
   showAppBar() {
     return !window.location.pathname.includes('/auth') && this.props.user.email
@@ -55,6 +63,10 @@ class App extends Component {
                 <Route path="/auth" component={Auth} />
                 <PrivateRoute path="/business" component={Business} />
                 <PrivateRoute path="/workforce" component={Workforce} />
+                <PrivateRoute
+                  path="/worksheet/:companyId"
+                  component={Worksheet}
+                />
                 <Route exact path="/" render={() => <h3>Main App</h3>} />
               </Switch>
             </div>
