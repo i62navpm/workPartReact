@@ -6,8 +6,19 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLFloat,
-  GraphQLList
+  GraphQLList,
+  GraphQLBoolean
 } from 'graphql'
+
+const EventType = new GraphQLObjectType({
+  name: 'Event',
+  fields: {
+    title: { type: GraphQLString },
+    allDay: { type: GraphQLBoolean },
+    start: { type: GraphQLString },
+    end: { type: GraphQLString }
+  }
+})
 
 const EmployeeType = new GraphQLObjectType({
   name: 'Employee',
@@ -21,7 +32,8 @@ const EmployeeType = new GraphQLObjectType({
     description: { type: GraphQLString },
     image: { type: GraphQLString },
     fullSalary: { type: GraphQLFloat },
-    halfSalary: { type: GraphQLFloat }
+    halfSalary: { type: GraphQLFloat },
+    events: { type: new GraphQLList(EventType) }
   }
 })
 
