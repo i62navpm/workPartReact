@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import Card, { CardMedia, CardContent } from 'material-ui/Card'
-import { Typography, Grid } from 'material-ui'
+import { Typography } from 'material-ui'
 
 const styles = () => ({
   card: {
@@ -36,23 +36,19 @@ class BusinessCardSummary extends React.Component {
 
   render() {
     return (
-      <Grid justify="center" direction="row" container>
-        <Grid xs={12} sm={6} item>
-          <Card className={this.classes.card}>
-            <CardContent className={this.classes.content}>
-              <Typography variant="headline">{this.data.name}</Typography>
-              <Typography variant="subheading" color="secondary">
-                {this.data.cif}
-              </Typography>
-            </CardContent>
-            <CardMedia
-              className={this.classes.cover}
-              image={this.data.image}
-              title="Company title"
-            />
-          </Card>
-        </ Grid>
-      </ Grid>
+      <Card className={this.classes.card}>
+        <CardContent className={this.classes.content}>
+          <Typography variant="headline">{this.data.name}</Typography>
+          <Typography variant="subheading" color="secondary">
+            {this.data.cif}
+          </Typography>
+        </CardContent>
+        <CardMedia
+          className={this.classes.cover}
+          image={this.data.image}
+          title="Company title"
+        />
+      </Card>
     )
   }
 }
