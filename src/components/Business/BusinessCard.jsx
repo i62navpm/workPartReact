@@ -46,7 +46,7 @@ class BusinessCard extends React.Component {
             title={this.data.name}
             subheader={this.data.date}
           />
-          <Link to="/">
+          <Link to={`/worksheet/${this.data.id}`}>
             <CardMedia
               className={this.classes.media}
               image={this.data.image}
