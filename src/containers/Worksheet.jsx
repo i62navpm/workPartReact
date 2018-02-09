@@ -5,7 +5,11 @@ import { graphql } from 'react-apollo'
 import { Grid } from 'material-ui'
 import { BusinessCardSummary } from '../components/Business'
 import { EmployeeCalendar } from '../components/Employee'
+import BigCalendar from 'react-big-calendar'
+import moment from 'moment'
 const debug = require('debug')('workSheet')
+
+BigCalendar.momentLocalizer(moment)
 
 function Worksheet({ data }) {
   const { loading, company } = data
@@ -49,7 +53,13 @@ export default graphql(gql`
         name,
         image,
         fullSalary,
-        halfSalary
+        halfSalary,
+        events {
+          title,
+          allDay,
+          start,
+          end
+        }
       }
     }
   }
