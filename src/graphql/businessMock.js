@@ -25,7 +25,7 @@ export default [
     email: 'company2@email.com',
     web: 'http://www.companyweb2.com',
     image: imageBusiness,
-    workforce: [workforceMock[1]]
+    workforce: workforceMock
   },
   {
     id: '3',
