@@ -7,6 +7,8 @@ import ExpansionPanel, {
 } from 'material-ui/ExpansionPanel'
 import { Typography, Avatar } from 'material-ui'
 import { ExpandMore } from 'material-ui-icons'
+import BigCalendar from 'react-big-calendar'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 const styles = theme => ({
   root: {
@@ -17,18 +19,19 @@ const styles = theme => ({
     fontWeight: theme.typography.fontWeightRegular,
     lineHeight: 2.5,
     marginLeft: theme.spacing.unit * 2,
-    flexBasis: '33.33%',
-    flexShrink: 0,
   },
+  calendar: {
+    width: '100%'
+  }
 })
 
 class EmployeeCalendar extends React.Component {
   constructor(props) {
     super(props)
-    
+
     const { classes, data } = props
     this.classes = classes
-    this.data = data
+    this.data = { events: [], ...data }
   }
 
   render() {
@@ -40,10 +43,14 @@ class EmployeeCalendar extends React.Component {
             <Typography className={this.classes.heading}>{this.data.name}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-          </Typography>
+            <BigCalendar
+              style={{ height: 500 }}
+              className={this.classes.calendar}
+              events={this.data.events}
+              views={['month']}
+              showMultiDayTimes
+              defaultDate={new Date()}
+            />
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
