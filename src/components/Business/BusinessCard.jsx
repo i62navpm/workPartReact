@@ -24,7 +24,7 @@ const styles = () => ({
   }
 })
 
-class Business extends React.Component {
+class BusinessCard extends React.Component {
   constructor(props) {
     super(props)
 
@@ -70,9 +70,9 @@ class Business extends React.Component {
   }
 }
 
-Business.propTypes = {
+BusinessCard.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Business)
+export default withStyles(styles)(BusinessCard)
