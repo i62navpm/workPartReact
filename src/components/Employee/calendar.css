@@ -1,0 +1,19 @@
+.calendar-event .rbc-event-allday {
+  height: 70px;
+  position: relative;
+}
+
+.calendar-event .event-money {
+  position: absolute;
+  bottom: 2px;
+  right: 5px;
+  font-size: 12px;
+}
+
+.calendar-event.fullSalary .rbc-event-allday {
+  background-color: #4caf50;
+}
+
+.calendar-event.halfSalary .rbc-event-allday {
+  background-color: #ff9800;
+}
