@@ -10,10 +10,19 @@ import {
   GraphQLBoolean
 } from 'graphql'
 
+const DataEventType = new GraphQLObjectType({
+  name: 'DataEvent',
+  fields: {
+    title: { type: GraphQLString },
+    salary: { type: GraphQLString },
+    money: { type: GraphQLFloat }
+  }
+})
+
 const EventType = new GraphQLObjectType({
   name: 'Event',
   fields: {
-    title: { type: GraphQLString },
+    data: { type: DataEventType },
     allDay: { type: GraphQLBoolean },
     start: { type: GraphQLString },
     end: { type: GraphQLString }
