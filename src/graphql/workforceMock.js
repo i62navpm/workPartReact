@@ -13,7 +13,7 @@ export default [
     image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25,
-    events: [eventsMock[0]]
+    events: [eventsMock[0], eventsMock[1]]
   },
   {
     id: '2',
