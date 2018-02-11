@@ -53,20 +53,44 @@ class EmployeeCalendar extends React.Component {
 
     const { classes, data } = props
     this.classes = classes
-    this.state = { events: [], ...data }
+    this.state = {
+      events: [],
+      status: [
+        {salary: 'fullSalary', title: 'Full Salary'},
+        {salary: 'halfSalary', title: 'Half Salary'},
+        {salary: 'customSalary', title: 'Custom Salary'}
+      ],
+      ...data,
+    }
 
     this.onSelectEvent = this.onSelectEvent.bind(this)
     this.onSelectSlot = this.onSelectSlot.bind(this)
   }
 
   onSelectEvent(event) {
-    console.log(event)
+    let index = this.state.status.findIndex(status => event.data.salary === status.salary)
+    index = ++index % this.state.status.length
+
+    let newEvents = this.state.events.map(eventCalendar => {
+      if (eventCalendar.end === event.end) {
+        const newData = { 
+          ...eventCalendar.data, 
+          ...this.state.status[index],
+          money: this.state[this.state.status[index].salary] 
+        }
+
+        return { ...eventCalendar, data: newData }
+      }
+      return eventCalendar
+    })
+
+    this.setState({ events: newEvents })
   }
 
   onSelectSlot(event) {
     event.slots.forEach(slot => {
-      if(this.state.events.findIndex(slotEvent => slotEvent.start === slot.toString()) !== -1) return
-      
+      if (this.state.events.findIndex(slotEvent => slotEvent.start === slot.toString()) !== -1) return
+
       let newSlot = {
         start: slot.toString(),
         end: slot.toString(),

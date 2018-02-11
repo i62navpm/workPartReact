@@ -17,3 +17,7 @@
 .calendar-event.halfSalary .rbc-event-allday {
   background-color: #ff9800;
 }
+
+.calendar-event.customSalary .rbc-event-allday {
+  background-color: #2196f3;
+}
