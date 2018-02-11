@@ -13,10 +13,15 @@ import Verification from '../components/Verification'
 import ForgotPassword from '../components/ForgotPassword'
 import {
   BusinessCard,
+  BusinessCardSummary,
   BusinessForm,
   BusinessEmployeeList
 } from '../components/Business'
-import { EmployeeCard, EmployeeForm } from '../components/Employee'
+import {
+  EmployeeCard,
+  EmployeeForm,
+  EmployeeCalendar
+} from '../components/Employee'
 import AddButton from '../components/AddButton'
 import UploadImage from '../components/UploadImage'
 import MenuAppBar from '../components/MenuAppBar'
@@ -26,7 +31,10 @@ import { MockHttpLink } from '../graphql/mockHttpLink'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import businessMockData from '../graphql/businessMock'
 import workforceMockData from '../graphql/workforceMock'
+import BigCalendar from 'react-big-calendar'
+import moment from 'moment'
 
+BigCalendar.momentLocalizer(moment)
 const store = createStore(storeApp)
 
 const client = new ApolloClient({
@@ -72,6 +80,9 @@ storiesOf('Business', module)
     </ApolloProvider>
   ))
   .add('Card business', () => <BusinessCard data={businessMockData[0]} />)
+  .add('Card business summary', () => (
+    <BusinessCardSummary data={businessMockData[0]} />
+  ))
   .add('Form business', () => (
     <BusinessForm match={{ params: { companyId: '1' } }} />
   ))
@@ -92,4 +103,7 @@ storiesOf('Workforce', module)
   .add('Card employee', () => <EmployeeCard data={workforceMockData[0]} />)
   .add('Form employee', () => (
     <EmployeeForm match={{ params: { employeeId: '1' } }} />
+  ))
+  .add('Calendar employee', () => (
+    <EmployeeCalendar data={workforceMockData[0]} />
   ))
