@@ -5,6 +5,8 @@ import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
 import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
 import { VerifiedUser, Send } from 'material-ui-icons'
+const debug = require('debug')
+const error = debug('verification:error')
 
 const styles = theme => ({
   paper: {
@@ -62,7 +64,7 @@ class Verification extends React.Component {
         this.props.history.push('/auth/login')
       } catch (err) {
         this.setState({ submitted: false })
-        console.log(err.message)
+        error(err.message)
       }
     })
   }
