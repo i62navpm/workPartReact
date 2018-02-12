@@ -102,7 +102,7 @@ storiesOf('Workforce', module)
   ))
   .add('Card employee', () => <EmployeeCard data={workforceMockData[0]} />)
   .add('Form employee', () => (
-    <EmployeeForm match={{ params: { employeeId: '1' } }} />
+    <EmployeeForm match={{ params: { employeeId: '1' } }} history={{}} />
   ))
   .add('Calendar employee', () => (
     <EmployeeCalendar data={workforceMockData[0]} />
