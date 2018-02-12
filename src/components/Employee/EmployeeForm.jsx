@@ -77,7 +77,9 @@ class EmployeeForm extends React.Component {
       try {
         await this.props.onSubmit(this.state.formData)
         this.setState({ submitted: false })
-        this.props.history.push('/workforce')
+        this.props.history.length > 2
+          ? this.props.history.goBack()
+          : this.props.history.push('/workforce')
       } catch (err) {
         this.setState({ submitted: false })
         error(err.message)
@@ -107,7 +109,7 @@ class EmployeeForm extends React.Component {
                 Employee form
                 </Typography>
               <IconButton
-                onClick={this.props.closeForm}
+                onClick={this.props.history.length > 2 ? this.props.history.goBack : this.props.closeForm}
                 color="contrast"
               >
                 <Close />

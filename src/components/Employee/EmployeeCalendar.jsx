@@ -1,12 +1,13 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import ExpansionPanel, {
   ExpansionPanelSummary,
   ExpansionPanelDetails,
 } from 'material-ui/ExpansionPanel'
-import { Typography, Avatar } from 'material-ui'
-import { ExpandMore } from 'material-ui-icons'
+import { Typography, Avatar, IconButton } from 'material-ui'
+import { ExpandMore, Edit } from 'material-ui-icons'
 import BigCalendar from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './calendar.css'
@@ -23,6 +24,13 @@ const styles = theme => ({
   },
   calendar: {
     width: '100%'
+  },
+  iconLink: {
+    marginLeft: 'auto'
+  },
+  icon: {
+    width: 20,
+    height: 20
   }
 })
 
@@ -112,6 +120,11 @@ class EmployeeCalendar extends React.Component {
           <ExpansionPanelSummary expandIcon={<ExpandMore />}>
             <Avatar alt={this.state.name} src={this.state.image} />
             <Typography className={this.classes.heading}>{this.state.name}</Typography>
+            <Link className={this.classes.iconLink} to={`/workforce/employee/${this.state.id}`}>
+              <IconButton>
+                <Edit className={this.classes.icon}/>
+              </IconButton>
+            </Link>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <BigCalendar
