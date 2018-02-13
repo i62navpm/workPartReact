@@ -1,32 +1,22 @@
 import React from 'react'
+import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
-import { Grid } from 'material-ui'
-import { BusinessCardSummary } from '../components/Business'
-import { EmployeeCalendar } from '../components/Employee'
-import BigCalendar from 'react-big-calendar'
-import moment from 'moment'
+import WorksheetPresentational from '../components/Worksheet'
+import { EmployeeForm } from '../components/Employee'
 const debug = require('debug')('workSheet')
 
-BigCalendar.momentLocalizer(moment)
-
-function Worksheet({ data }) {
-  const { loading, company } = data
+function Worksheet({ match, data, onNewEmployeeClick }) {
+  const { loading } = data
 
   if (loading) return <div>Loading...</div>
 
   return (
-    <React.Fragment>
-      <Grid justify="center" direction="row" spacing={40} container>
-        <Grid xs={12} sm={6} item>
-          <BusinessCardSummary data={company} />
-        </Grid>
-        <Grid xs={12} sm={10} item>
-          {company.workforce.map(employee => <EmployeeCalendar key={employee.id} data={employee} /> )}
-        </ Grid>
-      </Grid>
-    </React.Fragment>
+    <Switch>
+      <Route exact path={`${match.url}/`} render={() => <WorksheetPresentational data={data} />} />
+      <Route path={`${match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={onNewEmployeeClick} closeForm={() => history.push(`${match.url}`)} history={history} {...rest} />)} />
+    </Switch>
   )
 }
 
@@ -45,6 +35,7 @@ const mapDispatchToProps = () => {
 export default graphql(gql`
   query getCompany($companyId: ID) {
     company(id: $companyId) {
+      id,
       name,
       cif,
       image,
