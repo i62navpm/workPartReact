@@ -7,7 +7,7 @@ import ExpansionPanel, {
   ExpansionPanelDetails,
 } from 'material-ui/ExpansionPanel'
 import { Typography, Avatar, IconButton } from 'material-ui'
-import { ExpandMore, Edit } from 'material-ui-icons'
+import { ExpandMore, Edit, Face } from 'material-ui-icons'
 import BigCalendar from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './calendar.css'
@@ -31,17 +31,34 @@ const styles = theme => ({
   icon: {
     width: 20,
     height: 20
+  },
+  smallIcon: {
+    color: 'white',
+    width: 20,
+    height: 20
+  },
+  smallIconButton: {
+    width: 'auto',
+    height: 'auto'
   }
 })
 
-function Event({ event }) {
+function Event({ event, classes }) {
+  const handleChange = e => {
+    e.stopPropagation()
+  }
+
   return (
     <React.Fragment>
       <span className={'event-title'}>
         {event.data.title}
       </span>
       <span className={'event-money'}>
-        {event.data.money}€
+        {!event.data.money
+          ? <IconButton variant="raised" color="primary" className={classes.smallIconButton} onClick={handleChange}>
+            <Face className={classes.smallIcon} />
+          </IconButton>
+          : `${event.data.money} €`}
       </span>
     </React.Fragment>
   )
@@ -58,15 +75,15 @@ function EventWrapper({ event, children }) {
 class EmployeeCalendar extends React.Component {
   constructor(props) {
     super(props)
-    
+
     const { classes, data } = props
     this.classes = classes
     this.state = {
       events: [],
       status: [
-        {salary: 'fullSalary', title: 'Full Salary'},
-        {salary: 'halfSalary', title: 'Half Salary'},
-        {salary: 'customSalary', title: 'Custom Salary'}
+        { salary: 'fullSalary', title: 'Full Salary' },
+        { salary: 'halfSalary', title: 'Half Salary' },
+        { salary: 'customSalary', title: 'Custom Salary' }
       ],
       ...data,
     }
@@ -77,22 +94,28 @@ class EmployeeCalendar extends React.Component {
 
   onSelectEvent(event) {
     let index = this.state.status.findIndex(status => event.data.salary === status.salary)
-    index = ++index % this.state.status.length
+    index = ++index % (this.state.status.length + 1)
 
-    let newEvents = this.state.events.map(eventCalendar => {
-      if (eventCalendar.end === event.end) {
-        const newData = { 
-          ...eventCalendar.data, 
-          ...this.state.status[index],
-          money: this.state[this.state.status[index].salary] 
+    let events = this.state.events
+
+    if (index === this.state.status.length) {
+      events = events.filter(eventCalendar => eventCalendar.end !== event.end)
+    } else {
+      events = this.state.events.map(eventCalendar => {
+        if (eventCalendar.end === event.end) {
+          const newData = {
+            ...eventCalendar.data,
+            ...this.state.status[index],
+            money: this.state[this.state.status[index].salary]
+          }
+
+          return { ...eventCalendar, data: newData }
         }
+        return eventCalendar
+      })
+    }
 
-        return { ...eventCalendar, data: newData }
-      }
-      return eventCalendar
-    })
-
-    this.setState({ events: newEvents })
+    this.setState({ events })
   }
 
   onSelectSlot(event) {
@@ -122,7 +145,7 @@ class EmployeeCalendar extends React.Component {
             <Typography className={this.classes.heading}>{this.state.name}</Typography>
             <Link className={this.classes.iconLink} to={`/worksheet/${this.props.companyId}/employee/${this.state.id}`}>
               <IconButton>
-                <Edit className={this.classes.icon}/>
+                <Edit className={this.classes.icon} />
               </IconButton>
             </Link>
           </ExpansionPanelSummary>
@@ -135,7 +158,7 @@ class EmployeeCalendar extends React.Component {
               defaultDate={new Date()}
               views={['month']}
               components={{
-                event: Event,
+                event: withStyles(styles)(Event),
                 eventWrapper: EventWrapper
               }}
               onSelectEvent={this.onSelectEvent}
