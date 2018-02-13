@@ -36,19 +36,21 @@ class BusinessCardSummary extends React.Component {
 
   render() {
     return (
-      <Card className={this.classes.card}>
-        <CardContent className={this.classes.content}>
-          <Typography variant="headline">{this.data.name}</Typography>
-          <Typography variant="subheading" color="secondary">
-            {this.data.cif}
-          </Typography>
-        </CardContent>
-        <CardMedia
-          className={this.classes.cover}
-          image={this.data.image}
-          title="Company title"
-        />
-      </Card>
+      <div className={'card-hover'}>
+        <Card className={this.classes.card}>
+          <CardContent className={this.classes.content}>
+            <Typography variant="headline">{this.data.name}</Typography>
+            <Typography variant="subheading" color="secondary">
+              {this.data.cif}
+            </Typography>
+          </CardContent>
+          <CardMedia
+            className={this.classes.cover}
+            image={this.data.image}
+            title="Company title"
+          />
+        </Card>
+      </div>
     )
   }
 }

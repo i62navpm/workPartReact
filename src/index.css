@@ -3,3 +3,18 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.card-hover {
+  -webkit-transition: transform 0.2s linear, -webkit-box-shadow 0.2s linear;
+  -moz-transition: transform 0.2s linear, -moz-box-shadow 0.2s linear;
+  transition: transform 0.2s linear, box-shadow 0.2s linear;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  -webkit-transform: translateY(-4px);
+  box-shadow: 0 17px 25px rgba(0, 0, 0, 0.13);
+  -webkit-box-shadow: 0 17px 25px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 0 17px 25px rgba(0, 0, 0, 0.13);
+  -o-box-shadow: 0 17px 25px rgba(0, 0, 0, 0.13);
+}

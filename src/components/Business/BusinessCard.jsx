@@ -35,7 +35,7 @@ class BusinessCard extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={'card-hover'}>
         <Card className={this.classes.card}>
           <CardHeader
             avatar={
