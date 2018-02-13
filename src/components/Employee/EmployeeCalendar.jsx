@@ -58,7 +58,7 @@ function EventWrapper({ event, children }) {
 class EmployeeCalendar extends React.Component {
   constructor(props) {
     super(props)
-
+    
     const { classes, data } = props
     this.classes = classes
     this.state = {
@@ -120,7 +120,7 @@ class EmployeeCalendar extends React.Component {
           <ExpansionPanelSummary expandIcon={<ExpandMore />}>
             <Avatar alt={this.state.name} src={this.state.image} />
             <Typography className={this.classes.heading}>{this.state.name}</Typography>
-            <Link className={this.classes.iconLink} to={`/workforce/employee/${this.state.id}`}>
+            <Link className={this.classes.iconLink} to={`/worksheet/${this.props.companyId}/employee/${this.state.id}`}>
               <IconButton>
                 <Edit className={this.classes.icon}/>
               </IconButton>
@@ -150,7 +150,8 @@ class EmployeeCalendar extends React.Component {
 
 EmployeeCalendar.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  companyId: PropTypes.string.isRequired
 }
 
 export default withStyles(styles)(EmployeeCalendar)
