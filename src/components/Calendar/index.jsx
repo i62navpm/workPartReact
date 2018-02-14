@@ -82,7 +82,7 @@ class Calendar extends React.Component {
           const newData = {
             ...eventCalendar.data,
             ...this.state.status[index],
-            money: this.state[this.state.status[index].salary]
+            money: this.state[this.state.status[index].salary || 0]
           }
 
           return { ...eventCalendar, data: newData }
