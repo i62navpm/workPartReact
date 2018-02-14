@@ -43,11 +43,7 @@ const styles = theme => ({
   }
 })
 
-function Event({ event, classes }) {
-  const handleChange = e => {
-    e.stopPropagation()
-  }
-
+function Event({ event, classes, onSetEvent }) {
   return (
     <React.Fragment>
       <span className={'event-title'}>
@@ -55,7 +51,7 @@ function Event({ event, classes }) {
       </span>
       <span className={'event-money'}>
         {!event.data.money
-          ? <IconButton variant="raised" color="primary" className={classes.smallIconButton} onClick={handleChange}>
+          ? <IconButton variant="raised" color="primary" className={classes.smallIconButton} onClick={(e) => onSetEvent(e, event)}>
             <Face className={classes.smallIcon} />
           </IconButton>
           : `${event.data.money} €`}
@@ -90,6 +86,7 @@ class EmployeeCalendar extends React.Component {
 
     this.onSelectEvent = this.onSelectEvent.bind(this)
     this.onSelectSlot = this.onSelectSlot.bind(this)
+    this.onSetEvent = this.onSetEvent.bind(this)
   }
 
   onSelectEvent(event) {
@@ -136,6 +133,22 @@ class EmployeeCalendar extends React.Component {
     })
   }
 
+  onSetEvent(e, eventCalendar) {
+    e.stopPropagation()
+    const events = this.state.events.map(event => {
+      if (event.end === eventCalendar.end) {
+        const newData = {
+          ...event.data,
+          money: 50
+        }
+
+        return { ...event, data: newData }
+      }
+      return event
+    })
+    this.setState({ events })
+  }
+
   render() {
     return (
       <div className={this.classes.root}>
@@ -158,7 +171,7 @@ class EmployeeCalendar extends React.Component {
               defaultDate={new Date()}
               views={['month']}
               components={{
-                event: withStyles(styles)(Event),
+                event: withStyles(styles)(({...rest}) => <Event onSetEvent={this.onSetEvent} {...rest} />),
                 eventWrapper: EventWrapper
               }}
               onSelectEvent={this.onSelectEvent}
