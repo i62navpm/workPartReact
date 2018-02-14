@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui/styles'
 import { IconButton } from 'material-ui'
 import { Face } from 'material-ui-icons'
 import BigCalendar from 'react-big-calendar'
+import Modal from './modal'
 import './calendar.css'
 
 const styles = () => ({
@@ -52,7 +53,7 @@ class Calendar extends React.Component {
 
     const { classes, data } = props
     this.classes = classes
-    
+
     this.state = {
       events: [],
       status: [
@@ -60,12 +61,36 @@ class Calendar extends React.Component {
         { salary: 'halfSalary', title: 'Half Salary' },
         { salary: 'customSalary', title: 'Custom Salary' }
       ],
+      openModal: false,
+      customEvent: {},
       ...data,
     }
 
     this.onSelectEvent = this.onSelectEvent.bind(this)
     this.onSelectSlot = this.onSelectSlot.bind(this)
     this.onSetEvent = this.onSetEvent.bind(this)
+    this.handleModalOpen = this.handleModalOpen.bind(this)
+    this.handleModalClose = this.handleModalClose.bind(this)
+  }
+
+  handleModalOpen() {
+    this.setState({ openModal: true })
+  }
+
+  handleModalClose() {
+    const events = this.state.events.map(event => {
+      if (event.end === this.state.customEvent.end) {
+        const newData = {
+          ...event.data,
+          money: 50
+        }
+
+        return { ...event, data: newData }
+      }
+      return event
+    })
+    this.setState({ events })
+    this.setState({ openModal: false })
   }
 
   onSelectEvent(event) {
@@ -115,36 +140,29 @@ class Calendar extends React.Component {
   onSetEvent(e, eventCalendar) {
     e.stopPropagation()
 
-    const events = this.state.events.map(event => {
-      if (event.end === eventCalendar.end) {
-        const newData = {
-          ...event.data,
-          money: 50
-        }
-
-        return { ...event, data: newData }
-      }
-      return event
-    })
-    this.setState({ events })
+    this.handleModalOpen()
+    this.setState({customEvent: eventCalendar})
   }
 
   render() {
     return (
-      <BigCalendar
-        selectable
-        style={{ height: 500 }}
-        className={this.classes.calendar}
-        events={this.state.events}
-        defaultDate={new Date()}
-        views={['month']}
-        components={{
-          event: withStyles(styles)(({ ...rest }) => <Event onSetEvent={this.onSetEvent} {...rest} />),
-          eventWrapper: EventWrapper
-        }}
-        onSelectEvent={this.onSelectEvent}
-        onSelectSlot={this.onSelectSlot}
-      />
+      <React.Fragment>
+        <BigCalendar
+          selectable
+          style={{ height: 500 }}
+          className={this.classes.calendar}
+          events={this.state.events}
+          defaultDate={new Date()}
+          views={['month']}
+          components={{
+            event: withStyles(styles)(({ ...rest }) => <Event onSetEvent={this.onSetEvent} {...rest} />),
+            eventWrapper: EventWrapper
+          }}
+          onSelectEvent={this.onSelectEvent}
+          onSelectSlot={this.onSelectSlot}
+        />
+        <Modal openModal={this.state.openModal} handleModalClose={this.handleModalClose}/>
+      </ React.Fragment>
 
     )
   }
