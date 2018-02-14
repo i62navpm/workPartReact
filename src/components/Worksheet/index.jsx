@@ -4,6 +4,7 @@ import { BusinessCardSummary } from '../Business'
 import { EmployeeCalendar } from '../Employee'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'moment/locale/en-gb'
 
 BigCalendar.momentLocalizer(moment)
