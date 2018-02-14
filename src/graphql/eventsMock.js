@@ -7,7 +7,7 @@ export default [
     },
     allDay: true,
     start: new Date(2018, 1, 0),
-    end: new Date(2018, 1, 1)
+    end: new Date(2018, 1, 0)
   },
   {
     data: {
@@ -17,7 +17,7 @@ export default [
     },
     allDay: true,
     start: new Date(2018, 2, 0),
-    end: new Date(2018, 2, 1)
+    end: new Date(2018, 2, 0)
   },
   {
     data: {
@@ -27,7 +27,7 @@ export default [
     },
     allDay: true,
     start: new Date(2018, 2, 0),
-    end: new Date(2018, 2, 1)
+    end: new Date(2018, 2, 0)
   },
 
   {
@@ -38,6 +38,6 @@ export default [
     },
     allDay: true,
     start: new Date(2018, 3, 0),
-    end: new Date(2018, 3, 1)
+    end: new Date(2018, 3, 0)
   }
 ]
