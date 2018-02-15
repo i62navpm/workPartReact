@@ -52,7 +52,7 @@ class SimpleModal extends React.Component {
     return (
       <Modal open={this.props.openModal} onClose={this.handleClose}>
         <div className={this.props.classes.paper}>
-          <Typography variant="title" id="modal-title">
+          <Typography type="title" id="modal-title">
             Insert a custom salary
           </Typography>
           <FormControl fullWidth margin="normal">
