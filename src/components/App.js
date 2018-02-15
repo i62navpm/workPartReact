@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
   BrowserRouter as Router,
   Route,
+  Redirect,
   Switch,
   withRouter
 } from 'react-router-dom'
@@ -67,7 +68,7 @@ class App extends Component {
                   path="/worksheet/:companyId"
                   component={Worksheet}
                 />
-                <Route exact path="/" render={() => <h3>Main App</h3>} />
+                <Redirect exact from={'/'} to={'/business'} />
               </Switch>
             </div>
           </Router>
