@@ -32,6 +32,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import businessMockData from '../graphql/businessMock'
 import workforceMockData from '../graphql/workforceMock'
 import BigCalendar from 'react-big-calendar'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import 'moment/locale/en-gb'
 import moment from 'moment'
 
 BigCalendar.momentLocalizer(moment)
