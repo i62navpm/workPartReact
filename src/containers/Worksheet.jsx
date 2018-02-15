@@ -46,14 +46,26 @@ export default graphql(gql`
         fullSalary,
         halfSalary,
         events {
-          data {
-            title,
-            salary,
-            money
+          pay {
+            data {
+              title,
+              salary,
+              money
+            },
+            allDay,
+            start,
+            end
           },
-          allDay,
-          start,
-          end
+          debt {
+            data {
+              title,
+              salary,
+              money
+            },
+            allDay,
+            start,
+            end
+          }
         }
       }
     }
