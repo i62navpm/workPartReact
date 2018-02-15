@@ -1,7 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
-import { Typography, Modal } from 'material-ui'
+import {
+  Typography,
+  Modal,
+  FormControl,
+  InputLabel,
+  Input,
+  InputAdornment,
+  Button
+} from 'material-ui'
 
 const styles = theme => ({
   paper: {
@@ -13,28 +21,59 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4
+  },
+  button: {
+    marginTop: 5,
+    float: 'right'
   }
 })
 
-function SimpleModal(props) {
+class SimpleModal extends React.Component {
+  constructor(props) {
+    super(props)
 
-  return (
-    <Modal
-      open={props.openModal}
-      onClose={props.handleModalClose}
-    >
-      <div className={props.classes.paper}>
-        <Typography variant="title" id="modal-title">
-          Text in a modal
+    this.state = {
+      money: 25
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+  }
+
+  handleChange(event) {
+    this.setState({ money: event.target.value })
+  }
+
+  handleClose() {
+    this.props.handleModalClose(this.state.money)
+  }
+
+  render() {
+    return (
+      <Modal open={this.props.openModal} onClose={this.handleClose}>
+        <div className={this.props.classes.paper}>
+          <Typography variant="title" id="modal-title">
+            Insert a custom salary
           </Typography>
-        <Typography variant="subheading" id="simple-modal-description">
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-      </div>
-    </Modal>
-  )
+          <FormControl fullWidth margin="normal">
+            <InputLabel htmlFor="fullSalary">Custom Salary</InputLabel>
+            <Input
+              id="fullSalary"
+              type="number"
+              name="fullSalary"
+              onChange={this.handleChange}
+              value={this.state.money}
+              endAdornment={<InputAdornment position="end">€</InputAdornment>}
+            />
+          </FormControl>
+          <Button className={this.props.classes.button} raised color="primary" onClick={this.handleClose}>
+            Save
+          </Button>
+        </div>
+      </Modal>
+    )
+  }
 }
-
 
 SimpleModal.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -43,4 +82,3 @@ SimpleModal.propTypes = {
 }
 
 export default withStyles(styles)(SimpleModal)
-

@@ -77,20 +77,20 @@ class Calendar extends React.Component {
     this.setState({ openModal: true })
   }
 
-  handleModalClose() {
+  handleModalClose(money) {
     const events = this.state.events.map(event => {
       if (event.end === this.state.customEvent.end) {
         const newData = {
           ...event.data,
-          money: 50
+          money
         }
 
         return { ...event, data: newData }
       }
       return event
     })
-    this.setState({ events })
-    this.setState({ openModal: false })
+    
+    this.setState({ events, openModal: false, customEvent: {} })
   }
 
   onSelectEvent(event) {
