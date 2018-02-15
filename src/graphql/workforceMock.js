@@ -1,4 +1,4 @@
-import eventsMock from './eventsMock'
+import { pay, debt } from './eventsMock'
 import imageEmployee from '../assets/images/employeeDefault.jpg'
 
 export default [
@@ -13,7 +13,10 @@ export default [
     image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25,
-    events: [eventsMock[0], eventsMock[1]]
+    events: {
+      pay: [pay[0], pay[1]],
+      debt: [debt[0]]
+    }
   },
   {
     id: '2',
@@ -26,7 +29,10 @@ export default [
     image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25,
-    events: [eventsMock[1]]
+    events: {
+      pay: [pay[2], pay[1]],
+      debt: [debt[0]]
+    }
   },
   {
     id: '3',
@@ -39,6 +45,9 @@ export default [
     image: imageEmployee,
     fullSalary: 45.5,
     halfSalary: 25,
-    events: [eventsMock[2]]
+    events: {
+      pay: [pay[2]],
+      debt: [debt[0]]
+    }
   }
 ]

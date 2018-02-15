@@ -1,4 +1,4 @@
-export default [
+export const pay = [
   {
     data: {
       salary: 'fullSalary',
@@ -39,5 +39,18 @@ export default [
     allDay: true,
     start: new Date(2018, 3, 0),
     end: new Date(2018, 3, 0)
+  }
+]
+
+export const debt = [
+  {
+    data: {
+      salary: 'debtSalary',
+      title: 'Debt Salary',
+      money: 45
+    },
+    allDay: true,
+    start: new Date(2018, 2, 0),
+    end: new Date(2018, 2, 0)
   }
 ]

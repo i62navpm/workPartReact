@@ -29,6 +29,14 @@ const EventType = new GraphQLObjectType({
   }
 })
 
+const EventModalityType = new GraphQLObjectType({
+  name: 'EventModality',
+  fields: {
+    pay: { type: new GraphQLList(EventType) },
+    debt: { type: new GraphQLList(EventType) }
+  }
+})
+
 const EmployeeType = new GraphQLObjectType({
   name: 'Employee',
   fields: {
@@ -42,7 +50,7 @@ const EmployeeType = new GraphQLObjectType({
     image: { type: GraphQLString },
     fullSalary: { type: GraphQLFloat },
     halfSalary: { type: GraphQLFloat },
-    events: { type: new GraphQLList(EventType) }
+    events: { type: EventModalityType }
   }
 })
 
