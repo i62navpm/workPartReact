@@ -45,25 +45,22 @@ class EmployeeCalendar extends React.Component {
       1: 'debt'
     }
 
+    const { events, ...employeeInfo } = data
     this.state = {
       modality: 0,
-      currentCalendar: {
-        ...data,
-        events: data.events[this.mapModality[0]]
-      }
+      events,
+      employeeInfo
     }
-
     this.changeModality = this.changeModality.bind(this)
+    this.updateCalendar = this.updateCalendar.bind(this)
   }
 
   changeModality(event, value) {
-    this.setState({
-      modality: value,
-      currentCalendar: {
-        ...this.state.currentCalendar,
-        events: this.props.data.events[this.mapModality[value]]
-      }
-    })
+    this.setState({ modality: value })
+  }
+
+  updateCalendar(calendarUpdated) {
+    this.setState({ events: { ...this.state.events, ...calendarUpdated } })
   }
 
   render() {
@@ -112,7 +109,13 @@ class EmployeeCalendar extends React.Component {
               </Grid>
               <Grid item xs={12}>
                 <Calendar
-                  data={{ calendarData: this.state.currentCalendar, modality: this.mapModality[this.state.modality] }}
+                  data={{
+                    employeeInfo: this.state.employeeInfo,
+                    events: this.state.events[this.mapModality[this.state.modality]],
+                    modality: this.mapModality[this.state.modality]
+                  }
+                  }
+                  updateCalendar={this.updateCalendar}
                 />
               </Grid>
             </Grid>

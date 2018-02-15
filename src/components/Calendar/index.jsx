@@ -44,10 +44,9 @@ class Calendar extends React.Component {
       status: this.statusOptions[data.modality],
       openModal: false,
       customEvent: {},
-      modality: data.modality,
-      ...data.calendarData
+      ...data
     }
-
+    
     this.onSelectEvent = this.onSelectEvent.bind(this)
     this.onSelectSlot = this.onSelectSlot.bind(this)
     this.onSetEvent = this.onSetEvent.bind(this)
@@ -57,8 +56,9 @@ class Calendar extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     if (this.state.modality !== nextProps.data.modality) {
+      this.props.updateCalendar({[this.state.modality]: this.state.events})
       this.setState({
-        events: nextProps.data.calendarData.events,
+        events: nextProps.data.events,
         modality: nextProps.data.modality,
         status: this.statusOptions[nextProps.data.modality]
       })
@@ -101,7 +101,7 @@ class Calendar extends React.Component {
           const newData = {
             ...eventCalendar.data,
             ...this.state.status[index],
-            money: this.state[this.state.status[index].salary || 0]
+            money: this.state.employeeInfo[this.state.status[index].salary || 0]
           }
 
           return { ...eventCalendar, data: newData }
@@ -126,7 +126,7 @@ class Calendar extends React.Component {
         end: slot.toString(),
         allDay: true,
         data: {
-          money: this.state.modality === 'pay' ? this.state.fullSalary : null,
+          money: this.state.modality === 'pay' ? this.state.employeeInfo.fullSalary : null,
           ...this.state.status[0]
         }
       }
@@ -171,7 +171,8 @@ class Calendar extends React.Component {
 
 Calendar.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  updateCalendar: PropTypes.func
 }
 
 export default withStyles(styles)(Calendar)
