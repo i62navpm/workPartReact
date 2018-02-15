@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
-import { IconButton } from 'material-ui'
-import { Face } from 'material-ui-icons'
+import Event from './Event'
+import EventWrapper from './EventWrapper'
 import BigCalendar from 'react-big-calendar'
 import Modal from './modal'
 import './calendar.css'
@@ -22,48 +22,30 @@ const styles = () => ({
   }
 })
 
-function Event({ event, classes, onSetEvent }) {
-  return (
-    <React.Fragment>
-      <span className={'event-title'}>
-        {event.data.title}
-      </span>
-      <span className={'event-money'}>
-        {!event.data.money
-          ? <IconButton variant="raised" color="primary" className={classes.smallIconButton} onClick={(e) => onSetEvent(e, event)}>
-            <Face className={classes.smallIcon} />
-          </IconButton>
-          : `${event.data.money} €`}
-      </span>
-    </React.Fragment>
-  )
-}
-
-function EventWrapper({ event, children }) {
-  return (
-    <div className={`${event.data.salary} calendar-event`}>
-      {children}
-    </div>
-  )
-}
-
 class Calendar extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     const { classes, data } = props
     this.classes = classes
 
-    this.state = {
-      events: [],
-      status: [
+    this.statusOptions = {
+      pay: [
         { salary: 'fullSalary', title: 'Full Salary' },
         { salary: 'halfSalary', title: 'Half Salary' },
         { salary: 'customSalary', title: 'Custom Salary' }
       ],
+      debt: [
+        { salary: 'debtSalary', title: 'Debt Salary' }
+      ]
+    }
+    this.state = {
+      events: [],
+      status: this.statusOptions[data.modality],
       openModal: false,
       customEvent: {},
-      ...data,
+      modality: data.modality,
+      ...data.calendarData
     }
 
     this.onSelectEvent = this.onSelectEvent.bind(this)
@@ -73,11 +55,21 @@ class Calendar extends React.Component {
     this.handleModalClose = this.handleModalClose.bind(this)
   }
 
-  handleModalOpen() {
+  componentWillReceiveProps (nextProps) {
+    if (this.state.modality !== nextProps.data.modality) {
+      this.setState({
+        events: nextProps.data.calendarData.events,
+        modality: nextProps.data.modality,
+        status: this.statusOptions[nextProps.data.modality]
+      })
+    }
+  }
+
+  handleModalOpen () {
     this.setState({ openModal: true })
   }
 
-  handleModalClose(money) {
+  handleModalClose (money) {
     const events = this.state.events.map(event => {
       if (event.end === this.state.customEvent.end) {
         const newData = {
@@ -89,12 +81,14 @@ class Calendar extends React.Component {
       }
       return event
     })
-    
+
     this.setState({ events, openModal: false, customEvent: {} })
   }
 
-  onSelectEvent(event) {
-    let index = this.state.status.findIndex(status => event.data.salary === status.salary)
+  onSelectEvent (event) {
+    let index = this.state.status.findIndex(
+      status => event.data.salary === status.salary
+    )
     index = ++index % (this.state.status.length + 1)
 
     let events = this.state.events
@@ -119,32 +113,35 @@ class Calendar extends React.Component {
     this.setState({ events })
   }
 
-  onSelectSlot(event) {
+  onSelectSlot (event) {
     event.slots.forEach(slot => {
-      if (this.state.events.findIndex(slotEvent => slotEvent.start === slot.toString()) !== -1) return
+      if (
+        this.state.events.findIndex(
+          slotEvent => slotEvent.start === slot.toString()
+        ) !== -1
+      ) { return }
 
       let newSlot = {
         start: slot.toString(),
         end: slot.toString(),
         allDay: true,
         data: {
-          money: this.state.fullSalary,
-          salary: 'fullSalary',
-          title: 'Full Salary'
+          money: this.state.modality === 'pay' ? this.state.fullSalary : null,
+          ...this.state.status[0]
         }
       }
       this.setState({ events: [...this.state.events, newSlot] })
     })
   }
 
-  onSetEvent(e, eventCalendar) {
+  onSetEvent (e, eventCalendar) {
     e.stopPropagation()
 
     this.handleModalOpen()
-    this.setState({customEvent: eventCalendar})
+    this.setState({ customEvent: eventCalendar })
   }
 
-  render() {
+  render () {
     return (
       <React.Fragment>
         <BigCalendar
@@ -155,15 +152,19 @@ class Calendar extends React.Component {
           defaultDate={new Date()}
           views={['month']}
           components={{
-            event: withStyles(styles)(({ ...rest }) => <Event onSetEvent={this.onSetEvent} {...rest} />),
+            event: withStyles(styles)(({ ...rest }) => (
+              <Event onSetEvent={this.onSetEvent} {...rest} />
+            )),
             eventWrapper: EventWrapper
           }}
           onSelectEvent={this.onSelectEvent}
           onSelectSlot={this.onSelectSlot}
         />
-        <Modal openModal={this.state.openModal} handleModalClose={this.handleModalClose}/>
-      </ React.Fragment>
-
+        <Modal
+          openModal={this.state.openModal}
+          handleModalClose={this.handleModalClose}
+        />
+      </React.Fragment>
     )
   }
 }

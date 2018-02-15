@@ -21,3 +21,7 @@
 .calendar-event.customSalary .rbc-event-allday {
   background-color: #2196f3;
 }
+
+.calendar-event.debtSalary .rbc-event-allday {
+  background-color: #f44336;
+}
