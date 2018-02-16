@@ -4,20 +4,41 @@ import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 import WorksheetPresentational from '../components/Worksheet'
+import { setLoader } from '../actions/loader'
 import { EmployeeForm } from '../components/Employee'
 const debug = require('debug')('workSheet')
 
-function Worksheet({ match, data, onNewEmployeeClick }) {
-  const { loading } = data
+class Worksheet extends React.Component {
+  constructor(props) {
+    super(props)
+    this.props.setLoader(true)
 
-  if (loading) return <div>Loading...</div>
+    const { loading, company = {} } = props.data
 
-  return (
-    <Switch>
-      <Route exact path={`${match.url}/`} render={() => <WorksheetPresentational data={data} />} />
-      <Route path={`${match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={onNewEmployeeClick} closeForm={() => history.push(`${match.url}`)} history={history} {...rest} />)} />
-    </Switch>
-  )
+    this.state = {
+      company,
+      loading
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { data: { loading, company } } = nextProps
+    this.setState({ loading, company })
+    this.props.setLoader(loading)
+  }
+
+  render() {
+    let { loading, company } = this.state
+
+    if (loading) return null
+
+    return (
+      <Switch>
+        <Route exact path={`${this.props.match.url}/`} render={() => <WorksheetPresentational company={company} />} />
+        <Route path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.props.onNewEmployeeClick} closeForm={() => history.push(`${this.props.match.url}`)} history={history} {...rest} />)} />
+      </Switch>
+    )
+  }
 }
 
 const mapStateToProps = state => {
@@ -26,9 +47,10 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = () => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onNewEmployeeClick: () => debug('new Employee')
+    onNewEmployeeClick: () => debug('new Employee'),
+    setLoader: (loading) => dispatch(setLoader({ loading }))
   }
 }
 
