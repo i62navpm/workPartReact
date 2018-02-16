@@ -37,7 +37,7 @@ class BusinessEmployeeList extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { data: { workforce, loading } } = nextProps
-    this.setState({ workforce: [...this.state.workforce, ...workforce] })
+    this.setState({ workforce: [...workforce], loading })
     this.props.setLoader(loading)
   }
 
