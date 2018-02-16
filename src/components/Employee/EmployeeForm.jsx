@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { ValidatorForm } from 'react-form-validator-core'
+import { setLoader } from '../../actions/loader'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
 import { Button, Grid, Paper, AppBar, Toolbar, Typography, IconButton } from 'material-ui'
@@ -43,6 +45,7 @@ const styles = theme => ({
 class EmployeeForm extends React.Component {
   constructor(props) {
     super(props)
+    this.props.setLoader(true)
 
     const { classes } = props
     this.classes = classes
@@ -86,16 +89,16 @@ class EmployeeForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {data: {employee}} = nextProps
-    if(!employee) return
-    this.setState({formData: {...employee}})
+    const { data: { employee, loading } } = nextProps
+    this.setState({ loading, formData: { ...this.state.formData, ...employee } })
+    this.props.setLoader(loading)
   }
 
   render() {
     let { formData, submitted } = this.state
     const { loading } = this.props.data
 
-    if (loading) return <div>Loading...</div>
+    if (loading) return null
 
     return (
       <Grid container justify="center" alignItems="center">
@@ -171,7 +174,7 @@ class EmployeeForm extends React.Component {
                     onChange={this.handleChange}
                     value={formData.email}
                     fullWidth
-                  />                  
+                  />
                 </ Grid>
                 <Grid item xs={12} sm={6}>
                   <TextValidator
@@ -270,6 +273,12 @@ class EmployeeForm extends React.Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLoader: (loading) => dispatch(setLoader({ loading }))
+  }
+}
+
 EmployeeForm.propTypes = {
   classes: PropTypes.object.isRequired
 }
@@ -290,9 +299,12 @@ export default graphql(gql`
     }
   }
   `, {
-    options: ({match}) => {
+    options: ({ match }) => {
       return { variables: { employeeId: match.params.employeeId } }
     }
   })(
-  withStyles(styles)(EmployeeForm)
+    connect(
+      null,
+      mapDispatchToProps
+    )(withStyles(styles)(EmployeeForm))
   )

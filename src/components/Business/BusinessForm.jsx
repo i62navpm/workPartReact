@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import BusinessEmployeeList from './BusinessEmployeeList'
+import { setLoader } from '../../actions/loader'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
@@ -42,6 +44,7 @@ const styles = theme => ({
 class BusinessForm extends React.Component {
   constructor(props) {
     super(props)
+    this.props.setLoader(true)
 
     const { classes } = props
     this.classes = classes
@@ -86,14 +89,14 @@ class BusinessForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { data: { company, loading } } = nextProps
-    this.setState({ loading })
-    if (company) this.setState({ formData: { ...company } })
+    this.setState({ loading, formData: { ...this.state.formData, ...company } })
+    this.props.setLoader(loading)
   }
 
   render() {
     let { formData, submitted, loading } = this.state
-    
-    if (loading) return <div>Loading...</div>
+
+    if (loading) return null
 
     return (
       <Grid container justify="center" alignItems="center">
@@ -240,6 +243,12 @@ class BusinessForm extends React.Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLoader: (loading) => dispatch(setLoader({ loading }))
+  }
+}
+
 BusinessForm.propTypes = {
   classes: PropTypes.object.isRequired
 }
@@ -266,5 +275,8 @@ export default graphql(gql`
       return { variables: { companyId: match.params.companyId } }
     }
   })(
-  withStyles(styles)(BusinessForm)
+    connect(
+      null,
+      mapDispatchToProps
+    )(withStyles(styles)(BusinessForm))
   )

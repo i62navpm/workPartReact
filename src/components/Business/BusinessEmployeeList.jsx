@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
+import { setLoader } from '../../actions/loader'
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import { Avatar, Divider, Checkbox, Typography } from 'material-ui'
 import gql from 'graphql-tag'
@@ -26,13 +28,17 @@ class BusinessEmployeeList extends React.Component {
     const { classes } = props
     this.classes = classes
 
-    this.state = { workforce: [], activeWorkforce: [...props.activeWorkforce] || [] }
+    this.state = {
+      workforce: [],
+      loading: props.data.loading,
+      activeWorkforce: [...props.activeWorkforce] || []
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data: { workforce } } = nextProps
-    if (!workforce) return
-    this.setState({ workforce: [...workforce] })
+    const { data: { workforce, loading } } = nextProps
+    this.setState({ workforce: [...this.state.workforce, ...workforce] })
+    this.props.setLoader(loading)
   }
 
   handleToggle({ id }) {
@@ -59,7 +65,8 @@ class BusinessEmployeeList extends React.Component {
   render() {
     const { loading } = this.props.data
 
-    if (loading) return <div>Loading...</div>
+    if (loading) return <div className={this.classes.title}>Loading...</div>
+
     const { workforce } = this.state
 
     return (
@@ -89,6 +96,12 @@ class BusinessEmployeeList extends React.Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLoader: (loading) => dispatch(setLoader({ loading }))
+  }
+}
+
 BusinessEmployeeList.propTypes = {
   classes: PropTypes.object.isRequired
 }
@@ -103,5 +116,8 @@ export default graphql(gql`
     }
   }
   `)(
-  withStyles(styles)(BusinessEmployeeList)
+  connect(
+    null,
+    mapDispatchToProps
+  )(withStyles(styles)(BusinessEmployeeList))
   )
