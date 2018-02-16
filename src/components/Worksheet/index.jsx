@@ -9,11 +9,7 @@ import 'moment/locale/en-gb'
 
 BigCalendar.momentLocalizer(moment)
 
-function WorksheetPresentational({ data }) {
-  const { loading, company } = data
-
-  if (loading) return <div>Loading...</div>
-  
+function WorksheetPresentational({ company }) {
   return (
     <React.Fragment>
       <Grid justify="center" direction="row" spacing={40} container>
