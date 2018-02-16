@@ -11,36 +11,29 @@ import './App.css'
 import Loadable from 'react-loadable'
 import PrivateRoute from './PrivateRoute'
 import MenuAppBar from './MenuAppBar'
+import Loading from './Loading'
 
 const Auth = Loadable({
   loader: () => import(/* webpackChunkName: "auth" */ '../containers/Auth'),
-  loading() {
-    return <div>Loading...</div>
-  }
+  loading: Loading
 })
 
 const Business = Loadable({
   loader: () =>
     import(/* webpackChunkName: "business" */ '../containers/Business'),
-  loading() {
-    return <div>Loading...</div>
-  }
+  loading: Loading
 })
 
 const Workforce = Loadable({
   loader: () =>
     import(/* webpackChunkName: "workforce" */ '../containers/Workforce'),
-  loading() {
-    return <div>Loading...</div>
-  }
+  loading: Loading
 })
 
 const Worksheet = Loadable({
   loader: () =>
     import(/* webpackChunkName: "worksheet" */ '../containers/Worksheet'),
-  loading() {
-    return <div>Loading...</div>
-  }
+  loading: Loading
 })
 
 class App extends Component {
