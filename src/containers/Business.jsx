@@ -5,6 +5,7 @@ import { BusinessList, BusinessForm } from '../components/Business'
 import { setLoader } from '../actions/loader'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
+const debug = require('debug')('bussiness')
 
 class Business extends React.Component {
   constructor(props) {
@@ -47,7 +48,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLoader: (loading) => dispatch(setLoader({ loading }))
+    setLoader: (loading) => dispatch(setLoader({ loading })),
+    onNewBusinessClick: () => debug('new Business')
   }
 }
 
