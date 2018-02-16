@@ -77,9 +77,11 @@ storiesOf('Auth', module)
 
 storiesOf('Business', module)
   .addDecorator(story => (
-    <ApolloProvider client={client}>
-      <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+      </ApolloProvider>
+    </Provider>
   ))
   .add('Card business', () => <BusinessCard data={businessMockData[0]} />)
   .add('Card business summary', () => (
@@ -98,9 +100,11 @@ storiesOf('Business', module)
 
 storiesOf('Workforce', module)
   .addDecorator(story => (
-    <ApolloProvider client={client}>
-      <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
+      </ApolloProvider>
+    </Provider>
   ))
   .add('Card employee', () => <EmployeeCard data={workforceMockData[0]} />)
   .add('Form employee', () => (
