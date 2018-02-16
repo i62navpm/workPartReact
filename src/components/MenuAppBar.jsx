@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
-import { AppBar, Toolbar, Typography, IconButton } from 'material-ui'
+import { AppBar, Toolbar, Typography, IconButton, LinearProgress } from 'material-ui'
 import MenuIcon from 'material-ui-icons/Menu'
 import { AccountCircle } from 'material-ui-icons'
 import Menu, { MenuItem } from 'material-ui/Menu'
@@ -111,6 +111,7 @@ class MenuAppBar extends React.Component {
             )}
           </Toolbar>
         </AppBar>
+        {this.props.loader.loading && <LinearProgress color="accent" />}
       </div>
     )
   }
@@ -118,7 +119,8 @@ class MenuAppBar extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.auth
+    user: state.auth,
+    loader: state.loader
   }
 }
 
