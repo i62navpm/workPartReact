@@ -10,7 +10,6 @@ import { loginUser, registerUser, verificationUser, forgotPasswordUser, confirmP
 function Auth({ match, onLoginClick, onRegisterClick, onVerificationClick, onForgotPasswordClick, onConfirmPasswordClick }) {
   return (
     <div>
-      <p>{}</p>
       <Switch>
         <Route path={`${match.url}/login`} render={withRouter(({history}) => <Login onSubmit={onLoginClick} history={history}/>)} />
         <Route path={`${match.url}/register`} render={withRouter(({history}) => <Register onSubmit={onRegisterClick} history={history}/>)} />
