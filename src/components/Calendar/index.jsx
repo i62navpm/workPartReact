@@ -76,13 +76,13 @@ class Calendar extends React.Component {
           ...event.data,
           money
         }
-
         return { ...event, data: newData }
       }
       return event
     })
-
+    
     this.setState({ events, openModal: false, customEvent: {} })
+    this.props.onChangeCalendar(true)
   }
 
   onSelectEvent (event) {
@@ -111,17 +111,18 @@ class Calendar extends React.Component {
     }
 
     this.setState({ events })
+    this.props.onChangeCalendar(true)
   }
 
   onSelectSlot (event) {
-    event.slots.forEach(slot => {
+    const newEvents = event.slots.map(slot => {
       if (
         this.state.events.findIndex(
           slotEvent => slotEvent.start === slot.toString()
         ) !== -1
-      ) { return }
+      ) { return null}
 
-      let newSlot = {
+      return {
         start: slot.toString(),
         end: slot.toString(),
         allDay: true,
@@ -130,8 +131,9 @@ class Calendar extends React.Component {
           ...this.state.status[0]
         }
       }
-      this.setState({ events: [...this.state.events, newSlot] })
-    })
+    }).filter(event => event)
+    this.setState({ events: [...this.state.events, ...newEvents] })
+    this.props.onChangeCalendar(true)
   }
 
   onSetEvent (e, eventCalendar) {
@@ -172,7 +174,8 @@ class Calendar extends React.Component {
 Calendar.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  updateCalendar: PropTypes.func
+  updateCalendar: PropTypes.func,
+  onChangeCalendar: PropTypes.func
 }
 
 export default withStyles(styles)(Calendar)
