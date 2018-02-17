@@ -7,7 +7,7 @@ import ExpansionPanel, {
   ExpansionPanelDetails
 } from 'material-ui/ExpansionPanel'
 import Calendar from '../Calendar'
-import { Typography, Avatar, IconButton, Grid, Paper } from 'material-ui'
+import { Typography, Avatar, IconButton, Grid, Paper, Button } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown } from 'material-ui-icons'
 
@@ -49,10 +49,14 @@ class EmployeeCalendar extends React.Component {
     this.state = {
       modality: 0,
       events,
+      calendarChanged: { pay: false, debt: false },
+      discardChanges: false,
       employeeInfo
     }
     this.changeModality = this.changeModality.bind(this)
     this.updateCalendar = this.updateCalendar.bind(this)
+    this.onChangeCalendar = this.onChangeCalendar.bind(this)
+    this.restoreEvents = this.restoreEvents.bind(this)
   }
 
   changeModality(event, value) {
@@ -61,6 +65,22 @@ class EmployeeCalendar extends React.Component {
 
   updateCalendar(calendarUpdated) {
     this.setState({ events: { ...this.state.events, ...calendarUpdated } })
+  }
+
+  onChangeCalendar() {
+    this.setState({ calendarChanged: { ...this.state.calendarChanged, [this.mapModality[this.state.modality]]: true } })
+  }
+
+  restoreEvents() {
+    this.setState({
+      events: { 
+        ...this.state.events, [this.mapModality[this.state.modality]]: this.props.data.events[this.mapModality[this.state.modality]] 
+      },
+      calendarChanged: {
+        ...this.state.calendarChanged, [this.mapModality[this.state.modality]]: false
+      },
+      discardChanges: !this.state.discardChanges
+    })
   }
 
   render() {
@@ -112,11 +132,26 @@ class EmployeeCalendar extends React.Component {
                   data={{
                     employeeInfo: this.state.employeeInfo,
                     events: this.state.events[this.mapModality[this.state.modality]],
-                    modality: this.mapModality[this.state.modality]
-                  }
-                  }
+                    modality: this.mapModality[this.state.modality],
+                    discardChanges: this.state.discardChanges
+                  }}
                   updateCalendar={this.updateCalendar}
+                  onChangeCalendar={this.onChangeCalendar}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container spacing={24} justify="flex-end">
+                  <Grid item>
+                    <Button onClick={this.restoreEvents} raised color="accent" disabled={!this.state.calendarChanged[this.mapModality[this.state.modality]]}>
+                      Discard
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button raised color="primary" disabled={!this.state.calendarChanged[this.mapModality[this.state.modality]]}>
+                      Save
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </ExpansionPanelDetails>

@@ -55,11 +55,12 @@ class Calendar extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (this.state.modality !== nextProps.data.modality) {
+    if (this.state.modality !== nextProps.data.modality || this.state.discardChanges !== nextProps.data.discardChanges) {
       this.props.updateCalendar({[this.state.modality]: this.state.events})
       this.setState({
         events: nextProps.data.events,
         modality: nextProps.data.modality,
+        discardChanges: nextProps.data.discardChanges,
         status: this.statusOptions[nextProps.data.modality]
       })
     }
