@@ -6,6 +6,7 @@ import { AppBar, Toolbar, Typography, IconButton, LinearProgress } from 'materia
 import MenuIcon from 'material-ui-icons/Menu'
 import { AccountCircle } from 'material-ui-icons'
 import Menu, { MenuItem } from 'material-ui/Menu'
+import { setDrawer } from '../actions/drawer'
 import { logoutUser } from '../actions/auth'
 const debug = require('debug')
 const error = debug('menuAppBar:error')
@@ -75,6 +76,7 @@ class MenuAppBar extends React.Component {
               className={classes.menuButton}
               color="inherit"
               aria-label="Menu"
+              onClick={() => this.props.setDrawer(true)}
             >
               <MenuIcon />
             </IconButton>
@@ -126,7 +128,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLogoutClick: () => dispatch(logoutUser())
+    onLogoutClick: () => dispatch(logoutUser()),
+    setDrawer: (open) => dispatch(setDrawer({ open }))
   }
 }
 

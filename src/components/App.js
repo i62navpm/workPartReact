@@ -11,6 +11,7 @@ import './App.css'
 import Loadable from 'react-loadable'
 import PrivateRoute from './PrivateRoute'
 import MenuAppBar from './MenuAppBar'
+import DrawerBar from './DrawerBar'
 import Loading from './Loading'
 
 const Auth = Loadable({
@@ -40,19 +41,31 @@ class App extends Component {
   showAppBar() {
     return !window.location.pathname.includes('/auth') && this.props.user.email
   }
+
+  getAppBar() {
+    return (
+      <Route
+        render={withRouter(({ history }) => <MenuAppBar history={history} />)}
+      />
+    )
+  }
+
+  getDrawer() {
+    return (
+      <Route
+        render={withRouter(({ history }) => <DrawerBar history={history} />)}
+      />
+    )
+  }
+
   render() {
     return (
       <div className="App">
         <div className="App-intro">
           <Router>
             <div>
-              {this.showAppBar() && (
-                <Route
-                  render={withRouter(({ history }) => (
-                    <MenuAppBar history={history} />
-                  ))}
-                />
-              )}
+              {this.showAppBar() && this.getAppBar()}
+              {this.showAppBar() && this.getDrawer()}
               <Switch>
                 <Route path="/auth" component={Auth} />
                 <PrivateRoute path="/business" component={Business} />
