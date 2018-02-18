@@ -9,7 +9,7 @@ import ExpansionPanel, {
 import Calendar from '../Calendar'
 import { Typography, Avatar, IconButton, Grid, Paper, Button } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
-import { ExpandMore, Edit, TrendingUp, TrendingDown } from 'material-ui-icons'
+import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning } from 'material-ui-icons'
 
 const styles = theme => ({
   root: {
@@ -30,6 +30,11 @@ const styles = theme => ({
   },
   tab: {
     maxWidth: 500
+  },
+  warning: {
+    fill: '#ffc107',
+    width: 20,
+    height: 20
   }
 })
 
@@ -73,8 +78,8 @@ class EmployeeCalendar extends React.Component {
 
   restoreEvents() {
     this.setState({
-      events: { 
-        ...this.state.events, [this.mapModality[this.state.modality]]: this.props.data.events[this.mapModality[this.state.modality]] 
+      events: {
+        ...this.state.events, [this.mapModality[this.state.modality]]: this.props.data.events[this.mapModality[this.state.modality]]
       },
       calendarChanged: {
         ...this.state.calendarChanged, [this.mapModality[this.state.modality]]: false
@@ -116,12 +121,12 @@ class EmployeeCalendar extends React.Component {
                   >
                     <Tab
                       className={this.classes.tab}
-                      icon={<TrendingUp />}
+                      icon={this.state.calendarChanged['pay'] ? <Warning className={this.classes.warning} /> : <TrendingUp />}
                       label="Pay"
                     />
                     <Tab
                       className={this.classes.tab}
-                      icon={<TrendingDown />}
+                      icon={this.state.calendarChanged['debt'] ? <Warning className={this.classes.warning} /> : <TrendingDown />}
                       label="Debt"
                     />
                   </Tabs>
