@@ -88,6 +88,14 @@ class EmployeeCalendar extends React.Component {
     })
   }
 
+  showWarning() {
+    return Object.values(this.state.calendarChanged).some(status => status === true)
+      ? <IconButton>
+          <Warning className={this.classes.warning} />
+        </IconButton>
+      : null
+  }
+
   render() {
     return (
       <div className={this.classes.root}>
@@ -103,6 +111,7 @@ class EmployeeCalendar extends React.Component {
                 this.props.data.id
                 }`}
             >
+              {this.showWarning()}
               <IconButton>
                 <Edit className={this.classes.icon} />
               </IconButton>
