@@ -21,7 +21,7 @@ const styles = theme => ({
     lineHeight: 2.5,
     marginLeft: theme.spacing.unit * 2
   },
-  iconLink: {
+  iconWarning: {
     marginLeft: 'auto'
   },
   icon: {
@@ -105,13 +105,14 @@ class EmployeeCalendar extends React.Component {
             <Typography className={this.classes.heading}>
               {this.props.data.name}
             </Typography>
+            <div className={this.classes.iconWarning}>
+              {this.showWarning()}
+            </div>
             <Link
-              className={this.classes.iconLink}
               to={`/worksheet/${this.props.companyId}/employee/${
                 this.props.data.id
                 }`}
             >
-              {this.showWarning()}
               <IconButton>
                 <Edit className={this.classes.icon} />
               </IconButton>
