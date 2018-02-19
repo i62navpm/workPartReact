@@ -63,7 +63,7 @@ class App extends Component {
       <div className="App">
         <div className="App-intro">
           <Router>
-            <div>
+            <React.Fragment>
               {this.showAppBar() && this.getAppBar()}
               {this.showAppBar() && this.getDrawer()}
               <Switch>
@@ -76,7 +76,7 @@ class App extends Component {
                 />
                 <Redirect exact from={'/'} to={'/business'} />
               </Switch>
-            </div>
+            </React.Fragment>
           </Router>
         </div>
       </div>
