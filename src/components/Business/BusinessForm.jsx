@@ -150,7 +150,7 @@ class BusinessForm extends React.Component {
                     name="cif"
                     autoComplete="cif"
                     label="Cif"
-                    type="cif"
+                    type="text"
                     onChange={this.handleChange}
                     value={formData.cif}
                     validators={['required', 'matchRegexp:^.{9,}$']}

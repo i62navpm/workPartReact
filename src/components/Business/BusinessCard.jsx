@@ -52,11 +52,11 @@ class BusinessCard extends React.Component {
           </Link>
           <CardActions disableActionSpacing>
             <div className={this.classes.flexGrow} />
-            <IconButton color="accent">
+            <IconButton className="delete-business" color="accent">
               <Delete />
             </IconButton>
             <Link to={`/business/company/${this.data.id}`}>
-              <IconButton color="primary">
+              <IconButton className="edit-business" color="primary">
                 <Edit />
               </IconButton>
             </Link>

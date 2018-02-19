@@ -23,7 +23,7 @@ class BusinessAddButton extends React.Component {
 
   render() {
     return (
-      <Button fab onClick={this.props.onClick} className={this.classes.fab} color="primary">
+      <Button fab onClick={this.props.onClick} className={`${this.classes.fab} add-button`} color="primary">
         <Add />
       </Button>
     )
