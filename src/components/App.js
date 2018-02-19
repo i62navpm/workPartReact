@@ -13,6 +13,7 @@ import PrivateRoute from './PrivateRoute'
 import MenuAppBar from './MenuAppBar'
 import DrawerBar from './DrawerBar'
 import Loading from './Loading'
+import Notification from './Notification'
 
 const Auth = Loadable({
   loader: () => import(/* webpackChunkName: "auth" */ '../containers/Auth'),
@@ -62,6 +63,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-intro">
+          <Notification />
           <Router>
             <React.Fragment>
               {this.showAppBar() && this.getAppBar()}
