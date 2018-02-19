@@ -118,6 +118,11 @@ class MenuAppBar extends React.Component {
   }
 }
 
+MenuAppBar.propTypes = {
+  classes: PropTypes.object.isRequired,
+  onLogoutClick: PropTypes.func.isRequired
+}
+
 const mapStateToProps = state => {
   return {
     user: state.auth,
@@ -132,14 +137,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(withStyles(styles)(MenuAppBar))
 
-MenuAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onLogoutClick: PropTypes.func.isRequired
-}
 
