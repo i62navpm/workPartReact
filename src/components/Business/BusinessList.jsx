@@ -26,7 +26,7 @@ class Business extends React.Component {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={24}>
             {this.business.map(value => (
-              <Grid key={value.id} item>
+              <Grid key={value.id} xs={12} sm={6} md={4} item>
                 <BusinessCard data={value}/>
               </Grid>
             ))}

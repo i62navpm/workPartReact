@@ -26,7 +26,7 @@ class Employee extends React.Component {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={24}>
             {this.workforce.map(value => (
-              <Grid key={value.id} item>
+              <Grid key={value.id} xs={12} sm={6} md={4} item>
                 <EmployeeCard data={value}/>
               </Grid>
             ))}

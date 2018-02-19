@@ -66,16 +66,18 @@ class App extends Component {
             <React.Fragment>
               {this.showAppBar() && this.getAppBar()}
               {this.showAppBar() && this.getDrawer()}
-              <Switch>
-                <Route path="/auth" component={Auth} />
-                <PrivateRoute path="/business" component={Business} />
-                <PrivateRoute path="/workforce" component={Workforce} />
-                <PrivateRoute
-                  path="/worksheet/:companyId"
-                  component={Worksheet}
-                />
-                <Redirect exact from={'/'} to={'/business'} />
-              </Switch>
+              <div className={'content-body'}>
+                <Switch>
+                  <Route path="/auth" component={Auth} />
+                  <PrivateRoute path="/business" component={Business} />
+                  <PrivateRoute path="/workforce" component={Workforce} />
+                  <PrivateRoute
+                    path="/worksheet/:companyId"
+                    component={Worksheet}
+                  />
+                  <Redirect exact from={'/'} to={'/business'} />
+                </Switch>
+              </div>
             </React.Fragment>
           </Router>
         </div>

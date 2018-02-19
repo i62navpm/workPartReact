@@ -13,9 +13,6 @@ const randomColor = function (obj) {
 }
 
 const styles = () => ({
-  card: {
-    width: 400,
-  },
   media: {
     height: 194,
   },
