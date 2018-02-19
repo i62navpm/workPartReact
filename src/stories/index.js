@@ -25,6 +25,7 @@ import {
 import AddButton from '../components/AddButton'
 import UploadImage from '../components/UploadImage'
 import MenuAppBar from '../components/MenuAppBar'
+import DrawerBar from '../components/DrawerBar'
 import ApolloProvider from 'react-apollo/ApolloProvider'
 import ApolloClient from 'apollo-client'
 import { MockHttpLink } from '../graphql/mockHttpLink'
@@ -49,13 +50,15 @@ storiesOf('Button', module)
   .add('with some emoji', () => (
     <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
   ))
-storiesOf('Menu App Bar', module)
+
+storiesOf('Menu Bars', module)
   .addDecorator(story => (
     <Provider store={store}>
       <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
     </Provider>
   ))
   .add('App bar', () => <MenuAppBar onLogoutClick={action('clicked')} />)
+  .add('Drawer', () => <DrawerBar history={{ push: action('clicked') }} />)
 
 storiesOf('Upload', module).add('Upload image', () => (
   <UploadImage image="" name="image" handleChange={action('clicked')} />
