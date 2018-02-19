@@ -152,7 +152,7 @@ class EmployeeForm extends React.Component {
                     name="nif"
                     autoComplete="nif"
                     label="Nif"
-                    type="nif"
+                    type="text"
                     onChange={this.handleChange}
                     value={formData.nif}
                     validators={['required', 'matchRegexp:^.{9,}$']}

@@ -56,7 +56,7 @@ class Employee extends React.Component {
               <Delete />
             </IconButton>
             <Link to={`/workforce/employee/${this.data.id}`}>
-              <IconButton color="primary">
+              <IconButton className="edit-workforce" color="primary">
                 <Edit />
               </IconButton>
             </Link>

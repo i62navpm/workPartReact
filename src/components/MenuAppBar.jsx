@@ -84,7 +84,7 @@ class MenuAppBar extends React.Component {
               Work Part App
             </Typography>
             {auth && (
-              <div>
+              <div id="menu-appbar">
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : null}
                   aria-haspopup="true"
@@ -94,7 +94,6 @@ class MenuAppBar extends React.Component {
                   <AccountCircle />
                 </IconButton>
                 <Menu
-                  id="menu-appbar"
                   anchorEl={anchorEl}
                   anchorOrigin={{
                     vertical: 'top',
