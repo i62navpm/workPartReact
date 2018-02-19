@@ -62,11 +62,21 @@ class Register extends React.Component {
     this.setState({ submitted: true }, async () => {
       try {
         await this.props.onSubmit(this.state.formData)
-        this.setState({ submitted: false })
         this.props.history.push('/auth/verification')
+        this.props.setNotification({
+          open: true,
+          type: 'success',
+          message: 'Register Ok!, Verificate your email now!'
+        })
       } catch ({message}) {
-        this.setState({ submitted: false })
+        this.props.setNotification({
+          open: true,
+          type: 'error',
+          message
+        })
         error(message)
+      } finally {
+        this.setState({ submitted: false })
       }
     })
   }
@@ -152,7 +162,8 @@ class Register extends React.Component {
 }
 
 Register.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  setNotification: PropTypes.func
 }
 
 export default withStyles(styles)(Register)

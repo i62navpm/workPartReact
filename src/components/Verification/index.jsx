@@ -60,11 +60,21 @@ class Verification extends React.Component {
     this.setState({ submitted: true }, async () => {
       try {
         await this.props.onSubmit(this.state.formData)
-        this.setState({ submitted: false })
         this.props.history.push('/auth/login')
-      } catch (err) {
+        this.props.setNotification({
+          open: true,
+          type: 'success',
+          message: 'Your email is verificated!, Login now!'
+        })
+      } catch ({message}) {
+        this.props.setNotification({
+          open: true,
+          type: 'error',
+          message
+        })
+        error(message)
+      } finally {
         this.setState({ submitted: false })
-        error(err.message)
       }
     })
   }
@@ -131,7 +141,8 @@ class Verification extends React.Component {
 }
 
 Verification.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  setNotification: PropTypes.func
 }
 
 export default withStyles(styles)(Verification)

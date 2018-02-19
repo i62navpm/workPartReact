@@ -157,7 +157,17 @@ class ForgotPassword extends React.Component {
       try {
         await this.props.onNextStep(this.state.formData)
         this.setState({ activeStep: this.state.activeStep + 1 })
-      } catch ({message}) {
+        this.props.setNotification({
+          open: true,
+          type: 'success',
+          message: 'We send you an email with a verification code!'
+        })
+      } catch ({ message }) {
+        this.props.setNotification({
+          open: true,
+          type: 'error',
+          message
+        })
         error(message)
       } finally {
         this.setState({ submitted: false })
@@ -182,11 +192,21 @@ class ForgotPassword extends React.Component {
     this.setState({ submitted: true }, async () => {
       try {
         await this.props.onSubmit(this.state.formData)
-        this.setState({ submitted: false })
         this.props.history.push('/auth/login')
-      } catch ({message}) {
-        this.setState({ submitted: false })
+        this.props.setNotification({
+          open: true,
+          type: 'success',
+          message: 'Your password have been changed!'
+        })
+      } catch ({ message }) {
+        this.props.setNotification({
+          open: true,
+          type: 'error',
+          message
+        })
         error(message)
+      } finally {
+        this.setState({ submitted: false })
       }
     })
   }
@@ -248,7 +268,8 @@ class ForgotPassword extends React.Component {
 }
 
 ForgotPassword.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  setNotification: PropTypes.func
 }
 
 export default withStyles(styles)(ForgotPassword)

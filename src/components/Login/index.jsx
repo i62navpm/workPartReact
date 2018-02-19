@@ -64,11 +64,19 @@ class Login extends React.Component {
   handleSubmit() {
     this.setState({ submitted: true }, async () => {
       try {
-        this.setState({ submitted: false })
         await this.props.onSubmit(this.state.formData)
         this.props.history.push('/business')
+        this.props.setNotification({
+          open: true,
+          type: 'success',
+          message: 'Login Ok!'
+        })
       } catch ({message}) {
-        this.setState({ submitted: false })
+        this.props.setNotification({
+          open: true,
+          type: 'error',
+          message
+        })
         error(message)
       }
     })
@@ -167,7 +175,8 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  setNotification: PropTypes.func
 }
 
 export default withStyles(styles)(Login)
