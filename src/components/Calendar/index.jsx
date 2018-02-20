@@ -5,6 +5,7 @@ import Event from './Event'
 import EventWrapper from './EventWrapper'
 import BigCalendar from 'react-big-calendar'
 import Modal from './modal'
+import Toolbar from './Toolbar'
 import './calendar.css'
 
 const styles = () => ({
@@ -149,7 +150,7 @@ class Calendar extends React.Component {
       <React.Fragment>
         <BigCalendar
           selectable
-          style={{ height: 500 }}
+          style={{ height: 532 }}
           className={this.classes.calendar}
           events={this.state.events}
           defaultDate={new Date()}
@@ -158,7 +159,8 @@ class Calendar extends React.Component {
             event: withStyles(styles)(({ ...rest }) => (
               <Event onSetEvent={this.onSetEvent} {...rest} />
             )),
-            eventWrapper: EventWrapper
+            eventWrapper: EventWrapper,
+            toolbar: ({ ...rest }) => <Toolbar {...rest} />
           }}
           onSelectEvent={this.onSelectEvent}
           onSelectSlot={this.onSelectSlot}

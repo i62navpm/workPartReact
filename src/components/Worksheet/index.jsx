@@ -18,7 +18,7 @@ function WorksheetPresentational({ company }) {
         </Grid>
         <Grid xs={12} sm={10} item>
           {company.workforce.map(employee => <EmployeeCalendar key={employee.id} data={employee} companyId={company.id}/>)}
-        </ Grid>
+        </Grid>
       </Grid>
     </React.Fragment>
   )
