@@ -55,8 +55,8 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default graphql(gql`
-  query getCompany($companyId: ID) {
-    company(id: $companyId) {
+  query getCompany($companyId: ID, $date: String) {
+    company(id: $companyId, date: $date) {
       id,
       name,
       cif,
@@ -94,7 +94,7 @@ export default graphql(gql`
   }
   `, {
     options: ({ match }) => {
-      return { variables: { companyId: match.params.companyId } }
+      return { variables: { companyId: match.params.companyId, date: new Date().toISOString() } }
     }
   })(
     connect(

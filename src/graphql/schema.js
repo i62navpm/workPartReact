@@ -80,10 +80,33 @@ const QueryType = new GraphQLObjectType({
     company: {
       type: BusinessType,
       args: {
-        id: { type: GraphQLID }
+        id: { type: GraphQLID },
+        date: { type: GraphQLString }
       },
-      resolve: (root, args) =>
-        businessData.find(company => company.id === args.id)
+      resolve: (root, args) => {
+        let { workforce, ...rest } = businessData.find(
+          company => company.id === args.id
+        )
+        workforce = workforce.map(({ events, ...restEvents }) => {
+          let { pay, debt } = events
+          pay = pay.filter(item =>
+            [
+              new Date(args.date).getMonth() - 1,
+              new Date(args.date).getMonth(),
+              new Date(args.date).getMonth() + 1
+            ].includes(new Date(item.end).getMonth())
+          )
+          debt = debt.filter(item =>
+            [
+              new Date(args.date).getMonth() - 1,
+              new Date(args.date).getMonth(),
+              new Date(args.date).getMonth() + 1
+            ].includes(new Date(item.end).getMonth())
+          )
+          return { ...restEvents, events: { pay, debt } }
+        })
+        return { workforce, ...rest }
+      }
     },
     workforce: {
       type: new GraphQLList(EmployeeType),
