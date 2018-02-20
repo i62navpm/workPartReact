@@ -89,20 +89,17 @@ const QueryType = new GraphQLObjectType({
         )
         workforce = workforce.map(({ events, ...restEvents }) => {
           let { pay, debt } = events
-          pay = pay.filter(item =>
-            [
-              new Date(args.date).getMonth() - 1,
-              new Date(args.date).getMonth(),
-              new Date(args.date).getMonth() + 1
-            ].includes(new Date(item.end).getMonth())
-          )
-          debt = debt.filter(item =>
-            [
-              new Date(args.date).getMonth() - 1,
-              new Date(args.date).getMonth(),
-              new Date(args.date).getMonth() + 1
-            ].includes(new Date(item.end).getMonth())
-          )
+          const month = new Date(args.date).getMonth()
+          const year = new Date(args.date).getYear()
+          const listMonths = [month - 1 % 11, month % 11, month + 1 % 11]
+
+          const filterFn = item =>
+            listMonths.includes(new Date(item.end).getMonth()) &&
+            year === new Date(item.end).getYear()
+
+          pay = pay.filter(filterFn)
+          debt = debt.filter(filterFn)
+
           return { ...restEvents, events: { pay, debt } }
         })
         return { workforce, ...rest }
