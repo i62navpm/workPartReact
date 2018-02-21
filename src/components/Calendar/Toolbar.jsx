@@ -17,10 +17,6 @@ class Toolbar extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      calendarChanged: this.props.calendarChanged
-    }
-
     this.goToBack = this.goToBack.bind(this)
     this.goToNext = this.goToNext.bind(this)
   }
@@ -43,6 +39,7 @@ class Toolbar extends React.Component {
           <IconButton
             variant="raised"
             color="primary"
+            disabled={this.props.calendarChanged[this.props.modality]}
             onClick={this.goToBack}
           >
             <FastRewind />
@@ -58,6 +55,7 @@ class Toolbar extends React.Component {
           <IconButton
             variant="raised"
             color="primary"
+            disabled={this.props.calendarChanged[this.props.modality]}
             onClick={this.goToNext}
           >
             <FastForward />

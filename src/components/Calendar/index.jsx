@@ -55,6 +55,11 @@ class Calendar extends React.Component {
     this.handleModalClose = this.handleModalClose.bind(this)
   }
 
+  hasChanged(stateCalendar, nextCalendar) {
+    if (!nextCalendar) return
+    return Object.values(stateCalendar).toString() !== Object.values(nextCalendar).toString()
+  }
+
   componentWillReceiveProps (nextProps) {
     if (this.state.modality !== nextProps.data.modality || this.state.discardChanges !== nextProps.data.discardChanges) {
       this.props.updateCalendar({[this.state.modality]: this.state.events})
@@ -64,6 +69,8 @@ class Calendar extends React.Component {
         discardChanges: nextProps.data.discardChanges,
         status: this.statusOptions[nextProps.data.modality]
       })
+    } else if (this.hasChanged(this.state.calendarChanged, nextProps.data.calendarChanged)) {
+      this.setState({ calendarChanged: nextProps.data.calendarChanged})
     }
   }
 
@@ -160,7 +167,7 @@ class Calendar extends React.Component {
               <Event onSetEvent={this.onSetEvent} {...rest} />
             )),
             eventWrapper: EventWrapper,
-            toolbar: ({ ...rest }) => <Toolbar {...rest} />
+            toolbar: ({ ...rest }) => <Toolbar modality={this.state.modality} calendarChanged={this.state.calendarChanged} {...rest} />
           }}
           onSelectEvent={this.onSelectEvent}
           onSelectSlot={this.onSelectSlot}

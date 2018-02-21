@@ -148,7 +148,8 @@ class EmployeeCalendar extends React.Component {
                     employeeInfo: this.state.employeeInfo,
                     events: this.state.events[this.mapModality[this.state.modality]],
                     modality: this.mapModality[this.state.modality],
-                    discardChanges: this.state.discardChanges
+                    discardChanges: this.state.discardChanges,
+                    calendarChanged: this.state.calendarChanged
                   }}
                   updateCalendar={this.updateCalendar}
                   onChangeCalendar={this.onChangeCalendar}
