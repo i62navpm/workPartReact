@@ -7,7 +7,7 @@ import ExpansionPanel, {
   ExpansionPanelDetails
 } from 'material-ui/ExpansionPanel'
 import Calendar from '../Calendar'
-import { Typography, Avatar, IconButton, Grid, Paper, Button } from 'material-ui'
+import { Typography, Avatar, IconButton, Grid, Paper } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning } from 'material-ui-icons'
 
@@ -62,6 +62,7 @@ class EmployeeCalendar extends React.Component {
     this.updateCalendar = this.updateCalendar.bind(this)
     this.onChangeCalendar = this.onChangeCalendar.bind(this)
     this.restoreEvents = this.restoreEvents.bind(this)
+    this.saveEvents = this.saveEvents.bind(this)
   }
 
   changeModality(event, value) {
@@ -80,6 +81,18 @@ class EmployeeCalendar extends React.Component {
     this.setState({
       events: {
         ...this.state.events, [this.mapModality[this.state.modality]]: this.props.data.events[this.mapModality[this.state.modality]]
+      },
+      calendarChanged: {
+        ...this.state.calendarChanged, [this.mapModality[this.state.modality]]: false
+      },
+      discardChanges: !this.state.discardChanges
+    })
+  }
+  
+  saveEvents(events) {
+    this.setState({
+      events: {
+        ...this.state.events, [this.mapModality[this.state.modality]]: events
       },
       calendarChanged: {
         ...this.state.calendarChanged, [this.mapModality[this.state.modality]]: false
@@ -153,22 +166,11 @@ class EmployeeCalendar extends React.Component {
                   }}
                   updateCalendar={this.updateCalendar}
                   onChangeCalendar={this.onChangeCalendar}
+                  restoreEvents={this.restoreEvents}
+                  saveEvents={this.saveEvents}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Grid container spacing={24} justify="flex-end">
-                  <Grid item>
-                    <Button onClick={this.restoreEvents} raised color="accent" disabled={!this.state.calendarChanged[this.mapModality[this.state.modality]]}>
-                      Discard
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button raised color="primary" disabled={!this.state.calendarChanged[this.mapModality[this.state.modality]]}>
-                      Save
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
+              
             </Grid>
           </ExpansionPanelDetails>
         </ExpansionPanel>
