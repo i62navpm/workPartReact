@@ -53,6 +53,7 @@ class EmployeeCalendar extends React.Component {
     const { events, ...employeeInfo } = data
     this.state = {
       modality: 0,
+      initialEvents: events,
       events,
       calendarChanged: { pay: false, debt: false },
       discardChanges: false,
@@ -80,7 +81,7 @@ class EmployeeCalendar extends React.Component {
   restoreEvents() {
     this.setState({
       events: {
-        ...this.state.events, [this.mapModality[this.state.modality]]: this.props.data.events[this.mapModality[this.state.modality]]
+        ...this.state.events, [this.mapModality[this.state.modality]]: this.state.initialEvents[this.mapModality[this.state.modality]]
       },
       calendarChanged: {
         ...this.state.calendarChanged, [this.mapModality[this.state.modality]]: false
@@ -91,6 +92,9 @@ class EmployeeCalendar extends React.Component {
   
   saveEvents(events) {
     this.setState({
+      initialEvents: {
+        ...this.state.initialEvents, [this.mapModality[this.state.modality]]: events
+      },
       events: {
         ...this.state.events, [this.mapModality[this.state.modality]]: events
       },
