@@ -34,7 +34,7 @@ class Toolbar extends React.Component {
 
   render() {
     return (
-      <Grid container justify="space-between" spacing={40} className={this.props.classes.root}>
+      <Grid container justify="space-between" className={this.props.classes.root}>
         <Grid item>
           <IconButton
             variant="raised"

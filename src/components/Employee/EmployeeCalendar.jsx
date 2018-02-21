@@ -29,7 +29,7 @@ const styles = theme => ({
     height: 20
   },
   tab: {
-    maxWidth: 500
+    maxWidth: '100%'
   },
   warning: {
     fill: '#ffc107',
