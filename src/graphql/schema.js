@@ -80,29 +80,39 @@ const QueryType = new GraphQLObjectType({
     company: {
       type: BusinessType,
       args: {
-        id: { type: GraphQLID },
+        id: { type: GraphQLID }
+      },
+      resolve: (root, args) =>
+        businessData.find(company => company.id === args.id)
+    },
+    employeeEvents: {
+      type: EventModalityType,
+      args: {
+        companyId: { type: GraphQLID },
+        employeeId: { type: GraphQLID },
         date: { type: GraphQLString }
       },
       resolve: (root, args) => {
-        let { workforce, ...rest } = businessData.find(
-          company => company.id === args.id
+        let { workforce } = businessData.find(
+          company => company.id === args.companyId
         )
-        workforce = workforce.map(({ events, ...restEvents }) => {
-          let { pay, debt } = events
-          const month = new Date(args.date).getMonth()
-          const year = new Date(args.date).getYear()
-          const listMonths = [month - 1 % 11, month % 11, month + 1 % 11]
+        let { events } = workforce.find(
+          employee => employee.id === args.employeeId
+        )
 
-          const filterFn = item =>
-            listMonths.includes(new Date(item.end).getMonth()) &&
-            year === new Date(item.end).getYear()
+        let { pay, debt } = events
+        const month = new Date(args.date).getMonth()
+        const year = new Date(args.date).getYear()
+        const listMonths = [month - 1 % 11, month % 11, month + 1 % 11]
 
-          pay = pay.filter(filterFn)
-          debt = debt.filter(filterFn)
+        const filterFn = item =>
+          listMonths.includes(new Date(item.end).getMonth()) &&
+          year === new Date(item.end).getYear()
 
-          return { ...restEvents, events: { pay, debt } }
-        })
-        return { workforce, ...rest }
+        pay = pay.filter(filterFn)
+        debt = debt.filter(filterFn)
+
+        return { pay, debt }
       }
     },
     workforce: {
