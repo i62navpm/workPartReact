@@ -21,16 +21,19 @@ class Toolbar extends React.Component {
     this.goToNext = this.goToNext.bind(this)
   }
 
-  goToBack() {
+  async goToBack() {
     const mDate = this.props.date
-    this.props.onNavigate('prev', new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1))
+    const monthBack = new Date(mDate.getFullYear(), mDate.getMonth() - 1, 1)
+    await this.props.fetchEvents(monthBack)
+    this.props.onNavigate('prev', monthBack)
   }
 
-  goToNext() {
+  async goToNext() {
     const mDate = this.props.date
-    this.props.onNavigate('next', new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1))
+    const monthNext = new Date(mDate.getFullYear(), mDate.getMonth() + 1, 1)
+    await this.props.fetchEvents(monthNext)
+    this.props.onNavigate('next', monthNext)
   }
-
 
   render() {
     return (
