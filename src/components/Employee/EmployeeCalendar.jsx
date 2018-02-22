@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 import { withStyles } from 'material-ui/styles'
@@ -12,6 +13,7 @@ import Calendar from '../Calendar'
 import { Typography, Avatar, IconButton, Grid, Paper } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning } from 'material-ui-icons'
+import { setLoader } from '../../actions/loader'
 
 const styles = theme => ({
   root: {
@@ -43,6 +45,7 @@ const styles = theme => ({
 class EmployeeCalendar extends React.Component {
   constructor(props) {
     super(props)
+    this.props.setLoader(true)
 
     this.mapModality = {
       0: 'pay',
@@ -73,6 +76,7 @@ class EmployeeCalendar extends React.Component {
     const { data: { loading, employeeEvents } } = nextProps
     if (!this.state.initialEvents) this.setState({ initialEvents: employeeEvents })
     this.setState({ loading, events: employeeEvents, discardChanges: !this.state.discardChanges })
+    this.props.setLoader(loading)
   }
 
   fetchEvents(date) {
@@ -210,6 +214,12 @@ EmployeeCalendar.propTypes = {
   companyId: PropTypes.string.isRequired
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLoader: (loading) => dispatch(setLoader({ loading }))
+  }
+}
+
 export default graphql(gql`
   fragment EventPart on Event {
     data {
@@ -236,5 +246,8 @@ export default graphql(gql`
       return { variables: { companyId, employeeId: employee.id, date: new Date().toISOString() } }
     }
   })(
-    withStyles(styles)(EmployeeCalendar)
+    connect(
+      null,
+      mapDispatchToProps
+    )(withStyles(styles)(EmployeeCalendar))
   )
