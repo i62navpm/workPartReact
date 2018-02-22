@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
-import { AppBar, Toolbar, Typography, IconButton, LinearProgress } from 'material-ui'
+import { AppBar, Toolbar, Typography, IconButton, LinearProgress, Hidden } from 'material-ui'
 import MenuIcon from 'material-ui-icons/Menu'
 import { AccountCircle } from 'material-ui-icons'
 import Menu, { MenuItem } from 'material-ui/Menu'
@@ -83,6 +83,11 @@ class MenuAppBar extends React.Component {
             <Typography type="title" color="inherit" className={classes.flex}>
               Work Part App
             </Typography>
+            <Hidden xsDown>
+              <Typography type="body1" color="inherit" align="right" className={classes.flex}>
+                {this.props.user.email}
+              </Typography>
+            </Hidden>
             {auth && (
               <div id="menu-appbar">
                 <IconButton
