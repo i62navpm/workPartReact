@@ -55,8 +55,8 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default graphql(gql`
-  query getCompany($companyId: ID, $date: String) {
-    company(id: $companyId, date: $date) {
+  query getCompany($companyId: ID) {
+    company(id: $companyId) {
       id,
       name,
       cif,
@@ -66,29 +66,7 @@ export default graphql(gql`
         name,
         image,
         fullSalary,
-        halfSalary,
-        events {
-          pay {
-            data {
-              title,
-              salary,
-              money
-            },
-            allDay,
-            start,
-            end
-          },
-          debt {
-            data {
-              title,
-              salary,
-              money
-            },
-            allDay,
-            start,
-            end
-          }
-        }
+        halfSalary
       }
     }
   }

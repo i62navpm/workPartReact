@@ -170,7 +170,7 @@ class Calendar extends React.Component {
                 <Event onSetEvent={this.onSetEvent} {...rest} />
               )),
               eventWrapper: EventWrapper,
-              toolbar: ({ ...rest }) => <Toolbar modality={this.state.modality} calendarChanged={this.state.calendarChanged} {...rest} />
+              toolbar: ({ ...rest }) => <Toolbar modality={this.state.modality} fetchEvents={this.props.fetchEvents} calendarChanged={this.state.calendarChanged} {...rest} />
             }}
             onSelectEvent={this.onSelectEvent}
             onSelectSlot={this.onSelectSlot}
