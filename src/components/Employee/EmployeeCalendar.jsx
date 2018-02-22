@@ -211,27 +211,23 @@ EmployeeCalendar.propTypes = {
 }
 
 export default graphql(gql`
+  fragment EventPart on Event {
+    data {
+      title,
+      salary,
+      money
+    },
+    allDay,
+    start,
+    end
+  }
   query getEvents($companyId: ID, $employeeId: ID, $date: String) {
     employeeEvents(companyId: $companyId, employeeId: $employeeId, date: $date) {
       pay {
-        data {
-          title,
-          salary,
-          money
-        },
-        allDay,
-        start,
-        end
+        ...EventPart
       },
       debt {
-        data {
-          title,
-          salary,
-          money
-        },
-        allDay,
-        start,
-        end
+        ...EventPart
       }
     }
   }
