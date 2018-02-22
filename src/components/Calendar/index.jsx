@@ -160,7 +160,7 @@ class Calendar extends React.Component {
         <Grid item xs={12}>
           <BigCalendar
             selectable
-            style={{ height: 532 }}
+            style={{ height: 520 }}
             className={this.classes.calendar}
             events={this.state.events}
             defaultDate={new Date()}
