@@ -13,6 +13,9 @@ import { ApolloProvider } from 'react-apollo'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { MockHttpLink } from './graphql/mockHttpLink'
+import { Settings } from 'luxon'
+
+Settings.defaultLocale = 'en-gb'
 
 const client = new ApolloClient({
   // link: new HttpLink({ uri: 'https://1jzxrj179.lp.gql.zone/graphql' }),
