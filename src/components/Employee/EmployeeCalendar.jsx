@@ -13,6 +13,7 @@ import Calendar from '../Calendar'
 import { Typography, Avatar, IconButton, Grid, Paper } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning } from 'material-ui-icons'
+import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
 
 const styles = theme => ({
@@ -123,6 +124,11 @@ class EmployeeCalendar extends React.Component {
       },
       discardChanges: !this.state.discardChanges
     })
+    this.props.setNotification({
+      open: true,
+      type: 'success',
+      message: 'Calendar saved correctly!'
+    })
   }
 
   showWarning() {
@@ -216,6 +222,7 @@ EmployeeCalendar.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    setNotification: (notification = {}) => dispatch(setNotification(notification)),
     setLoader: (loading) => dispatch(setLoader({ loading }))
   }
 }
