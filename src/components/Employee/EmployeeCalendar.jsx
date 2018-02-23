@@ -10,8 +10,9 @@ import ExpansionPanel, {
   ExpansionPanelDetails
 } from 'material-ui/ExpansionPanel'
 import Calendar from '../Calendar'
-import MonthChart from '../Calendar/MonthChart'
-import { Typography, Avatar, IconButton, Grid, Paper } from 'material-ui'
+import MonthLineChart from '../Calendar/MonthLineChart'
+import MonthPieChart from '../Calendar/MonthPieChart'
+import { Typography, Avatar, IconButton, Grid, Paper, Hidden } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning } from 'material-ui-icons'
 import { setNotification } from '../../actions/notification'
@@ -27,7 +28,10 @@ const styles = theme => ({
     lineHeight: 2.5,
     marginLeft: theme.spacing.unit * 2
   },
-  monthChart: {
+  blockCharts: {
+    marginTop: 56
+  },
+  monthLineChart: {
     height: '250px'
   },
   iconWarning: {
@@ -171,9 +175,6 @@ class EmployeeCalendar extends React.Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Grid container spacing={24}>
-              <Grid item xs={12} className={this.props.classes.monthChart}>
-                <MonthChart data={this.state.events}/>
-              </Grid>
               <Grid item xs={12}>
                 <Paper>
                   <Tabs
@@ -196,7 +197,7 @@ class EmployeeCalendar extends React.Component {
                   </Tabs>
                 </Paper>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={8}>
                 <Calendar
                   data={{
                     employeeInfo: this.state.employee,
@@ -212,11 +213,22 @@ class EmployeeCalendar extends React.Component {
                   fetchEvents={this.fetchEvents}
                 />
               </Grid>
-
+              <Hidden xsDown>
+                <Grid item xs={4} className={this.props.classes.blockCharts}>
+                  <Grid container>
+                    <Grid item xs={12} className={this.props.classes.monthLineChart}>
+                      <MonthLineChart data={this.state.events} calendarChanged={this.state.discardChanges} />
+                    </Grid>
+                    <Grid item xs={12} className={this.props.classes.monthLineChart}>
+                      <MonthPieChart data={this.state.events} calendarChanged={this.state.discardChanges} />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Hidden>
             </Grid>
           </ExpansionPanelDetails>
         </ExpansionPanel>
-      </div>
+      </div >
     )
   }
 }

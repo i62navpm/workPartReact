@@ -7,19 +7,26 @@ import { DateTime } from 'luxon'
 const styles = () => ({
 })
 
-class MonthChart extends React.Component {
+class MonthLineChart extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      data: this.calcChart(this.props.data)
+    }
+
+  }
+
+  calcChart(data) {
     let daysMonth = this.daysInMonth()
 
-    this.data = daysMonth.map(({ date, ...rest }) => {
-      let payEvents = this.props.data.pay.find(({ start }) => {
+    return daysMonth.map(({ date, ...rest }) => {
+      let payEvents = data.pay.find(({ start }) => {
         start = DateTime.fromISO(new Date(start).toISOString())
         return start.toLocaleString() === date.toLocaleString()
       })
 
-      let debtEvents = this.props.data.debt.find(({ start }) => {
+      let debtEvents = data.debt.find(({ start }) => {
         start = DateTime.fromISO(new Date(start).toISOString())
         return start.toLocaleString() === date.toLocaleString()
       })
@@ -37,29 +44,34 @@ class MonthChart extends React.Component {
       name: `${i + 1}-${monthDate.toLocaleString({ month: 'short' })}`,
       date: monthDate.plus({ days: i })
     }))
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.calendarChanged !== this.props.calendarChanged) {
+      this.setState({ data: this.calcChart(nextProps.data) })
+    }
   }
 
   render() {
     return (
       <ResponsiveContainer>
-        <LineChart data={this.data} >
+        <LineChart data={this.state.data} >
           <XAxis dataKey="name" />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="pay" stroke="#8884d8" />
-          <Line type="monotone" dataKey="debt" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="pay" stroke="#4caf50" />
+          <Line type="monotone" dataKey="debt" stroke="#e91e63" />
         </LineChart>
       </ResponsiveContainer>
     )
   }
 }
 
-MonthChart.propTypes = {
+MonthLineChart.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(MonthChart)
+export default withStyles(styles)(MonthLineChart)
