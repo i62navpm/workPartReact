@@ -10,6 +10,7 @@ import ExpansionPanel, {
   ExpansionPanelDetails
 } from 'material-ui/ExpansionPanel'
 import Calendar from '../Calendar'
+import MonthChart from '../Calendar/MonthChart'
 import { Typography, Avatar, IconButton, Grid, Paper } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning } from 'material-ui-icons'
@@ -25,6 +26,9 @@ const styles = theme => ({
     fontWeight: theme.typography.fontWeightRegular,
     lineHeight: 2.5,
     marginLeft: theme.spacing.unit * 2
+  },
+  monthChart: {
+    height: '250px'
   },
   iconWarning: {
     marginLeft: 'auto'
@@ -167,6 +171,9 @@ class EmployeeCalendar extends React.Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Grid container spacing={24}>
+              <Grid item xs={12} className={this.props.classes.monthChart}>
+                <MonthChart data={this.state.events}/>
+              </Grid>
               <Grid item xs={12}>
                 <Paper>
                   <Tabs
