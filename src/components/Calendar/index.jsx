@@ -7,9 +7,13 @@ import EventWrapper from './EventWrapper'
 import BigCalendar from 'react-big-calendar'
 import Modal from './modal'
 import Toolbar from './Toolbar'
+import Loading from '../Loading'
 import './calendar.css'
 
 const styles = () => ({
+  calendarGrid: {
+    position: 'relative'
+  },
   calendar: {
     width: '100%',
     marginBottom: 20
@@ -46,6 +50,7 @@ class Calendar extends React.Component {
       events: [],
       status: this.statusOptions[data.modality],
       openModal: false,
+      updatingEvents: false,
       customEvent: {},
       ...data
     }
@@ -126,6 +131,7 @@ class Calendar extends React.Component {
   }
 
   onSelectSlot(event) {
+    this.setState({ updatingEvents: true })
     const newEvents = event.slots.map(slot => {
       if (
         this.state.events.findIndex(
@@ -145,6 +151,7 @@ class Calendar extends React.Component {
     }).filter(event => event)
     this.setState({ events: [...this.state.events, ...newEvents] })
     this.props.onChangeCalendar(true)
+    this.setState({ updatingEvents: false })
   }
 
   onSetEvent(e, eventCalendar) {
@@ -157,7 +164,8 @@ class Calendar extends React.Component {
   render() {
     return (
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item xs={12} className={this.classes.calendarGrid}>
+          {this.state.updatingEvents && <Loading />}
           <BigCalendar
             selectable
             style={{ height: 520 }}
