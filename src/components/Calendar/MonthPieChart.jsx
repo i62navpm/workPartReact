@@ -19,8 +19,8 @@ class MonthPieChart extends React.Component {
     const dataPay = { name: 'pay', color: '#e91e63' }
     const dataDebt = { name: 'debt', color: '#4caf50' }
 
-    dataPay.value = data.pay.reduce((bef, curr) => ({ data: { money: curr.data.money + bef.data.money } }), { data: { money: 0 } }).data.money
-    dataDebt.value = data.debt.reduce((bef, curr) => ({ data: { money: curr.data.money + bef.data.money } }), { data: { money: 0 } }).data.money
+    dataPay.value = data.pay.reduce((bef, curr) => ({ data: { money: (curr.data.money || 0) + (bef.data.money || 0) } }), { data: { money: 0 } }).data.money
+    dataDebt.value = data.debt.reduce((bef, curr) => ({ data: { money: (curr.data.money || 0) + (bef.data.money || 0) } }), { data: { money: 0 } }).data.money
     return [dataPay, dataDebt]
   }
 
