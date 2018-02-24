@@ -16,8 +16,8 @@ class MonthPieChart extends React.Component {
   }
 
   calcChart(data) {
-    const dataPay = { name: 'pay', color: '#e91e63' }
-    const dataDebt = { name: 'debt', color: '#4caf50' }
+    const dataPay = { name: 'pay', color: '#4caf50' }
+    const dataDebt = { name: 'debt', color: '#e91e63' }
 
     dataPay.value = data.pay.reduce((bef, curr) => ({ data: { money: (curr.data.money || 0) + (bef.data.money || 0) } }), { data: { money: 0 } }).data.money
     dataDebt.value = data.debt.reduce((bef, curr) => ({ data: { money: (curr.data.money || 0) + (bef.data.money || 0) } }), { data: { money: 0 } }).data.money
@@ -33,7 +33,7 @@ class MonthPieChart extends React.Component {
   render() {
     return (
       <ResponsiveContainer>
-        <PieChart>
+        <PieChart margin={{ right: 50, left: 50 }}>
           <Pie dataKey="value" data={this.state.data} fill="#8884d8" label>
             {this.state.data.map((entry, index) => <Cell key={index} fill={entry.color} />)}
           </Pie>
