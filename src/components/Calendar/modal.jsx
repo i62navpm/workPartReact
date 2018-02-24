@@ -46,7 +46,7 @@ class SimpleModal extends React.Component {
   }
 
   handleClose() {
-    this.props.handleModalClose(this.state.money)
+    this.props.handleModalClose(+this.state.money)
   }
 
   render() {
