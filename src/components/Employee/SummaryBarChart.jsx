@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import { DateTime } from 'luxon'
-import { Info } from 'luxon/src/info.js'
+import { Info } from 'luxon'
 
 const styles = () => ({
 })
