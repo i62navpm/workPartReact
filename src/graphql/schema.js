@@ -115,6 +115,32 @@ const QueryType = new GraphQLObjectType({
         return { pay, debt }
       }
     },
+    employeeSummary: {
+      type: EmployeeType,
+      args: {
+        companyId: { type: GraphQLID },
+        employeeId: { type: GraphQLID },
+        date: { type: GraphQLString }
+      },
+      resolve: (root, args) => {
+        let { workforce } = businessData.find(
+          company => company.id === args.companyId
+        )
+        let { events, ...employee } = workforce.find(
+          employee => employee.id === args.employeeId
+        )
+
+        let { pay, debt } = events
+        const year = new Date(args.date).getYear()
+
+        const filterFn = item => year === new Date(item.end).getYear()
+
+        pay = pay.filter(filterFn)
+        debt = debt.filter(filterFn)
+
+        return { ...employee, events: { pay, debt } }
+      }
+    },
     workforce: {
       type: new GraphQLList(EmployeeType),
       resolve: () => workforceData
