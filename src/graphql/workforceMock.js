@@ -30,8 +30,8 @@ export default [
     fullSalary: 45.5,
     halfSalary: 25,
     events: {
-      pay: [pay[2], pay[1]],
-      debt: [debt[0]]
+      pay,
+      debt
     }
   },
   {

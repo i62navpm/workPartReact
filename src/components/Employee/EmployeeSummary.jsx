@@ -15,6 +15,7 @@ import { Avatar } from 'material-ui'
 import { TagFaces, Close, Home, Phone, Mail, FormatQuote } from 'material-ui-icons'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
+import SummaryBarChart from './SummaryBarChart'
 
 const styles = theme => ({
   paper: {
@@ -43,7 +44,11 @@ const styles = theme => ({
   },
   description: {
     fontStyle: 'italic'
-  }
+  },
+  monthLineChart: {
+    height: '250px',
+    flex: 1
+  },
 })
 
 class EmployeeSummary extends React.Component {
@@ -54,7 +59,7 @@ class EmployeeSummary extends React.Component {
     const { classes } = props
     this.classes = classes
 
-    const { loading, employeeSummary, ...data} = props.data
+    const { loading, employeeSummary, ...data } = props.data
     this.state = {
       loading,
       employeeSummary,
@@ -118,13 +123,13 @@ class EmployeeSummary extends React.Component {
                   direction={'row'}
                   justify={'center'}
                 >
-                  <Grid xs={10} sm={8} item>
+                  <Grid item xs={10} sm={8} >
                     <Typography type="caption" className={this.classes.description} align="center"><FormatQuote />{this.state.employeeSummary.description}</Typography>
                   </Grid>
                 </Grid>
               </Grid>}
 
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={12} sm={4} md={3}>
                 <Grid container>
                   <Grid item>
                     <Home />
@@ -152,6 +157,16 @@ class EmployeeSummary extends React.Component {
                   </Grid>
                 </Grid>
               </Grid>
+
+
+              <Grid item xs={12} sm={8} md={9}>
+                <Grid container alignItems={'center'} direction={'row'} justify={'center'}>
+                  <Grid item className={this.classes.monthLineChart}>
+                    <SummaryBarChart data={this.state.employeeSummary.events} />
+                  </Grid>
+                </Grid>
+              </Grid>
+
             </Grid>
           </Paper>
         </Grid>
