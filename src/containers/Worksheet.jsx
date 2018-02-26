@@ -6,6 +6,7 @@ import { graphql } from 'react-apollo'
 import WorksheetPresentational from '../components/Worksheet'
 import { setLoader } from '../actions/loader'
 import { EmployeeForm } from '../components/Employee'
+import { EmployeeSummary } from '../components/Employee'
 const debug = require('debug')('workSheet')
 
 class Worksheet extends React.Component {
@@ -36,6 +37,7 @@ class Worksheet extends React.Component {
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={() => <WorksheetPresentational company={company} />} />
         <Route path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.props.onNewEmployeeClick} closeForm={() => history.push(`${this.props.match.url}`)} history={history} {...rest} />)} />
+        <Route path={`${this.props.match.url}/summary/:employeeId`} render={withRouter(({ history, ...rest }) => <EmployeeSummary closeForm={() => history.push(`${this.props.match.url}`)} history={history} companyId={company.id} {...rest} />)} />
       </Switch>
     )
   }

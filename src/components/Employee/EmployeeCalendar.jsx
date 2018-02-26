@@ -14,7 +14,7 @@ import MonthLineChart from '../Calendar/MonthLineChart'
 import MonthPieChart from '../Calendar/MonthPieChart'
 import { Typography, Avatar, IconButton, Grid, Paper, Hidden } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
-import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning } from 'material-ui-icons'
+import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning, PermContactCalendar } from 'material-ui-icons'
 import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
 
@@ -163,6 +163,15 @@ class EmployeeCalendar extends React.Component {
             <div className={this.props.classes.iconWarning}>
               {this.showWarning()}
             </div>
+            <Link
+              to={`/worksheet/${this.props.companyId}/summary/${
+                this.props.employee.id
+                }`}
+            >
+              <IconButton>
+                <PermContactCalendar className={this.props.classes.icon} />
+              </IconButton>
+            </Link>
             <Link
               to={`/worksheet/${this.props.companyId}/employee/${
                 this.props.employee.id
