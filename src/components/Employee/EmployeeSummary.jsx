@@ -9,13 +9,20 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  IconButton
+  IconButton,
+  Avatar,
+  Divider,
+  colors
 } from 'material-ui'
-import { Avatar } from 'material-ui'
 import { TagFaces, Close, Home, Phone, Mail, FormatQuote } from 'material-ui-icons'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 import SummaryBarChart from './SummaryBarChart'
+
+const randomColor = function (obj) {
+  const keys = Object.keys(obj)
+  return obj[keys[keys.length * Math.random() << 0]]
+}
 
 const styles = theme => ({
   paper: {
@@ -42,8 +49,12 @@ const styles = theme => ({
   flex: {
     flex: 1
   },
+  icons: {
+    fill: '#9e9e9e'
+  },
   description: {
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    marginBottom: theme. spacing.unit * 2,
   },
   monthLineChart: {
     height: '250px',
@@ -107,7 +118,9 @@ class EmployeeSummary extends React.Component {
                   justify={'flex-start'}
                 >
                   <Grid item>
-                    <Avatar aria-label="Employee">A</Avatar>
+                    <Avatar aria-label="employee-summary" style={{ backgroundColor: randomColor(colors)[500] }}>
+                      {this.state.employeeSummary.name[0]}
+                    </Avatar>
                   </Grid>
                   <Grid item>
                     <Typography color="primary" type="headline">{this.state.employeeSummary.name}</Typography>
@@ -125,6 +138,7 @@ class EmployeeSummary extends React.Component {
                 >
                   <Grid item xs={10} sm={8} >
                     <Typography type="caption" className={this.classes.description} align="center"><FormatQuote />{this.state.employeeSummary.description}</Typography>
+                    <Divider light/>
                   </Grid>
                 </Grid>
               </Grid>}
@@ -132,7 +146,7 @@ class EmployeeSummary extends React.Component {
               <Grid item xs={12} sm={4} md={3}>
                 <Grid container>
                   <Grid item>
-                    <Home />
+                    <Home className={this.classes.icons}/>
                   </Grid>
                   <Grid item>
                     <Typography type="body1">{this.state.employeeSummary.address}</Typography>
@@ -140,7 +154,7 @@ class EmployeeSummary extends React.Component {
                 </Grid>
                 <Grid container>
                   <Grid item>
-                    <Phone />
+                    <Phone className={this.classes.icons}/>
                   </Grid>
                   <Grid item>
                     <Typography type="body1">{this.state.employeeSummary.phone}</Typography>
@@ -148,7 +162,7 @@ class EmployeeSummary extends React.Component {
                 </Grid>
                 <Grid container>
                   <Grid item>
-                    <Mail />
+                    <Mail className={this.classes.icons}/>
                   </Grid>
                   <Grid item>
                     <Typography type="body1">
