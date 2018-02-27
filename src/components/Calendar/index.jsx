@@ -50,6 +50,7 @@ class Calendar extends React.Component {
       events: [],
       status: this.statusOptions[data.modality],
       openModal: false,
+      currentDate: new Date(),
       updatingEvents: false,
       customEvent: {},
       ...data
@@ -60,6 +61,7 @@ class Calendar extends React.Component {
     this.onSetEvent = this.onSetEvent.bind(this)
     this.handleModalOpen = this.handleModalOpen.bind(this)
     this.handleModalClose = this.handleModalClose.bind(this)
+    this.wrapFetchEvent = this.wrapFetchEvent.bind(this)
   }
 
   hasChanged(stateCalendar, nextCalendar) {
@@ -133,12 +135,14 @@ class Calendar extends React.Component {
   onSelectSlot(event) {
     this.setState({ updatingEvents: true })
     const newEvents = event.slots.map(slot => {
+      if (slot.getMonth() !== this.state.currentDate.getMonth()) return null
       if (
         this.state.events.findIndex(
           slotEvent => slotEvent.start === slot.toString()
         ) !== -1
       ) { return null }
 
+      this.props.onChangeCalendar(true)
       return {
         start: slot.toString(),
         end: slot.toString(),
@@ -150,7 +154,6 @@ class Calendar extends React.Component {
       }
     }).filter(event => event)
     this.setState({ events: [...this.state.events, ...newEvents] })
-    this.props.onChangeCalendar(true)
     this.setState({ updatingEvents: false })
   }
 
@@ -159,6 +162,12 @@ class Calendar extends React.Component {
 
     this.handleModalOpen()
     this.setState({ customEvent: eventCalendar })
+  }
+
+  async wrapFetchEvent(date) {
+    this.setState({ updatingEvents: true })
+    await this.props.fetchEvents(date)
+    this.setState({currentDate: date, updatingEvents: false})
   }
 
   render() {
@@ -171,14 +180,14 @@ class Calendar extends React.Component {
             style={{ height: 520 }}
             className={this.classes.calendar}
             events={this.state.events}
-            defaultDate={new Date()}
+            defaultDate={this.state.currentDate}
             views={['month']}
             components={{
               event: withStyles(styles)(({ ...rest }) => (
                 <Event onSetEvent={this.onSetEvent} {...rest} />
               )),
               eventWrapper: EventWrapper,
-              toolbar: ({ ...rest }) => <Toolbar modality={this.state.modality} fetchEvents={this.props.fetchEvents} calendarChanged={this.state.calendarChanged} {...rest} />
+              toolbar: ({ ...rest }) => <Toolbar modality={this.state.modality} fetchEvents={this.wrapFetchEvent} calendarChanged={this.state.calendarChanged} {...rest} />
             }}
             onSelectEvent={this.onSelectEvent}
             onSelectSlot={this.onSelectSlot}

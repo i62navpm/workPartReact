@@ -101,13 +101,10 @@ const QueryType = new GraphQLObjectType({
         )
 
         let { pay, debt } = events
-        const month = new Date(args.date).getMonth()
-        const year = new Date(args.date).getYear()
-        const listMonths = [month - 1 % 11, month % 11, month + 1 % 11]
 
         const filterFn = item =>
-          listMonths.includes(new Date(item.end).getMonth()) &&
-          year === new Date(item.end).getYear()
+          new Date(args.date).getMonth() === new Date(item.end).getMonth() &&
+          new Date(args.date).getYear() === new Date(item.end).getYear()
 
         pay = pay.filter(filterFn)
         debt = debt.filter(filterFn)
