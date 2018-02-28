@@ -25,6 +25,7 @@ import {
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 import SummaryBarChart from './SummaryBarChart'
+import PdfSummary from './PdfSummary'
 
 const randomColor = function (obj) {
   const keys = Object.keys(obj)
@@ -214,6 +215,7 @@ class EmployeeSummary extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
+            <PdfSummary />
           </Paper>
         </Grid>
       </Grid>
