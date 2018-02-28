@@ -69,6 +69,7 @@ class EmployeeCalendar extends React.Component {
       events: {},
       employee,
       calendarChanged: { pay: false, debt: false },
+      currentDate: new Date(),
       discardChanges: false,
       ...data
     }
@@ -88,6 +89,7 @@ class EmployeeCalendar extends React.Component {
   }
 
   fetchEvents(date) {
+    this.setState({currentDate: date})
     return this.state.fetchMore({
       variables: { date: date.toISOString() },
       updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult
@@ -225,7 +227,7 @@ class EmployeeCalendar extends React.Component {
                 <Grid item xs={4} className={this.props.classes.blockCharts}>
                   <Grid container>
                     <Grid item xs={12} className={this.props.classes.monthLineChart}>
-                      <MonthLineChart data={this.state.events} calendarChanged={this.state.discardChanges} />
+                      <MonthLineChart data={this.state.events} currentDate={this.state.currentDate} calendarChanged={this.state.discardChanges} />
                     </Grid>
                     <Grid item xs={12} className={this.props.classes.monthLineChart}>
                       <MonthPieChart data={this.state.events} calendarChanged={this.state.discardChanges} />
