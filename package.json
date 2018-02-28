@@ -9,6 +9,7 @@
     "aws-sdk": "^2.177.0",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.6.1",
+    "lodash": "^4.17.5",
     "luxon": "^0.3.0",
     "material-ui": "^1.0.0-beta.26",
     "material-ui-icons": "^1.0.0-beta.17",
