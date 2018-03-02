@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
-import { DateTime } from 'luxon'
-import { Info } from 'luxon'
+import { DateTime, Info } from 'luxon'
 
 const styles = () => ({
 })
@@ -35,10 +34,7 @@ class SummaryBarChart extends React.Component {
     return Info.months('long', { locale: 'en-gb' })
       .map(month => ({ name: month, pay: 0, debt: 0 }))
       .map(({ name }) => ({ name, pay: months[name]['pay'], debt: months[name]['debt'] }))
-
   }
-
-
 
   render() {
     return (

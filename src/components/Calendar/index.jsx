@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
-import { Grid, Button } from 'material-ui'
+import { Grid, Button, TextField } from 'material-ui'
+import { DateTime } from 'luxon'
 import Event from './Event'
 import EventWrapper from './EventWrapper'
 import BigCalendar from 'react-big-calendar'
@@ -62,6 +63,8 @@ class Calendar extends React.Component {
     this.handleModalOpen = this.handleModalOpen.bind(this)
     this.handleModalClose = this.handleModalClose.bind(this)
     this.wrapFetchEvent = this.wrapFetchEvent.bind(this)
+    this.getSearchDate = this.getSearchDate.bind(this)
+    this.changeSearchDate = this.changeSearchDate.bind(this)
   }
 
   hasChanged(stateCalendar, nextCalendar) {
@@ -170,17 +173,39 @@ class Calendar extends React.Component {
     this.setState({currentDate: date, updatingEvents: false})
   }
 
+  getSearchDate() {
+    return DateTime.fromISO(new Date(this.state.currentDate).toISOString()).toISODate()
+  }
+
+  async changeSearchDate(e) {
+    e.stopPropagation()
+    await this.wrapFetchEvent(new Date(e.target.value))
+  }
+
   render() {
     return (
       <Grid container>
         <Grid item xs={12} className={this.classes.calendarGrid}>
           {this.state.updatingEvents && <Loading />}
+          <Grid item xs={12}>
+            <TextField
+              label="Search date"
+              type="date"
+              onChange={this.changeSearchDate}
+              defaultValue={this.getSearchDate()}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </Grid>
           <BigCalendar
             selectable
             style={{ height: 520 }}
             className={this.classes.calendar}
             events={this.state.events}
             defaultDate={this.state.currentDate}
+            date={this.state.currentDate}
+            onNavigate={() => {}}
             views={['month']}
             components={{
               event: withStyles(styles)(({ ...rest }) => (
