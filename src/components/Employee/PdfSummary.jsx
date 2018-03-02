@@ -50,62 +50,96 @@ function daysInMonth(date) {
     }))
 }
 
-function PdfSummary(props) {
-  let doc = new jsPDF()
-
-  doc.setProperties({
-    title: 'Employee summary'
-  })
-  var columns = ['Date', 'Pay', 'Debt']
-  var rows = calcChart(props.data.events, new Date(2018, 1, 1))
-
-  const totalAdd = rows.reduce((bef, curr) => {
+function calcTotalRow(rows) {
+  return rows.reduce((bef, curr) => {
     const [title, pay1, debt1] = bef
     const [, pay2, debt2] = curr
     return [title, pay1 + pay2, debt1 + debt2]
   }, ['Sum:   ', 0, 0])
+}
+
+function createTables(doc, props) {
+  return {
+    createMainTable(rows, columns, date) {
+      doc.setTextColor('#3f51b5')
+      doc.text(props.data.name, 15, 20)
+      doc.setFontSize(18)
+      doc.text(`Paysheet ${DateTime.fromISO(new Date(date).toISOString()).toLocaleString({ month: 'long' })}`, 110, 30)
+      doc.setFontSize(10)
+      doc.setTextColor()
+      doc.text(`Nif: ${props.data.nif}`, 15, 30)
+      doc.text(`Address: ${props.data.address}`, 15, 35)
+      doc.text(`Phone: ${props.data.phone}`, 15, 40)
+      doc.text(`Email: ${props.data.email}`, 15, 45)
+      doc.setFontSize(16)
+
+      doc.autoTable(columns, rows, {
+        theme: 'striped', startY: 50, bodyStyles: { fontSize: 8 }, margin: { horizontal: 30 },
+        drawCell: (cell, data) => {
+          if (data.row.index === data.table.rows.length - 1) {
+            doc.setFontSize(12)
+            doc.setFontStyle('bold')
+          }
+        },
+        drawRow: function (row, data) {
+          if (row.index === data.table.rows.length - 1) {
+            const title = row.cells['0']
+            const totalPay = row.cells['1']
+            const totalDebt = row.cells['2']
+
+            data.row.height = 8
+            title.styles.halign = 'right'
+            totalPay.styles.textColor = '#4caf50'
+            totalDebt.styles.textColor = '#e91e63'
+          }
+        },
+      })
+    },
+    createTotalTable(totalAdd) {
+      const options = {
+        theme: 'grid', startY: doc.autoTableEndPosY() + 5, bodyStyles: { fontSize: 10 }, margin: { horizontal: 80 },
+        drawCell: (cell, data) => {
+          if (data.row.index === data.table.rows.length - 1) {
+            doc.setFontSize(12)
+            doc.setFontStyle('bold')
+          }
+        },
+        drawRow: function (row, data) {
+          if (row.index === data.table.rows.length - 1) {
+            const title = row.cells['0']
+
+            data.row.height = 8
+            title.styles.halign = 'center'
+            title.styles.textColor = title.raw.includes('-') ? '#e91e63' : '#4caf50'
+          }
+        }
+      }
+
+      const [, totalPay, totalDebt] = totalAdd
+      const total = [`${totalPay - totalDebt} €`]
+      doc.autoTable(['Total'], [total], options)
+    }
+  }
+}
+
+function PdfSummary(props) {
+  let doc = new jsPDF()
+  let date = new Date(2018, 1, 1)
+  
+  doc.setProperties({
+    title: 'Employee summary'
+  })
+  
+  var columns = ['Date', 'Pay', 'Debt']
+  var rows = calcChart(props.data.events, date)
+
+  const totalAdd = calcTotalRow(rows)
 
   rows = [...rows, totalAdd].map(([date, pay, debt]) => ([date, pay + ' €', debt + ' €']))
 
-  doc.setTextColor('#3f51b5')
-  doc.text(props.data.name, 15, 20)
-  doc.setTextColor()
-  doc.setFontSize(10)
-  doc.text(`Nif: ${props.data.nif}`, 15, 30)
-  doc.text(`Address: ${props.data.address}`, 15, 35)
-  doc.text(`Phone: ${props.data.phone}`, 15, 40)
-  doc.text(`Email: ${props.data.email}`, 15, 45)
-  doc.setFontSize(16)
-
-  doc.autoTable(columns, rows, {
-    theme: 'striped', startY: 50, bodyStyles: { fontSize: 8 }, margin: { horizontal: 30 }, 
-    drawCell: (cell, data) => {
-      if (data.row.index === data.table.rows.length - 1) {
-        doc.setFontSize(12)
-        doc.setFontStyle('bold')
-      }
-    },
-    drawRow: function (row, data)  {
-      if (row.index === data.table.rows.length - 1) {
-        const title = row.cells['0']
-        const totalPay = row.cells['1']
-        const totalDebt = row.cells['2']
-
-        data.row.height = 8
-        title.styles.halign = 'right'
-        totalPay.styles.textColor = '#4caf50'
-        totalDebt.styles.textColor = '#e91e63'
-      }
-    },
-  })
-
-  const options = {
-    theme: 'striped', startY: doc.autoTableEndPosY() + 5, bodyStyles: { fontSize: 10 }, margin: { horizontal: 80 },
-  }
-
-  const [, totalPay, totalDebt] = totalAdd
-  const total = [`${totalPay - totalDebt} €`]
-  doc.autoTable(['Total'], total, options)
+  let createTablesFn = createTables(doc, props)
+  createTablesFn.createMainTable(rows, columns, date)
+  createTablesFn.createTotalTable(totalAdd)
 
   return (
     <React.Fragment>
