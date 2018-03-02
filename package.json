@@ -29,7 +29,8 @@
     "react-scripts": "1.0.17",
     "recharts": "^1.0.0-beta.10",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "source-map-explorer": "^1.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -38,7 +39,8 @@
     "eject": "react-scripts eject",
     "precommit": "lint-staged",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "analyze": "source-map-explorer build/static/js/main.*"
   },
   "lint-staged": {
     "src/**/*.{js,json,css,md}": [
