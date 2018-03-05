@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { setLoader } from '../../actions/loader'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
-import { Typography, Hidden, TextField } from 'material-ui'
+import { Typography, Hidden, TextField, Button } from 'material-ui'
+import { FileDownload } from 'material-ui-icons'
 import { withStyles } from 'material-ui/styles'
 import { DateTime } from 'luxon'
 import jsPDF from 'jspdf'
@@ -20,6 +21,9 @@ const styles = theme => ({
   searchDate: {
     float: 'left',
     marginBottom: theme.spacing.unit * 4
+  },
+  downloadButton: {
+    marginTop: theme.spacing.unit * 2
   }
 })
 
@@ -109,6 +113,12 @@ class PdfSummary extends React.Component {
             }}
           />
           <iframe title="Summary employee pdf" src={this.doc.output('datauristring')} type="application/pdf" width="100%" height="842px" />
+        </Hidden>
+        <Hidden smUp>
+          <Button onClick={() => this.doc.save(`${this.props.employee.name}-${this.getSearchDate()}.pdf`)} raised className={this.props.classes.downloadButton} color="primary" size="small">
+            <FileDownload />
+            Download
+          </Button>
         </Hidden>
       </React.Fragment>
     )
