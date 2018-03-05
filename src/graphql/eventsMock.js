@@ -46,8 +46,8 @@ export const pay = [
       title: 'Event with full salary 2'
     },
     allDay: true,
-    start: new Date(2018, 2, 1),
-    end: new Date(2018, 2, 1)
+    start: new Date(2018, 2, 2),
+    end: new Date(2018, 2, 2)
   },
 
   {
