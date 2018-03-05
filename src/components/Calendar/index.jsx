@@ -145,7 +145,6 @@ class Calendar extends React.Component {
         ) !== -1
       ) { return null }
 
-      this.props.onChangeCalendar(true)
       return {
         start: slot.toString(),
         end: slot.toString(),
@@ -158,6 +157,7 @@ class Calendar extends React.Component {
     }).filter(event => event)
     this.setState({ events: [...this.state.events, ...newEvents] })
     this.setState({ updatingEvents: false })
+    this.props.onChangeCalendar(true)
   }
 
   onSetEvent(e, eventCalendar) {
