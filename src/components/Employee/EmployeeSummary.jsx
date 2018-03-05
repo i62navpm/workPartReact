@@ -215,7 +215,7 @@ class EmployeeSummary extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <PdfSummary data={this.state.employeeSummary}/>
+            <PdfSummary employee={this.state.employeeSummary}/>
           </Paper>
         </Grid>
       </Grid>

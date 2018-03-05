@@ -1,5 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { setLoader } from '../../actions/loader'
+import gql from 'graphql-tag'
+import { graphql } from 'react-apollo'
 import { Typography, Hidden } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
 import { DateTime } from 'luxon'
@@ -58,19 +62,19 @@ function calcTotalRow(rows) {
   }, ['Sum:   ', 0, 0])
 }
 
-function createTables(doc, props) {
+function createTables(doc, employee) {
   return {
     createMainTable(rows, columns, date) {
       doc.setTextColor('#3f51b5')
-      doc.text(props.data.name, 15, 20)
+      doc.text(employee.name, 15, 20)
       doc.setFontSize(18)
       doc.text(`Paysheet ${DateTime.fromISO(new Date(date).toISOString()).toLocaleString({ month: 'long' })}`, 110, 30)
       doc.setFontSize(10)
       doc.setTextColor()
-      doc.text(`Nif: ${props.data.nif}`, 15, 30)
-      doc.text(`Address: ${props.data.address}`, 15, 35)
-      doc.text(`Phone: ${props.data.phone}`, 15, 40)
-      doc.text(`Email: ${props.data.email}`, 15, 45)
+      doc.text(`Nif: ${employee.nif}`, 15, 30)
+      doc.text(`Address: ${employee.address}`, 15, 35)
+      doc.text(`Phone: ${employee.phone}`, 15, 40)
+      doc.text(`Email: ${employee.email}`, 15, 45)
       doc.setFontSize(16)
 
       doc.autoTable(columns, rows, {
@@ -122,40 +126,108 @@ function createTables(doc, props) {
   }
 }
 
-function PdfSummary(props) {
-  let doc = new jsPDF()
-  let date = new Date(2018, 1, 1)
-  
-  doc.setProperties({
-    title: 'Employee summary'
-  })
-  
-  var columns = ['Date', 'Pay', 'Debt']
-  var rows = calcChart(props.data.events, date)
+class PdfSummary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.props.setLoader(true)
 
-  const totalAdd = calcTotalRow(rows)
+    const { classes } = props
+    this.classes = classes
 
-  rows = [...rows, totalAdd].map(([date, pay, debt]) => ([date, pay + ' €', debt + ' €']))
+    const { loading, employeeEvents, ...data } = props.data
 
-  let createTablesFn = createTables(doc, props)
-  createTablesFn.createMainTable(rows, columns, date)
-  createTablesFn.createTotalTable(totalAdd)
+    this.state = {
+      currentDate: new Date(),
+      loading,
+      employeeEvents,
+      data
+    }
+  }
 
-  return (
-    <React.Fragment>
-      <Hidden xsDown>
-        <Typography className={props.classes.titleSummary} align="center" type="headline" color="primary">
-          Employee Summary
-      </Typography>
-        <iframe title="Summary employee pdf" src={doc.output('datauristring')} type="application/pdf" width="100%" height="842px" />
-      </Hidden>
-    </React.Fragment>
-  )
+  createPdf(employeeEvents) {
+    this.doc = new jsPDF()
+    this.doc.setProperties({
+      title: 'Employee summary'
+    })
+    this.columns = ['Date', 'Pay', 'Debt']
+    this.createTablesFn = createTables(this.doc, this.props.employee)
+    
+    let rows = calcChart(employeeEvents, this.state.currentDate)
+
+    const totalAdd = calcTotalRow(rows)
+
+    rows = [...rows, totalAdd].map(([date, pay, debt]) => ([date, pay + ' €', debt + ' €']))
+
+    this.createTablesFn.createMainTable(rows, this.columns, this.state.currentDate)
+    this.createTablesFn.createTotalTable(totalAdd)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { data: { employeeEvents, loading } } = nextProps
+
+    this.setState({ loading, employeeEvents })
+    this.createPdf(employeeEvents)
+    this.props.setLoader(loading)
+  }
+
+  render() {
+    const { loading } = this.state
+
+    if (loading) return null
+
+    return (
+      <React.Fragment>
+        <Hidden xsDown>
+          <Typography className={this.props.classes.titleSummary} align="center" type="headline" color="primary">
+            Employee Summary
+          </Typography>
+          <iframe title="Summary employee pdf" src={this.doc.output('datauristring')} type="application/pdf" width="100%" height="842px" />
+        </Hidden>
+      </React.Fragment>
+    )
+  }
+
 }
 
 PdfSummary.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired
+  employee: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(PdfSummary)
+const mapDispatchToProps = dispatch => {
+  return {
+    setLoader: loading => dispatch(setLoader({ loading }))
+  }
+}
+
+export default graphql(gql`
+  fragment EventPart on Event {
+    data {
+      title,
+      salary,
+      money
+    },
+    allDay,
+    start,
+    end
+  }
+  query getEvents($companyId: ID, $employeeId: ID, $date: String) {
+    employeeEvents(companyId: $companyId, employeeId: $employeeId, date: $date) {
+      pay {
+        ...EventPart
+      },
+      debt {
+        ...EventPart
+      }
+    }
+  }
+  `, {
+    options: () => {
+      return { variables: { companyId: '2', employeeId: '1', date: new Date().toISOString() } }
+    }
+  })(
+    connect(
+      null,
+      mapDispatchToProps
+    )(withStyles(styles)(PdfSummary))
+  )
