@@ -9,8 +9,8 @@ export function createTables(doc, employee) {
       doc.text(
         `Paysheet ${DateTime.fromISO(
           new Date(date).toISOString()
-        ).toLocaleString({ month: 'long' })}`,
-        120,
+        ).toLocaleString({ month: 'long', year: 'numeric' })}`,
+        115,
         25
       )
       doc.setFontSize(10)
