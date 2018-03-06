@@ -4,35 +4,55 @@ import { withStyles } from 'material-ui/styles'
 import { Grid } from 'material-ui'
 import BusinessCard from './BusinessCard'
 import AddButton from '../AddButton'
+import { Typography } from 'material-ui'
 
-const styles = () => ({
+const styles = theme => ({
   root: {
     flexGrow: 1
+  },
+  noBusiness: {
+    marginTop: theme.spacing.unit * 4
   }
 })
 
 class Business extends React.Component {
   constructor(props) {
     super(props)
-    
+
     const { classes, business } = props
     this.classes = classes
     this.business = business
   }
 
+  getBusiness() {
+    if (this.business.length) {
+      return this.business.map(value => (
+        <Grid key={value.id} xs={12} sm={6} md={4} item>
+          <BusinessCard data={value} />
+        </Grid>
+      ))
+    } else {
+      return (
+        <div className={this.classes.noBusiness}>
+          <Typography align="center" type="title" color="primary">
+            There is no bussiness yet.
+          </Typography>
+          <Typography align="center" type="subheading">
+            Please add new companies.
+          </Typography>
+        </div>
+      )
+    }
+  }
   render() {
     return (
       <Grid container className={this.classes.root}>
         <Grid item xs={12}>
           <Grid container justify="center" spacing={24}>
-            {this.business.map(value => (
-              <Grid key={value.id} xs={12} sm={6} md={4} item>
-                <BusinessCard data={value}/>
-              </Grid>
-            ))}
+            {this.getBusiness()}
           </Grid>
         </Grid>
-        <AddButton onClick={() => this.props.history.push('/business/company')}/>
+        <AddButton onClick={() => this.props.history.push('/business/company')} />
       </Grid>
     )
   }
