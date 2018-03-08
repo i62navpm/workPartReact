@@ -38,7 +38,11 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 32,
     height: 32,
+  },
+  noEmployeeList: {
+    marginTop: theme.spacing.unit * 4
   }
+
 })
 
 class BusinessForm extends React.Component {
@@ -92,6 +96,24 @@ class BusinessForm extends React.Component {
     this.setState({ loading, formData: { ...this.state.formData, ...company } })
     this.props.setLoader(loading)
   }
+
+  getEmployeeList() {
+    if (this.state.formData.workforce.length) {
+      return <BusinessEmployeeList activeWorkforce={this.state.formData.workforce.map(employee => employee.id)} name="workforce" handleChange={this.handleChange} />
+    } else {
+      return (
+        <div className={this.classes.noEmployeeList}>
+          <Typography align="center" type="title" color="primary">
+            There is no employee yet.
+          </Typography>
+          <Typography align="center" type="subheading">
+            Please add new employees.
+          </Typography>
+        </div>
+      )
+    }
+  }
+
 
   render() {
     let { formData, submitted, loading } = this.state
@@ -215,7 +237,7 @@ class BusinessForm extends React.Component {
                 </ Grid>
               </ Grid>
               <Grid item xs={12}>
-                <BusinessEmployeeList activeWorkforce={formData.workforce.map(employee => employee.id)} name="workforce" handleChange={this.handleChange} />
+                {this.getEmployeeList()}
               </Grid>
               <Grid
                 className={this.classes.rowSubmit}

@@ -44,6 +44,7 @@ class Business extends React.Component {
       )
     }
   }
+
   render() {
     return (
       <Grid container className={this.classes.root}>
