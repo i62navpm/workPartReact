@@ -5,7 +5,7 @@ import { withStyles } from 'material-ui/styles'
 import Card, { CardHeader, CardMedia, CardActions } from 'material-ui/Card'
 import { Avatar, IconButton } from 'material-ui'
 import { colors } from 'material-ui'
-import { Edit, Delete } from 'material-ui-icons'
+import { Edit, Delete, People } from 'material-ui-icons'
 
 const randomColor = function (obj) {
   const keys = Object.keys(obj)
@@ -52,14 +52,19 @@ class BusinessCard extends React.Component {
           </Link>
           <CardActions disableActionSpacing>
             <div className={this.classes.flexGrow} />
-            <IconButton className="delete-business" color="accent">
-              <Delete />
-            </IconButton>
+            <Link to={`/business/company/${this.data.id}/workforce`}>
+              <IconButton className="edit-business" color="primary">
+                <People />
+              </IconButton>
+            </Link>
             <Link to={`/business/company/${this.data.id}`}>
               <IconButton className="edit-business" color="primary">
                 <Edit />
               </IconButton>
             </Link>
+            <IconButton className="delete-business" color="accent">
+              <Delete />
+            </IconButton>
           </ CardActions>
         </Card>
       </div>
