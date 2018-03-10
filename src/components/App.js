@@ -26,12 +26,6 @@ const Business = Loadable({
   loading: Loading
 })
 
-const Workforce = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "workforce" */ '../containers/Workforce'),
-  loading: Loading
-})
-
 const Worksheet = Loadable({
   loader: () =>
     import(/* webpackChunkName: "worksheet" */ '../containers/Worksheet'),

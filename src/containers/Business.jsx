@@ -2,11 +2,18 @@ import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { BusinessList, BusinessForm } from '../components/Business'
-import Workforce from './Workforce'
 import { setLoader } from '../actions/loader'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
+import Loadable from 'react-loadable'
+import Loading from '../components/Loading'
 const debug = require('debug')('bussiness')
+
+const Workforce = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "workforce" */ './Workforce'),
+  loading: Loading
+})
 
 class Business extends React.Component {
   constructor(props) {
@@ -18,7 +25,6 @@ class Business extends React.Component {
       loading,
       business
     }
-
   }
 
   componentWillReceiveProps(nextProps) {
