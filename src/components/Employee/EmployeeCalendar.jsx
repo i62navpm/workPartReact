@@ -14,7 +14,7 @@ import MonthLineChart from '../Calendar/MonthLineChart'
 import MonthPieChart from '../Calendar/MonthPieChart'
 import { Typography, Avatar, IconButton, Grid, Paper, Hidden } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
-import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning, PermContactCalendar } from 'material-ui-icons'
+import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning, FolderShared } from 'material-ui-icons'
 import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
 
@@ -170,7 +170,7 @@ class EmployeeCalendar extends React.Component {
                 }`}
             >
               <IconButton>
-                <PermContactCalendar className={this.props.classes.icon} />
+                <FolderShared className={this.props.classes.icon} />
               </IconButton>
             </Link>
             <Link
