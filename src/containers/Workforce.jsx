@@ -33,8 +33,8 @@ class Workforce extends React.Component {
 
     return (
       <Switch>
-        <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history }) => <EmployeeList workforce={workforce} history={history} />)} />
-        <Route path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.props.onNewEmployeeClick} closeForm={() => history.push('/workforce')} history={history} {...rest} />)} />
+        <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history, ...rest }) => <EmployeeList workforce={workforce} history={history} {...rest} />)} />
+        <Route exact path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.props.onNewEmployeeClick} closeForm={() => history.push(this.props.match.url)} history={history} {...rest} />)} />
       </Switch>
     )
   }

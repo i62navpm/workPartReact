@@ -52,7 +52,7 @@ class Employee extends React.Component {
           </Link>
           <CardActions disableActionSpacing>
             <div className={this.classes.flexGrow} />
-            <Link to={`/workforce/employee/${this.data.id}`}>
+            <Link to={`${this.props.history.location.pathname}/employee/${this.data.id}`}>
               <IconButton className="edit-workforce" color="primary">
                 <Edit />
               </IconButton>

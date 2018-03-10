@@ -17,7 +17,7 @@ const styles = theme => ({
 class Employee extends React.Component {
   constructor(props) {
     super(props)
-    
+
     const { classes, workforce } = props
     this.classes = classes
     this.workforce = workforce
@@ -27,7 +27,7 @@ class Employee extends React.Component {
     if (this.workforce.length) {
       return this.workforce.map(value => (
         <Grid key={value.id} xs={12} sm={6} md={4} item>
-          <EmployeeCard data={value} />
+          <EmployeeCard data={value} history={this.props.history} />
         </Grid>
       ))
     } else {
@@ -52,7 +52,7 @@ class Employee extends React.Component {
             {this.getEmployees()}
           </Grid>
         </Grid>
-        <AddButton onClick={() => this.props.history.push('/workforce/employee')}/>
+        <AddButton onClick={() => this.props.history.push(`${this.props.match.url}/employee`)} />
       </Grid>
     )
   }

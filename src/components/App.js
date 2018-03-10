@@ -72,7 +72,6 @@ class App extends Component {
                 <Switch>
                   <Route path="/auth" component={Auth} />
                   <PrivateRoute path="/business" component={Business} />
-                  <PrivateRoute path="/workforce" component={Workforce} />
                   <PrivateRoute
                     path="/worksheet/:companyId"
                     component={Worksheet}
