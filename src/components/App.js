@@ -61,7 +61,6 @@ class App extends Component {
           <Router>
             <React.Fragment>
               {this.showAppBar() && this.getAppBar()}
-              {this.showAppBar() && this.getDrawer()}
               <div className={'content-body'}>
                 <Switch>
                   <Route path="/auth" component={Auth} />

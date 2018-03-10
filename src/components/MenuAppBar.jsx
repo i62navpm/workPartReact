@@ -1,9 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 import { AppBar, Toolbar, Typography, IconButton, LinearProgress, Hidden } from 'material-ui'
-import MenuIcon from 'material-ui-icons/Menu'
 import { AccountCircle } from 'material-ui-icons'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import { setDrawer } from '../actions/drawer'
@@ -15,6 +15,10 @@ const styles = theme => ({
   root: {
     width: '100%',
     marginBottom: theme.spacing.unit * 2,
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit'
   },
   flex: {
     flex: 1
@@ -72,17 +76,11 @@ class MenuAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Menu"
-              onClick={() => this.props.setDrawer(true)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography type="title" color="inherit" className={classes.flex}>
-              Work Part App
-            </Typography>
+            <Link to={'/business'} className={classes.link}>
+              <Typography type="title" color="inherit" className={classes.flex}>
+                Work Part App
+              </Typography>
+            </Link>
             <Hidden xsDown>
               <Typography type="body1" color="inherit" align="right" className={classes.flex}>
                 {this.props.user.email}
