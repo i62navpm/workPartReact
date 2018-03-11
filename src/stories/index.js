@@ -109,10 +109,12 @@ storiesOf('Workforce', module)
       </ApolloProvider>
     </Provider>
   ))
-  .add('Card employee', () => <EmployeeCard data={workforceMockData[0]} />)
+  .add('Card employee', () => (
+    <EmployeeCard data={workforceMockData[0]} history={{ location: {} }} />
+  ))
   .add('Form employee', () => (
     <EmployeeForm match={{ params: { employeeId: '1' } }} history={{}} />
   ))
   .add('Calendar employee', () => (
-    <EmployeeCalendar data={workforceMockData[0]} />
+    <EmployeeCalendar employee={workforceMockData[0]} companyId={'1'} />
   ))
