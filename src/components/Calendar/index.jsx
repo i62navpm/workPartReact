@@ -97,7 +97,7 @@ class Calendar extends React.Component {
           ...event.data,
           money
         }
-        return { ...event, data: newData }
+        return { ...event, ...newData }
       }
       return event
     })
@@ -108,7 +108,7 @@ class Calendar extends React.Component {
 
   onSelectEvent(event) {
     let index = this.state.status.findIndex(
-      status => event.data.salary === status.salary
+      status => event.salary === status.salary
     )
     index = ++index % (this.state.status.length + 1)
 
@@ -125,7 +125,7 @@ class Calendar extends React.Component {
             money: this.state.employeeInfo[this.state.status[index].salary || 0]
           }
 
-          return { ...eventCalendar, data: newData }
+          return { ...eventCalendar, ...newData }
         }
         return eventCalendar
       })
@@ -149,10 +149,9 @@ class Calendar extends React.Component {
         start: slot.toString(),
         end: slot.toString(),
         allDay: true,
-        data: {
-          money: this.state.modality === 'pay' ? this.state.employeeInfo.fullSalary : null,
-          ...this.state.status[0]
-        }
+        money: this.state.modality === 'pay' ? this.state.employeeInfo.fullSalary : null,
+        ...this.state.status[0]
+
       }
     }).filter(event => event)
     this.setState({ events: [...this.state.events, ...newEvents] })
@@ -170,7 +169,7 @@ class Calendar extends React.Component {
   async wrapFetchEvent(date) {
     this.setState({ updatingEvents: true })
     await this.props.fetchEvents(date)
-    this.setState({currentDate: date, updatingEvents: false})
+    this.setState({ currentDate: date, updatingEvents: false })
   }
 
   getSearchDate() {
@@ -205,7 +204,7 @@ class Calendar extends React.Component {
             events={this.state.events}
             defaultDate={this.state.currentDate}
             date={this.state.currentDate}
-            onNavigate={() => {}}
+            onNavigate={() => { }}
             views={['month']}
             components={{
               event: withStyles(styles)(({ ...rest }) => (

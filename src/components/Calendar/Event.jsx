@@ -6,9 +6,9 @@ import { Face } from 'material-ui-icons'
 export default function Event({ event, classes, onSetEvent }) {
   return (
     <React.Fragment>
-      <span className={'event-title'}>{event.data.title}</span>
+      <span className={'event-title'}>{event.title}</span>
       <span className={'event-money'}>
-        {!event.data.money ? (
+        {!event.money ? (
           <IconButton
             variant="raised"
             color="primary"
@@ -18,7 +18,7 @@ export default function Event({ event, classes, onSetEvent }) {
             <Face className={classes.smallIcon} />
           </IconButton>
         ) : (
-            `${event.data.money} €`
+            `${event.money} €`
           )}
       </span>
     </React.Fragment>

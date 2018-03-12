@@ -139,11 +139,9 @@ const mapDispatchToProps = dispatch => {
 
 export default graphql(gql`
   fragment EventPart on Event {
-    data {
-      title,
-      salary,
-      money
-    },
+    title,
+    salary,
+    money
     allDay,
     start,
     end

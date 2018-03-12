@@ -23,11 +23,11 @@ class SummaryBarChart extends React.Component {
       return obj
     }, {})
 
-    data.pay.forEach(({ start, data: { money } }) => {
+    data.pay.forEach(({ start, money }) => {
       start = DateTime.fromISO(new Date(start).toISOString())
       months[start.toLocaleString({ month: 'long' })]['pay'] += money
     })
-    data.debt.forEach(({ start, data: { money } }) => {
+    data.debt.forEach(({ start, money }) => {
       start = DateTime.fromISO(new Date(start).toISOString())
       months[start.toLocaleString({ month: 'long' })]['debt'] += money
     })

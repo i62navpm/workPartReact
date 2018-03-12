@@ -15,9 +15,9 @@ export function calcChart(data, date = new Date()) {
       return start.toLocaleString(format) === date.toLocaleString(format)
     })
 
-    if (!payEvents) payEvents = { data: {} }
-    if (!debtEvents) debtEvents = { data: {} }
-    return [rest.name, payEvents.data.money || 0, debtEvents.data.money || 0]
+    if (!payEvents) payEvents = {}
+    if (!debtEvents) debtEvents = {}
+    return [rest.name, payEvents.money || 0, debtEvents.money || 0]
   })
 }
 

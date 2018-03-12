@@ -237,9 +237,7 @@ EmployeeSummary.propTypes = {
 export default graphql(
   gql`
     fragment EventSummary on Event {
-      data {
-        money
-      }
+      money
       start
     }
 

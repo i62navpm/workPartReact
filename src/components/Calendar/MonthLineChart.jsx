@@ -40,12 +40,12 @@ class MonthLineChart extends React.Component {
         return start.toLocaleString(format) === date.toLocaleString(format)
       })
 
-      if (!payEvents) payEvents = { data: {} }
-      if (!debtEvents) debtEvents = { data: {} }
+      if (!payEvents) payEvents = { }
+      if (!debtEvents) debtEvents = { }
       return {
         ...rest,
-        pay: payEvents.data.money || 0,
-        debt: debtEvents.data.money || 0
+        pay: payEvents.money || 0,
+        debt: debtEvents.money || 0
       }
     })
   }
