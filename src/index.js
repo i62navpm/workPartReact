@@ -9,27 +9,41 @@ import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 import storeApp from './reducers'
 import { ApolloProvider } from 'react-apollo'
+import AWSAppSyncClient from 'aws-appsync'
+import { Rehydrated } from 'aws-appsync-react'
+import appSyncConfig from './config/appSync'
 // import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { MockHttpLink } from './graphql/mockHttpLink'
+// import { InMemoryCache } from 'apollo-cache-inmemory'
+// import { ApolloClient } from 'apollo-client'
+// import { MockHttpLink } from './graphql/mockHttpLink'
 import { Settings } from 'luxon'
 
 Settings.defaultLocale = 'en-gb'
 
-const client = new ApolloClient({
-  // link: new HttpLink({ uri: 'https://1jzxrj179.lp.gql.zone/graphql' }),
-  link: MockHttpLink,
-  cache: new InMemoryCache()
+// const client = new ApolloClient({
+//   // link: new HttpLink({ uri: 'https://1jzxrj179.lp.gql.zone/graphql' }),
+//   link: MockHttpLink,
+//   cache: new InMemoryCache()
+// })
+
+const client = new AWSAppSyncClient({
+  url: appSyncConfig.graphqlEndpoint,
+  region: appSyncConfig.region,
+  auth: {
+    type: appSyncConfig.authenticationType,
+    apiKey: appSyncConfig.apiKey
+  }
 })
 
 const store = createStore(storeApp, compose(applyMiddleware(thunk, logger)))
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <Rehydrated>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Rehydrated>
   </ApolloProvider>,
   document.getElementById('root')
 )
@@ -39,9 +53,11 @@ if (module.hot) {
     const NextApp = require('./components/App').default
     ReactDOM.render(
       <ApolloProvider client={client}>
-        <Provider store={store}>
-          <NextApp />
-        </Provider>
+        <Rehydrated>
+          <Provider store={store}>
+            <NextApp />
+          </Provider>
+        </Rehydrated>
       </ApolloProvider>,
       document.getElementById('root')
     )
