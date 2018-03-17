@@ -51,7 +51,7 @@ class Business extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.auth
   }
 }
 
@@ -62,9 +62,13 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default graphql(queryBusinessesByUserIdIndex)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Business)
+export default (connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(graphql(queryBusinessesByUserIdIndex, {
+  options: ({ user: { email } }) => ({ 
+    variables: { userId: email },
+    fetchPolicy: 'network-only'
+  }),
+})(Business))
 )

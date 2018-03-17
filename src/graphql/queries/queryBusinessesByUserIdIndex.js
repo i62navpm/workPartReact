@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql(`
-  {
-    queryBusinessesByUserIdIndex(userId:"1") {
+  query($userId: ID!){
+    queryBusinessesByUserIdIndex(userId: $userId) {
       items {
         id
         name
