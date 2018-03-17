@@ -71,7 +71,7 @@ class UploadImage extends React.Component {
 
 UploadImage.propTypes = {
   classes: PropTypes.object.isRequired,
-  image: PropTypes.string.isRequired,
+  image: PropTypes.string,
   handleChange: PropTypes.func.isRequired
 }
 
