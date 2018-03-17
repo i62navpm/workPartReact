@@ -31,9 +31,10 @@ class Business extends React.Component {
 
   submitForm(businessData) {
     return this.props.updateBusiness({ variables: { input: businessData },
-      update: (proxy, { data: { updateBusiness } }) => {
-        const newBusiness = this.state.business.map(item => item.id === updateBusiness.id ? updateBusiness : item )
-        this.setState({business: newBusiness})
+      update: (proxy) => {
+        const query = queryBusinessesByUserIdIndex
+        const data = proxy.readQuery({ query, variables: { userId: this.props.user.email } })
+        proxy.writeQuery({ query, data })
       },
     })
   }
