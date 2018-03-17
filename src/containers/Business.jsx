@@ -8,7 +8,8 @@ import Loadable from 'react-loadable'
 import Loading from '../components/Loading'
 import queryBusinessesByUserIdIndex from '../graphql/queries/queryBusinessesByUserIdIndex'
 import updateBusiness from '../graphql/mutations/updateBusiness'
-import createBusiness from '../graphql/mutations/createUser'
+import createBusiness from '../graphql/mutations/createBusiness'
+import { v4 as uuid } from 'uuid'
 
 const Workforce = Loadable({
   loader: () =>
@@ -30,13 +31,22 @@ class Business extends React.Component {
   }
 
   submitForm(businessData) {
-    return this.props.updateBusiness({ variables: { input: businessData },
-      update: (proxy) => {
-        const query = queryBusinessesByUserIdIndex
-        const data = proxy.readQuery({ query, variables: { userId: this.props.user.email } })
-        proxy.writeQuery({ query, data })
-      },
-    })
+
+    if (businessData.id) {
+      return this.props.updateBusiness({
+        variables: { input: businessData },
+        update: (proxy) => {
+          const query = queryBusinessesByUserIdIndex
+          const data = proxy.readQuery({ query, variables: { userId: this.props.user.email } })
+          proxy.writeQuery({ query, data })
+        }
+      })
+    } else {
+      const idInfo = { userId: this.props.user.email, id: uuid() }
+      businessData = { ...idInfo, ...businessData }
+      
+      return this.props.createBusiness({ variables: { input: businessData } })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
