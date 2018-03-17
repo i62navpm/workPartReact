@@ -64,7 +64,6 @@ input CreateEventsInput {
 
 input CreateUserInput {
 	id: ID!
-	cognitoId: ID!
 	email: String!
 }
 
@@ -184,11 +183,11 @@ type Query {
 }
 
 type Subscription {
-	onCreateUser(id: ID, cognitoId: ID, email: String): User
+	onCreateUser(id: ID, email: String): User
 		@aws_subscribe(mutations: ["createUser"])
-	onUpdateUser(id: ID, cognitoId: ID, email: String): User
+	onUpdateUser(id: ID, email: String): User
 		@aws_subscribe(mutations: ["updateUser"])
-	onDeleteUser(id: ID, cognitoId: ID, email: String): User
+	onDeleteUser(id: ID, email: String): User
 		@aws_subscribe(mutations: ["deleteUser"])
 	onCreateBusiness(
 		id: ID,
@@ -315,13 +314,11 @@ input UpdateEventsInput {
 
 input UpdateUserInput {
 	id: ID!
-	cognitoId: ID
 	email: String
 }
 
 type User {
 	id: ID!
-	cognitoId: ID!
 	email: String!
 	business(first: Int, after: String): BusinessConnection
 }

@@ -1,10 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { graphql } from 'react-apollo'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
 import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
 import { VerifiedUser, Send } from 'material-ui-icons'
+import createUser from '../../graphql/mutations/createUser'
 const debug = require('debug')
 const error = debug('verification:error')
 
@@ -59,22 +62,23 @@ class Verification extends React.Component {
   handleSubmit() {
     this.setState({ submitted: true }, async () => {
       try {
+        const { email } = this.props.user
         await this.props.onSubmit(this.state.formData)
+        await this.props.mutate({ variables: { input: { id: email, email } } })
         this.props.history.push('/auth/login')
         this.props.setNotification({
           open: true,
           type: 'success',
           message: 'Your email is verificated!, Login now!'
         })
-      } catch ({message}) {
+      } catch ({ message }) {
         this.props.setNotification({
           open: true,
           type: 'error',
           message
         })
-        error(message)
-      } finally {
         this.setState({ submitted: false })
+        error(message)
       }
     })
   }
@@ -145,4 +149,15 @@ Verification.propTypes = {
   setNotification: PropTypes.func
 }
 
-export default withStyles(styles)(Verification)
+const mapStateToProps = state => {
+  return {
+    user: state.auth
+  }
+}
+
+export default graphql(createUser)(
+  connect(
+    mapStateToProps,
+    null
+  )(withStyles(styles)(Verification))
+)
