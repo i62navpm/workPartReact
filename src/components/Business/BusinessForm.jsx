@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import BusinessEmployeeList from './BusinessEmployeeList'
 import { setLoader } from '../../actions/loader'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
@@ -9,8 +8,8 @@ import { withStyles } from 'material-ui/styles'
 import { Button, Grid, Paper, AppBar, Toolbar, Typography, IconButton } from 'material-ui'
 import { Domain, Save, Close } from 'material-ui-icons'
 import UploadImage from '../UploadImage'
-import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
+import getBusiness from '../../graphql/queries/getBusiness'
 const debug = require('debug')
 const error = debug('businessForm:error')
 
@@ -38,17 +37,13 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 32,
     height: 32,
-  },
-  noEmployeeList: {
-    marginTop: theme.spacing.unit * 4
   }
-
 })
 
 class BusinessForm extends React.Component {
   constructor(props) {
     super(props)
-    this.props.setLoader(true)
+    this.props.setLoader(!!props.match.params.companyId)
 
     const { classes } = props
     this.classes = classes
@@ -62,9 +57,8 @@ class BusinessForm extends React.Component {
         phone: '',
         email: '',
         web: '',
-        workforce: [],
       },
-      loading: true,
+      loading: !!props.match.params.companyId,
       submitted: false
     }
 
@@ -81,7 +75,7 @@ class BusinessForm extends React.Component {
   handleSubmit() {
     this.setState({ submitted: true }, async () => {
       try {
-        await this.props.onSubmit(this.state.formData)
+        await this.props.onSubmit(this.removeNull(this.state.formData))
         this.setState({ submitted: false })
         this.props.history.push('/business')
       } catch (err) {
@@ -91,29 +85,22 @@ class BusinessForm extends React.Component {
     })
   }
 
+  omitTypename(key, value) {
+    return (key === '__typename' || !value)
+      ? undefined 
+      : value
+  }
+
+  removeNull(obj) {
+    return JSON.parse(JSON.stringify(obj), this.omitTypename)
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { data: { company, loading } } = nextProps
-    this.setState({ loading, formData: { ...this.state.formData, ...company } })
+    let { data: { getBusiness, loading } } = nextProps
+    getBusiness = this.removeNull({...getBusiness})
+    this.setState({ loading, formData: { ...this.state.formData, ...getBusiness } })
     this.props.setLoader(loading)
   }
-
-  getEmployeeList() {
-    if (this.state.formData.workforce.length) {
-      return <BusinessEmployeeList activeWorkforce={this.state.formData.workforce.map(employee => employee.id)} name="workforce" handleChange={this.handleChange} />
-    } else {
-      return (
-        <div className={this.classes.noEmployeeList}>
-          <Typography align="center" type="title" color="primary">
-            There is no employee yet.
-          </Typography>
-          <Typography align="center" type="subheading">
-            Please add new employees.
-          </Typography>
-        </div>
-      )
-    }
-  }
-
 
   render() {
     let { formData, submitted, loading } = this.state
@@ -236,9 +223,6 @@ class BusinessForm extends React.Component {
                   />
                 </ Grid>
               </ Grid>
-              <Grid item xs={12}>
-                {this.getEmployeeList()}
-              </Grid>
               <Grid
                 className={this.classes.rowSubmit}
                 container
@@ -265,6 +249,12 @@ class BusinessForm extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    user: state.auth
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     setLoader: (loading) => dispatch(setLoader({ loading }))
@@ -275,30 +265,13 @@ BusinessForm.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default graphql(gql`
-  query getCompany($companyId: ID) {
-    company(id: $companyId) {
-      id,
-      name,
-      cif,
-      date,
-      address,
-      phone,
-      email,
-      web,
-      image,
-      workforce {
-        id
-      }
-    }
-  }
-  `, {
-    options: ({ match }) => {
-      return { variables: { companyId: match.params.companyId } }
-    }
-  })(
-    connect(
-      null,
-      mapDispatchToProps
-    )(withStyles(styles)(BusinessForm))
-  )
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(graphql(getBusiness, {
+  options: ({ match, user: { email } }) => ({
+    variables: { id: match.params.companyId, userId: email },
+    fetchPolicy: 'network-only'
+  }),
+  skip: ({ match }) => !match.params.companyId
+})(withStyles(styles)(BusinessForm)))

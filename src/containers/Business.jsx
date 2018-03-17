@@ -3,12 +3,12 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { BusinessList, BusinessForm } from '../components/Business'
 import { setLoader } from '../actions/loader'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import Loadable from 'react-loadable'
 import Loading from '../components/Loading'
 import queryBusinessesByUserIdIndex from '../graphql/queries/queryBusinessesByUserIdIndex'
-
-const debug = require('debug')('bussiness')
+import updateBusiness from '../graphql/mutations/updateBusiness'
+import createBusiness from '../graphql/mutations/createUser'
 
 const Workforce = Loadable({
   loader: () =>
@@ -26,6 +26,16 @@ class Business extends React.Component {
       loading,
       business
     }
+    this.submitForm = this.submitForm.bind(this)
+  }
+
+  submitForm(businessData) {
+    return this.props.updateBusiness({ variables: { input: businessData },
+      update: (proxy, { data: { updateBusiness } }) => {
+        const newBusiness = this.state.business.map(item => item.id === updateBusiness.id ? updateBusiness : item )
+        this.setState({business: newBusiness})
+      },
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,7 +52,7 @@ class Business extends React.Component {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history }) => <BusinessList business={business} history={history} />)} />
-        <Route exact path={`${this.props.match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={this.props.onNewBusinessClick} closeForm={() => history.push('/business')} history={history} {...rest} />)} />
+        <Route exact path={`${this.props.match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={this.submitForm} closeForm={() => history.push('/business')} history={history} {...rest} />)} />
         <Route path={`${this.props.match.url}/company/:companyId/workforce`} component={Workforce} />
       </Switch>
     )
@@ -57,18 +67,21 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLoader: (loading) => dispatch(setLoader({ loading })),
-    onNewBusinessClick: () => debug('new Business')
+    setLoader: (loading) => dispatch(setLoader({ loading }))
   }
 }
 
 export default (connect(
   mapStateToProps,
   mapDispatchToProps
-)(graphql(queryBusinessesByUserIdIndex, {
-  options: ({ user: { email } }) => ({ 
-    variables: { userId: email },
-    fetchPolicy: 'network-only'
+)(compose(
+  graphql(queryBusinessesByUserIdIndex, {
+    options: ({ user: { email } }) => ({
+      variables: { userId: email },
+      fetchPolicy: 'network-only'
+    }),
   }),
-})(Business))
+  graphql(createBusiness, { name: 'createBusiness' }),
+  graphql(updateBusiness, { name: 'updateBusiness' })
+)(Business))
 )
