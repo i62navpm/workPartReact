@@ -54,6 +54,7 @@ class BusinessForm extends React.Component {
         cif: '',
         image: '',
         address: '',
+        date: new Date().toISOString(),
         phone: '',
         email: '',
         web: '',
@@ -76,7 +77,6 @@ class BusinessForm extends React.Component {
     this.setState({ submitted: true }, async () => {
       try {
         await this.props.onSubmit(this.removeNull(this.state.formData))
-        this.setState({ submitted: false })
         this.props.history.push('/business')
       } catch (err) {
         this.setState({ submitted: false })

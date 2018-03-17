@@ -12,8 +12,7 @@ import createBusiness from '../graphql/mutations/createBusiness'
 import { v4 as uuid } from 'uuid'
 
 const Workforce = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "workforce" */ './Workforce'),
+  loader: () => import(/* webpackChunkName: "workforce" */ './Workforce'),
   loading: Loading
 })
 
@@ -30,23 +29,42 @@ class Business extends React.Component {
     this.submitForm = this.submitForm.bind(this)
   }
 
-  submitForm(businessData) {
-
-    if (businessData.id) {
-      return this.props.updateBusiness({
-        variables: { input: businessData },
-        update: (proxy) => {
-          const query = queryBusinessesByUserIdIndex
-          const data = proxy.readQuery({ query, variables: { userId: this.props.user.email } })
-          proxy.writeQuery({ query, data })
+  updateBusiness(data) {
+    return this.props.updateBusiness({
+      variables: { input: data },
+      update: (proxy) => {
+        const options = {
+          query: queryBusinessesByUserIdIndex,
+          variables: { userId: this.props.user.email }
         }
-      })
-    } else {
-      const idInfo = { userId: this.props.user.email, id: uuid() }
-      businessData = { ...idInfo, ...businessData }
-      
-      return this.props.createBusiness({ variables: { input: businessData } })
-    }
+        const data = proxy.readQuery(options)
+        proxy.writeQuery({ ...options, data })
+      }
+    })
+  }
+
+  createBusiness(data) {
+    return this.props.createBusiness({
+      variables: { input: data },
+      update: (proxy, { data: { createBusiness } }) => {
+        const options = {
+          query: queryBusinessesByUserIdIndex,
+          variables: { userId: this.props.user.email }
+        }
+        const data = proxy.readQuery(options)
+        data.queryBusinessesByUserIdIndex.items.push(createBusiness)
+        proxy.writeQuery({ ...options, data })
+      }
+    })
+  }
+
+  submitForm(businessData) {
+    if (businessData.id)
+      return this.updateBusiness(businessData)
+
+    const idInfo = { userId: this.props.user.email, id: uuid() }
+    businessData = { ...idInfo, ...businessData }
+    return this.createBusiness(businessData)
   }
 
   componentWillReceiveProps(nextProps) {
