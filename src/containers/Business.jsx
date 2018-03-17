@@ -3,10 +3,11 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { BusinessList, BusinessForm } from '../components/Business'
 import { setLoader } from '../actions/loader'
-import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 import Loadable from 'react-loadable'
 import Loading from '../components/Loading'
+import queryBusinessesByUserIdIndex from '../graphql/queries/queryBusinessesByUserIdIndex'
+
 const debug = require('debug')('bussiness')
 
 const Workforce = Loadable({
@@ -28,8 +29,8 @@ class Business extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data: { loading, business } } = nextProps
-    this.setState({ loading, business })
+    const { data: { loading, queryBusinessesByUserIdIndex: { items } } } = nextProps
+    this.setState({ loading, business: items })
     this.props.setLoader(loading)
   }
 
@@ -61,18 +62,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default graphql(gql`
-  {
-    business {
-      id,
-      name,
-      date,
-      image
-    }
-  }
-  `)(
+export default graphql(queryBusinessesByUserIdIndex)(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(Business)
-  )
+)
