@@ -27,7 +27,7 @@ class Employee extends React.Component {
     if (this.workforce.length) {
       return this.workforce.map(value => (
         <Grid key={value.id} xs={12} sm={6} md={4} item>
-          <EmployeeCard data={value} history={this.props.history} />
+          <EmployeeCard data={value} onRemove={this.props.onRemove} history={this.props.history} />
         </Grid>
       ))
     } else {

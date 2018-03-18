@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Dialog, { DialogTitle, DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog'
 import { Button } from 'material-ui'
 
-class BusinessRemoveModal extends React.Component {
+class EmployeeRemoveModal extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -37,11 +37,11 @@ class BusinessRemoveModal extends React.Component {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Do you want to remove the business?'}
+          {'Do you want to remove this employee?'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            If you remove the business <strong>{this.props.data.name}</strong> all your information will be lost.
+            If you remove the employee <strong>{this.props.data.name}</strong> all your information will be lost.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -57,8 +57,8 @@ class BusinessRemoveModal extends React.Component {
   }
 }
 
-BusinessRemoveModal.propTypes = {
+EmployeeRemoveModal.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default BusinessRemoveModal
+export default EmployeeRemoveModal

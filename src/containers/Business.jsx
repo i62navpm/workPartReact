@@ -32,6 +32,7 @@ class Business extends React.Component {
   }
 
   updateBusiness(data) {
+    this.props.setLoader(true)
     return this.props.updateBusiness({
       variables: { input: data },
       update: (proxy) => {
@@ -46,6 +47,7 @@ class Business extends React.Component {
   }
 
   createBusiness(data) {
+    this.props.setLoader(true)
     return this.props.createBusiness({
       variables: { input: data },
       update: (proxy, { data: { createBusiness } }) => {
@@ -61,6 +63,7 @@ class Business extends React.Component {
   }
 
   removeBusiness(data) {
+    this.props.setLoader(true)
     data = {userId: this.props.user.email, ...data}
     return this.props.deleteBusiness({
       variables: { input: data },

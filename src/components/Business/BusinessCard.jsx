@@ -41,7 +41,7 @@ class BusinessCard extends React.Component {
   render() {
     return (
       <div className={'card-hover'}>
-        <BusinessRemoveModal ref="removeModal" data={this.data} onRemove={this.props.onRemove}/>
+        <BusinessRemoveModal ref="removeModal" data={this.data} onRemove={this.props.onRemove} />
         <Card className={this.classes.card}>
           <CardHeader
             avatar={

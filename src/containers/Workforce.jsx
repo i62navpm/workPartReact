@@ -7,6 +7,7 @@ import { graphql, compose } from 'react-apollo'
 import queryEmployeesByBusinessIdIndex from '../graphql/queries/queryEmployeesByBusinessIdIndex'
 import createEmployee from '../graphql/mutations/createEmployee'
 import updateEmployee from '../graphql/mutations/updateEmployee'
+import deleteEmployee from '../graphql/mutations/deleteEmployee'
 import { v4 as uuid } from 'uuid'
 
 class Workforce extends React.Component {
@@ -27,6 +28,7 @@ class Workforce extends React.Component {
   }
   
   updateEmployee(data) {
+    this.props.setLoader(true)
     return this.props.updateEmployee({
       variables: { input: data },
       update: (proxy) => {
@@ -41,6 +43,7 @@ class Workforce extends React.Component {
   }
 
   createEmployee(data) {
+    this.props.setLoader(true)
     return this.props.createEmployee({
       variables: { input: data },
       update: (proxy, { data: { createEmployee } }) => {
@@ -56,6 +59,7 @@ class Workforce extends React.Component {
   }
 
   removeEmployee(data) {
+    this.props.setLoader(true)
     data = { businessId: this.state.businessId, ...data }
     return this.props.deleteEmployee({
       variables: { input: data },
@@ -93,7 +97,7 @@ class Workforce extends React.Component {
 
     return (
       <Switch>
-        <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history, ...rest }) => <EmployeeList workforce={workforce} history={history} {...rest} />)} />
+        <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history, ...rest }) => <EmployeeList workforce={workforce} onRemove={this.removeEmployee} history={history} {...rest} />)} />
         <Route exact path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.submitForm} businessId={this.props.match.params.companyId} closeForm={() => history.push(this.props.match.url)} history={history} {...rest} />)} />
       </Switch>
     )
@@ -124,6 +128,6 @@ export default (connect(
   }),
   graphql(createEmployee, { name: 'createEmployee' }),
   graphql(updateEmployee, { name: 'updateEmployee' }),
-  // graphql(deleteEmployee, { name: 'deleteEmployee' }),
+  graphql(deleteEmployee, { name: 'deleteEmployee' }),
 )(Workforce))
 )

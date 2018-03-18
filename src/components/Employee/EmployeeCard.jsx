@@ -7,6 +7,7 @@ import { Avatar, IconButton } from 'material-ui'
 import { colors } from 'material-ui'
 import { Edit, Delete } from 'material-ui-icons'
 import imageEmployee from '../../assets/images/employeeDefault.jpg'
+import EmployeeRemoveModal from './EmployeeRemoveModal'
 
 const randomColor = function (obj) {
   const keys = Object.keys(obj)
@@ -29,15 +30,22 @@ class Employee extends React.Component {
     const { classes, data } = props
     this.classes = classes
     this.data = data
+
+    this.openRemoveModal = this.openRemoveModal.bind(this)
+  }
+
+  openRemoveModal() {
+    this.refs.removeModal.handleClickOpen()
   }
 
   render() {
     return (
       <div className={'card-hover'}>
+        <EmployeeRemoveModal ref="removeModal" data={this.data} onRemove={this.props.onRemove} />
         <Card className={this.classes.card}>
           <CardHeader
             avatar={
-              <Avatar aria-label="Employee" style={{backgroundColor: randomColor(colors)[500]}}>
+              <Avatar aria-label="Employee" style={{ backgroundColor: randomColor(colors)[500] }}>
                 {this.data.name[0]}
               </Avatar>
             }
@@ -58,7 +66,7 @@ class Employee extends React.Component {
                 <Edit />
               </IconButton>
             </Link>
-            <IconButton color="accent">
+            <IconButton color="accent" onClick={this.openRemoveModal}>
               <Delete />
             </IconButton>
           </ CardActions>
