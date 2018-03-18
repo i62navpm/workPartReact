@@ -7,6 +7,7 @@ import { Avatar, IconButton } from 'material-ui'
 import { colors } from 'material-ui'
 import { Edit, Delete, People } from 'material-ui-icons'
 import imageBusiness from '../../assets/images/businessDefault.png'
+import BusinessRemoveModal from './BusinessRemoveModal'
 
 const randomColor = function (obj) {
   const keys = Object.keys(obj)
@@ -29,15 +30,22 @@ class BusinessCard extends React.Component {
     const { classes, data } = props
     this.classes = classes
     this.data = data
+
+    this.openRemoveModal = this.openRemoveModal.bind(this)
+  }
+
+  openRemoveModal() {
+    this.refs.removeModal.handleClickOpen()
   }
 
   render() {
     return (
       <div className={'card-hover'}>
+        <BusinessRemoveModal ref="removeModal" data={this.data} onRemove={this.props.onRemove}/>
         <Card className={this.classes.card}>
           <CardHeader
             avatar={
-              <Avatar aria-label="Business" style={{backgroundColor: randomColor(colors)[500]}}>
+              <Avatar aria-label="Business" style={{ backgroundColor: randomColor(colors)[500] }}>
                 {this.data.name[0]}
               </Avatar>
             }
@@ -63,7 +71,7 @@ class BusinessCard extends React.Component {
                 <Edit />
               </IconButton>
             </Link>
-            <IconButton className="delete-business" color="accent">
+            <IconButton className="delete-business" color="accent" onClick={this.openRemoveModal}>
               <Delete />
             </IconButton>
           </ CardActions>
@@ -75,7 +83,8 @@ class BusinessCard extends React.Component {
 
 BusinessCard.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  onRemove: PropTypes.func
 }
 
 export default withStyles(styles)(BusinessCard)

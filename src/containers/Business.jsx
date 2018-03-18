@@ -7,8 +7,9 @@ import { graphql, compose } from 'react-apollo'
 import Loadable from 'react-loadable'
 import Loading from '../components/Loading'
 import queryBusinessesByUserIdIndex from '../graphql/queries/queryBusinessesByUserIdIndex'
-import updateBusiness from '../graphql/mutations/updateBusiness'
 import createBusiness from '../graphql/mutations/createBusiness'
+import updateBusiness from '../graphql/mutations/updateBusiness'
+import deleteBusiness from '../graphql/mutations/deleteBusiness'
 import { v4 as uuid } from 'uuid'
 
 const Workforce = Loadable({
@@ -27,6 +28,7 @@ class Business extends React.Component {
       business
     }
     this.submitForm = this.submitForm.bind(this)
+    this.removeBusiness = this.removeBusiness.bind(this)
   }
 
   updateBusiness(data) {
@@ -58,6 +60,22 @@ class Business extends React.Component {
     })
   }
 
+  removeBusiness(data) {
+    data = {userId: this.props.user.email, ...data}
+    return this.props.deleteBusiness({
+      variables: { input: data },
+      update: (proxy, { data: { deleteBusiness } }) => {
+        const options = {
+          query: queryBusinessesByUserIdIndex,
+          variables: { userId: this.props.user.email }
+        }
+        const data = proxy.readQuery(options)
+        data.queryBusinessesByUserIdIndex.items = data.queryBusinessesByUserIdIndex.items.filter(item => item.id !== deleteBusiness.id)
+        proxy.writeQuery({ ...options, data })
+      }
+    })
+  }
+
   submitForm(businessData) {
     if (businessData.id)
       return this.updateBusiness(businessData)
@@ -80,7 +98,7 @@ class Business extends React.Component {
 
     return (
       <Switch>
-        <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history }) => <BusinessList business={business} history={history} />)} />
+        <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history }) => <BusinessList business={business} onRemove={this.removeBusiness} history={history} />)} />
         <Route exact path={`${this.props.match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={this.submitForm} closeForm={() => history.push('/business')} history={history} {...rest} />)} />
         <Route path={`${this.props.match.url}/company/:companyId/workforce`} component={Workforce} />
       </Switch>
@@ -111,6 +129,7 @@ export default (connect(
     }),
   }),
   graphql(createBusiness, { name: 'createBusiness' }),
-  graphql(updateBusiness, { name: 'updateBusiness' })
+  graphql(updateBusiness, { name: 'updateBusiness' }),
+  graphql(deleteBusiness, { name: 'deleteBusiness' }),
 )(Business))
 )
