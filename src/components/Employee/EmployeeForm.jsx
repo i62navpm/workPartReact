@@ -304,8 +304,8 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(graphql(getEmployee, {
-  options: ({ match }) => ({
-    variables: { id: match.params.employeeId, businessId: match.params.companyId },
+  options: ({ match, businessId }) => ({
+    variables: { id: match.params.employeeId, businessId: businessId },
     fetchPolicy: 'network-only'
   }),
   skip: ({ match }) => !match.params.employeeId

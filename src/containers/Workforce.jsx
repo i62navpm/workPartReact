@@ -6,6 +6,7 @@ import { setLoader } from '../actions/loader'
 import { graphql, compose } from 'react-apollo'
 import queryEmployeesByBusinessIdIndex from '../graphql/queries/queryEmployeesByBusinessIdIndex'
 import createEmployee from '../graphql/mutations/createEmployee'
+import updateEmployee from '../graphql/mutations/updateEmployee'
 import { v4 as uuid } from 'uuid'
 
 class Workforce extends React.Component {
@@ -76,7 +77,6 @@ class Workforce extends React.Component {
 
     const idInfo = { businessId: this.state.businessId, id: uuid() }
     employeeData = { ...idInfo, ...employeeData }
-    console.log(employeeData)
     return this.createEmployee(employeeData)
   }
 
@@ -94,7 +94,7 @@ class Workforce extends React.Component {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history, ...rest }) => <EmployeeList workforce={workforce} history={history} {...rest} />)} />
-        <Route exact path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.submitForm} closeForm={() => history.push(this.props.match.url)} history={history} {...rest} />)} />
+        <Route exact path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.submitForm} businessId={this.props.match.params.companyId} closeForm={() => history.push(this.props.match.url)} history={history} {...rest} />)} />
       </Switch>
     )
   }
@@ -123,7 +123,7 @@ export default (connect(
     }),
   }),
   graphql(createEmployee, { name: 'createEmployee' }),
-  // graphql(updateEmployee, { name: 'updateEmployee' }),
+  graphql(updateEmployee, { name: 'updateEmployee' }),
   // graphql(deleteEmployee, { name: 'deleteEmployee' }),
 )(Workforce))
 )
