@@ -14,10 +14,10 @@ class WorksheetPresentational extends React.Component {
   constructor(props) {
     super(props)
 
-    const { workforce, ...company } = props.company
+    const { employees: { items }, ...company } = props.company
     this.state = {
-      initWorkforce: workforce,
-      workforce,
+      initWorkforce: items,
+      workforce: items,
       company
     }
 

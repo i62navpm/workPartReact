@@ -1,12 +1,12 @@
 import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import WorksheetPresentational from '../components/Worksheet'
 import { setLoader } from '../actions/loader'
 import { EmployeeForm } from '../components/Employee'
 import { EmployeeSummary } from '../components/Employee'
+import getBusinessWithEmployees from '../graphql/queries/getBusinessWithEmployees'
 const debug = require('debug')('workSheet')
 
 class Worksheet extends React.Component {
@@ -23,8 +23,8 @@ class Worksheet extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data: { loading, company } } = nextProps
-    this.setState({ loading, company })
+    const { data: { loading, getBusiness } } = nextProps
+    this.setState({ loading, company: getBusiness })
     this.props.setLoader(loading)
   }
 
@@ -45,7 +45,7 @@ class Worksheet extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user
+    user: state.auth
   }
 }
 
@@ -56,29 +56,15 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default graphql(gql`
-  query getCompany($companyId: ID) {
-    company(id: $companyId) {
-      id,
-      name,
-      cif,
-      image,
-      workforce {
-        id,
-        name,
-        image,
-        fullSalary,
-        halfSalary
-      }
-    }
-  }
-  `, {
-    options: ({ match }) => {
-      return { variables: { companyId: match.params.companyId, date: new Date().toISOString() } }
-    }
-  })(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(Worksheet)
-  )
+export default (connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(compose(
+  graphql(getBusinessWithEmployees, {
+    options: ({ match, user: { email } }) => ({
+      variables: { id: match.params.companyId, userId: email },
+      fetchPolicy: 'network-only'
+    }),
+  })
+)(Worksheet))
+)
