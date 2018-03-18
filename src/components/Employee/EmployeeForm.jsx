@@ -10,8 +10,8 @@ import Input, { InputLabel, InputAdornment } from 'material-ui/Input'
 import { FormControl } from 'material-ui/Form'
 import { Face, Save, Close } from 'material-ui-icons'
 import UploadImage from '../UploadImage'
-import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
+import getEmployee from '../../graphql/queries/getEmployee'
 const debug = require('debug')
 const error = debug('employeeForm:error')
 
@@ -45,7 +45,7 @@ const styles = theme => ({
 class EmployeeForm extends React.Component {
   constructor(props) {
     super(props)
-    this.props.setLoader(true)
+    this.props.setLoader(!!props.match.params.employeeId)
 
     const { classes } = props
     this.classes = classes
@@ -62,6 +62,7 @@ class EmployeeForm extends React.Component {
         fullSalary: 0,
         halfSalary: 0
       },
+      loading: !!props.match.params.employeeId,
       submitted: false
     }
 
@@ -78,25 +79,35 @@ class EmployeeForm extends React.Component {
   handleSubmit() {
     this.setState({ submitted: true }, async () => {
       try {
-        await this.props.onSubmit(this.state.formData)
+        await this.props.onSubmit(this.removeNull(this.state.formData))
         this.setState({ submitted: false })
         this.props.closeForm()
       } catch (err) {
         this.setState({ submitted: false })
-        error(err.message)
+        error(err)
       }
     })
   }
 
+  omitTypename(key, value) {
+    return (key === '__typename' || !value)
+      ? undefined
+      : value
+  }
+
+  removeNull(obj) {
+    return JSON.parse(JSON.stringify(obj), this.omitTypename)
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { data: { employee, loading } } = nextProps
-    this.setState({ loading, formData: { ...this.state.formData, ...employee } })
+    let { data: { getEmployee, loading } } = nextProps
+    getEmployee = this.removeNull({ ...getEmployee })
+    this.setState({ loading, formData: { ...this.state.formData, ...getEmployee } })
     this.props.setLoader(loading)
   }
 
   render() {
-    let { formData, submitted } = this.state
-    const { loading } = this.props.data
+    let { formData, submitted, loading } = this.state
 
     if (loading) return null
 
@@ -273,6 +284,12 @@ class EmployeeForm extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    user: state.auth
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     setLoader: (loading) => dispatch(setLoader({ loading }))
@@ -283,28 +300,13 @@ EmployeeForm.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default graphql(gql`
-  query getEmployee($employeeId: ID) {
-    employee(id: $employeeId) {
-      id,
-      name,
-      nif,
-      address,
-      phone,
-      email,
-      image,
-      description,
-      fullSalary,
-      halfSalary
-    }
-  }
-  `, {
-    options: ({ match }) => {
-      return { variables: { employeeId: match.params.employeeId } }
-    }
-  })(
-    connect(
-      null,
-      mapDispatchToProps
-    )(withStyles(styles)(EmployeeForm))
-  )
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(graphql(getEmployee, {
+  options: ({ match }) => ({
+    variables: { id: match.params.employeeId, businessId: match.params.companyId },
+    fetchPolicy: 'network-only'
+  }),
+  skip: ({ match }) => !match.params.employeeId
+})(withStyles(styles)(EmployeeForm)))

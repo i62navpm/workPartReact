@@ -6,6 +6,7 @@ import Card, { CardHeader, CardMedia, CardActions } from 'material-ui/Card'
 import { Avatar, IconButton } from 'material-ui'
 import { colors } from 'material-ui'
 import { Edit, Delete } from 'material-ui-icons'
+import imageEmployee from '../../assets/images/employeeDefault.jpg'
 
 const randomColor = function (obj) {
   const keys = Object.keys(obj)
@@ -46,7 +47,7 @@ class Employee extends React.Component {
           <Link to="/">
             <CardMedia
               className={this.classes.media}
-              image={this.data.image}
+              image={this.data.image || imageEmployee}
               title={this.data.name}
             />
           </Link>

@@ -100,7 +100,7 @@ class Business extends React.Component {
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history }) => <BusinessList business={business} onRemove={this.removeBusiness} history={history} />)} />
         <Route exact path={`${this.props.match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={this.submitForm} closeForm={() => history.push('/business')} history={history} {...rest} />)} />
-        <Route path={`${this.props.match.url}/company/:companyId/workforce`} component={Workforce} />
+        <Route path={`${this.props.match.url}/company/:companyId/workforce`} render={withRouter(({ history, ...rest }) => <Workforce history={history} {...rest} />)} />
       </Switch>
     )
   }
