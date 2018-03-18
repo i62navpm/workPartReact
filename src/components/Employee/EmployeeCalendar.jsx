@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import { withStyles } from 'material-ui/styles'
 import ExpansionPanel, {
   ExpansionPanelSummary,
@@ -17,6 +16,7 @@ import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning, FolderShared } from 'material-ui-icons'
 import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
+import queryEventsByEmployeeIdIndex from '../../graphql/queries/queryEventsByEmployeeIdIndex'
 
 const styles = theme => ({
   root: {
@@ -83,13 +83,13 @@ class EmployeeCalendar extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data: { loading, employeeEvents } } = nextProps
-    this.setState({ loading, events: employeeEvents, initialEvents: employeeEvents, discardChanges: !this.state.discardChanges })
+    let { data: { loading, queryEventsByEmployeeIdIndex: { items } } } = nextProps
+    this.setState({ loading, events: items, initialEvents: items, discardChanges: !this.state.discardChanges })
     this.props.setLoader(loading)
   }
 
   fetchEvents(date) {
-    this.setState({currentDate: date})
+    this.setState({ currentDate: date })
     return this.state.fetchMore({
       variables: { date: date.toISOString() },
       updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult
@@ -249,6 +249,12 @@ EmployeeCalendar.propTypes = {
   companyId: PropTypes.string.isRequired
 }
 
+const mapStateToProps = state => {
+  return {
+    user: state.auth
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     setNotification: (notification = {}) => dispatch(setNotification(notification)),
@@ -256,32 +262,18 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default graphql(gql`
-  fragment EventPart on Event {
-    title,
-    salary,
-    money
-    allDay,
-    start,
-    end
-  }
-  query getEvents($companyId: ID, $employeeId: ID, $date: String) {
-    employeeEvents(companyId: $companyId, employeeId: $employeeId, date: $date) {
-      pay {
-        ...EventPart
-      },
-      debt {
-        ...EventPart
-      }
-    }
-  }
-  `, {
-    options: ({ employee, companyId }) => {
-      return { variables: { companyId, employeeId: employee.id, date: new Date().toISOString() } }
-    }
-  })(
-    connect(
-      null,
-      mapDispatchToProps
-    )(withStyles(styles)(EmployeeCalendar))
-  )
+export default (connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(compose(
+  graphql(queryEventsByEmployeeIdIndex, {
+    options: ({ employee: { id } }) => ({
+      variables: { employeeId: id },
+      fetchPolicy: 'network-only'
+    }),
+  }),
+  // graphql(createBusiness, { name: 'createBusiness' }),
+  // graphql(updateBusiness, { name: 'updateBusiness' }),
+  // graphql(deleteBusiness, { name: 'deleteBusiness' }),
+)(withStyles(styles)(EmployeeCalendar)))
+)
