@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import Card, { CardMedia, CardContent } from 'material-ui/Card'
 import { Typography } from 'material-ui'
+import imageBusiness from '../../assets/images/businessDefault.png'
 
 const styles = () => ({
   card: {
@@ -46,7 +47,7 @@ class BusinessCardSummary extends React.Component {
           </CardContent>
           <CardMedia
             className={this.classes.cover}
-            image={this.data.image}
+            image={this.data.image || imageBusiness}
             title="Company title"
           />
         </Card>
