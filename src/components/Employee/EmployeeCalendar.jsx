@@ -16,6 +16,7 @@ import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning, FolderShared } from 'material-ui-icons'
 import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
+import imageEmployee from '../../assets/images/employeeDefault.jpg'
 import queryEventsByEmployeeIdIndex from '../../graphql/queries/queryEventsByEmployeeIdIndex'
 
 const styles = theme => ({
@@ -161,7 +162,7 @@ class EmployeeCalendar extends React.Component {
       <div className={this.props.classes.root}>
         <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMore />}>
-            <Avatar alt={this.props.employee.name} src={this.props.employee.image} />
+            <Avatar alt={this.props.employee.name} src={this.props.employee.image || imageEmployee} />
             <Typography className={this.props.classes.heading}>
               {this.props.employee.name}
             </Typography>
