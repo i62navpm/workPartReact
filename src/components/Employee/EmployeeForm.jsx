@@ -80,7 +80,6 @@ class EmployeeForm extends React.Component {
     this.setState({ submitted: true }, async () => {
       try {
         await this.props.onSubmit(this.removeNull(this.state.formData))
-        this.setState({ submitted: false })
         this.props.closeForm()
       } catch (err) {
         this.setState({ submitted: false })
