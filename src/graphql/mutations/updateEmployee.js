@@ -8,6 +8,8 @@ export default gql(`
       name
       nif
       image
+      fullSalary
+      halfSalary
     }
   }
   `)

@@ -7,7 +7,7 @@ import { setLoader } from '../actions/loader'
 import { EmployeeForm } from '../components/Employee'
 import { EmployeeSummary } from '../components/Employee'
 import getBusinessWithEmployees from '../graphql/queries/getBusinessWithEmployees'
-const debug = require('debug')('workSheet')
+import updateEmployee from '../graphql/mutations/updateEmployee'
 
 class Worksheet extends React.Component {
   constructor(props) {
@@ -20,12 +20,32 @@ class Worksheet extends React.Component {
       company,
       loading
     }
+
+    this.updateEmployee = this.updateEmployee.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     const { data: { loading, getBusiness } } = nextProps
     this.setState({ loading, company: getBusiness })
     this.props.setLoader(loading)
+  }
+
+  updateEmployee(data) {
+    this.props.setLoader(true)
+    return this.props.updateEmployee({
+      variables: { input: data },
+      update: (proxy, { data: { updateEmployee } }) => {
+        const options = {
+          query: getBusinessWithEmployees,
+          variables: { id: this.props.match.params.companyId, userId: this.props.user.email }
+        }
+        const data = proxy.readQuery(options)
+        data.getBusiness.employees.items = data.getBusiness.employees.items.map(
+          item => item.id === updateEmployee.id ? updateEmployee : item
+        )
+        proxy.writeQuery({ ...options, data })
+      }
+    })
   }
 
   render() {
@@ -36,7 +56,7 @@ class Worksheet extends React.Component {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={() => <WorksheetPresentational company={company} />} />
-        <Route path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.props.onNewEmployeeClick} businessId={company.id} closeForm={() => history.push(`${this.props.match.url}`)} history={history} {...rest} />)} />
+        <Route path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.updateEmployee} businessId={company.id} closeForm={() => history.push(`${this.props.match.url}`)} history={history} {...rest} />)} />
         <Route path={`${this.props.match.url}/summary/:employeeId`} render={withRouter(({ history, ...rest }) => <EmployeeSummary closeForm={() => history.push(`${this.props.match.url}`)} history={history} companyId={company.id} {...rest} />)} />
       </Switch>
     )
@@ -51,7 +71,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onNewEmployeeClick: () => debug('new Employee'),
     setLoader: (loading) => dispatch(setLoader({ loading }))
   }
 }
@@ -65,6 +84,7 @@ export default (connect(
       variables: { id: match.params.companyId, userId: email },
       fetchPolicy: 'network-only'
     }),
-  })
+  }),
+  graphql(updateEmployee, { name: 'updateEmployee' }),
 )(Worksheet))
 )
