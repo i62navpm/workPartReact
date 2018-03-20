@@ -86,7 +86,7 @@ class EmployeeCalendar extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let { data: { loading, getEvents } } = nextProps
-    if(!getEvents) getEvents = {pay: [], debt: []}
+    if (!getEvents) getEvents = { pay: [], debt: [] }
     this.setState({ loading, events: getEvents, initialEvents: getEvents, discardChanges: !this.state.discardChanges })
     this.props.setLoader(loading)
   }
@@ -94,7 +94,7 @@ class EmployeeCalendar extends React.Component {
   fetchEvents(date) {
     this.setState({ currentDate: date })
     return this.state.fetchMore({
-      variables: { date: date.toISOString() },
+      variables: { employeeId: this.props.employee.id, id: getFirstDayMonth(date) },
       updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult
     })
   }
@@ -271,7 +271,7 @@ export default (connect(
 )(compose(
   graphql(getEvents, {
     options: ({ employee: { id } }) => ({
-      variables: { employeeId: id, id: getFirstDayMonth(new Date())},
+      variables: { employeeId: id, id: getFirstDayMonth(new Date()) },
       fetchPolicy: 'network-only'
     }),
   }),
