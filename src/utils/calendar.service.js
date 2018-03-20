@@ -43,3 +43,9 @@ export function calcTotalRow(rows) {
     ['Sum:   ', 0, 0]
   )
 }
+
+export function getFirstDayMonth(date = new Date()) {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  return new Date(year, month, 1).toISOString()
+}

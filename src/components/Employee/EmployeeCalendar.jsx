@@ -17,7 +17,8 @@ import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning, FolderShared } fro
 import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
 import imageEmployee from '../../assets/images/employeeDefault.jpg'
-import queryEventsByEmployeeIdIndex from '../../graphql/queries/queryEventsByEmployeeIdIndex'
+import getEvents from '../../graphql/queries/getEvents'
+import { getFirstDayMonth } from '../../utils/calendar.service'
 
 const styles = theme => ({
   root: {
@@ -84,13 +85,9 @@ class EmployeeCalendar extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let { data: { loading, queryEventsByEmployeeIdIndex: { items } } } = nextProps
-    
-    const [events] = !items.length
-      ? [{ pay: [], debt: [] }]
-      : items
-
-    this.setState({ loading, events: events, initialEvents: events, discardChanges: !this.state.discardChanges })
+    let { data: { loading, getEvents } } = nextProps
+    if(!getEvents) getEvents = {pay: [], debt: []}
+    this.setState({ loading, events: getEvents, initialEvents: getEvents, discardChanges: !this.state.discardChanges })
     this.props.setLoader(loading)
   }
 
@@ -272,9 +269,9 @@ export default (connect(
   mapStateToProps,
   mapDispatchToProps
 )(compose(
-  graphql(queryEventsByEmployeeIdIndex, {
+  graphql(getEvents, {
     options: ({ employee: { id } }) => ({
-      variables: { employeeId: id },
+      variables: { employeeId: id, id: getFirstDayMonth(new Date())},
       fetchPolicy: 'network-only'
     }),
   }),
