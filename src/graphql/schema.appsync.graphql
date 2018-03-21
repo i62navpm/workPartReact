@@ -60,6 +60,9 @@ input CreateEventInfoInput {
 input CreateEventsInput {
 	id: ID!
 	employeeId: ID!
+	yearId: Int!
+	pay: [EventDataInput]!
+	debt: [EventDataInput]!
 }
 
 input CreateUserInput {
@@ -94,7 +97,6 @@ input DeleteUserInput {
 type Employee {
 	id: ID!
 	businessId: ID!
-	business: Business
 	name: String!
 	nif: String
 	address: String
@@ -110,6 +112,24 @@ type Employee {
 type EmployeeConnection {
 	items: [Employee]
 	nextToken: String
+}
+
+type EventData {
+	allDay: Boolean!
+	start: String!
+	end: String!
+	salary: String!
+	title: String!
+	money: Float
+}
+
+input EventDataInput {
+	allDay: Boolean!
+	start: String!
+	end: String!
+	salary: String!
+	title: String!
+	money: Float
 }
 
 type EventInfo {
@@ -137,8 +157,9 @@ enum EventType {
 type Events {
 	id: ID!
 	employeeId: ID!
-	pay: [EventInfo]!
-	debt: [EventInfo]!
+	yearId: Int!
+	pay: [EventData]!
+	debt: [EventData]!
 }
 
 type EventsConnection {
@@ -175,6 +196,7 @@ type Query {
 	listEmployees(first: Int, after: String): EmployeeConnection
 	queryEmployeesByBusinessIdIndex(businessId: ID!, first: Int, after: String): EmployeeConnection
 	getEvents(id: ID!, employeeId: ID!): Events
+	getEventsByEmployeeIdIndexByYear(employeeId: ID!, yearId: Int!): EventsConnection
 	listEvents(first: Int, after: String): EventsConnection
 	queryEventsByEmployeeIdIndex(employeeId: ID!, first: Int, after: String): EventsConnection
 	getEventInfo(id: ID!, eventId: ID!): EventInfo
@@ -310,6 +332,9 @@ input UpdateEventInfoInput {
 input UpdateEventsInput {
 	id: ID!
 	employeeId: ID!
+	yearId: Int!
+	pay: [EventDataInput]!
+	debt: [EventDataInput]!
 }
 
 input UpdateUserInput {
