@@ -83,22 +83,15 @@ class EmployeeSummary extends React.Component {
     this.state = {
       loading,
       getEmployee,
-      currentDate: new Date(),
       events: [],
       data
     }
-    
-    this.updateCurrentDate = this.updateCurrentDate.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
     const { data: { getEmployee, getEventsByEmployeeIdIndexByYear: { items }, loading } } = nextProps
     this.setState({ loading, getEmployee, events: items })
     this.props.setLoader(loading)
-  }
-
-  updateCurrentDate(date) {
-    this.setState({currentDate: date})
   }
 
   render() {
@@ -223,7 +216,7 @@ class EmployeeSummary extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <PdfSummary companyId={this.props.businessId} employee={this.state.getEmployee} updateCurrentDate={this.updateCurrentDate} currentDate={this.state.currentDate}/>
+            <PdfSummary companyId={this.props.businessId} employee={this.state.getEmployee}/>
           </Paper>
         </Grid>
       </Grid>

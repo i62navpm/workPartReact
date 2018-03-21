@@ -41,7 +41,7 @@ class PdfSummary extends React.Component {
 
     this.currentDate = new Date()
     this.state = {
-      currentDate: this.props.currentDate,
+      currentDate: new Date(),
       loading,
       events: getEvents,
       ...data
@@ -74,26 +74,32 @@ class PdfSummary extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let { data: { getEvents, loading }, currentDate } = nextProps
+    let { data: { getEvents, loading } } = nextProps
 
     if (!getEvents) getEvents = { pay: [], debt: [] }
-
-    this.setState({ loading, getEvents })
-    this.currentDate = currentDate
     if (!loading) this.createPdf(getEvents)
+    
+    this.setState({ loading, getEvents })
     this.props.setLoader(loading)
   }
 
   fetchEvents(date) {
     return this.state.fetchMore({
       variables: { employeeId: this.props.employee.id, id: getFirstDayMonth(date) },
-      updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        this.currentDate = date
+        if (!previousResult.getEvents && !fetchMoreResult.getEvents) {
+          const getEvents = { pay: [], debt: [] }
+          this.createPdf({ pay: [], debt: [] })
+          this.setState({ data: { ...this.state.getEvents.data, getEvents } })
+        }
+        return fetchMoreResult
+      }
     })
   }
 
   async changeSearchDate(e) {
     e.stopPropagation()
-    this.props.updateCurrentDate(new Date(e.target.value))
     await this.fetchEvents(new Date(e.target.value))
   }
 
@@ -135,7 +141,6 @@ class PdfSummary extends React.Component {
 PdfSummary.propTypes = {
   classes: PropTypes.object.isRequired,
   employee: PropTypes.object.isRequired,
-  updateCurrentDate: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => {
