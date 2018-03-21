@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setLoader } from '../../actions/loader'
-import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
+import { setNotification } from '../../actions/notification'
+import { graphql, compose } from 'react-apollo'
 import { Typography, Hidden, TextField, Button } from 'material-ui'
 import { FileDownload } from 'material-ui-icons'
 import { withStyles } from 'material-ui/styles'
@@ -12,6 +12,8 @@ import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 import { calcChart, calcTotalRow } from '../../utils/calendar.service'
 import { createTables } from '../../utils/pdf.service'
+import getEvents from '../../graphql/queries/getEvents'
+import { getFirstDayMonth } from '../../utils/calendar.service'
 
 const styles = theme => ({
   titleSummary: {
@@ -35,13 +37,14 @@ class PdfSummary extends React.Component {
     const { classes } = props
     this.classes = classes
 
-    const { loading, employeeEvents, ...data } = props.data
+    const { loading, getEvents, ...data } = props.data
 
+    this.currentDate = new Date()
     this.state = {
-      currentDate: new Date(),
+      currentDate: this.props.currentDate,
       loading,
-      employeeEvents,
-      data
+      events: getEvents,
+      ...data
     }
 
     this.changeSearchDate = this.changeSearchDate.bind(this)
@@ -60,34 +63,37 @@ class PdfSummary extends React.Component {
     this.columns = ['Date', 'Pay', 'Debt']
     this.createTablesFn = createTables(this.doc, this.props.employee)
 
-    let rows = calcChart(employeeEvents, this.state.currentDate)
+    let rows = calcChart(employeeEvents, this.currentDate)
 
     const totalAdd = calcTotalRow(rows)
 
     rows = [...rows, totalAdd].map(([date, pay, debt]) => ([date, pay + ' €', debt + ' €']))
 
-    this.createTablesFn.createMainTable(rows, this.columns, this.state.currentDate)
+    this.createTablesFn.createMainTable(rows, this.columns, this.currentDate)
     this.createTablesFn.createTotalTable(totalAdd)
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data: { employeeEvents, loading } } = nextProps
+    let { data: { getEvents, loading }, currentDate } = nextProps
 
-    this.createPdf(employeeEvents)
-    this.setState({ loading, employeeEvents })
+    if (!getEvents) getEvents = { pay: [], debt: [] }
+
+    this.setState({ loading, getEvents })
+    this.currentDate = currentDate
+    if (!loading) this.createPdf(getEvents)
     this.props.setLoader(loading)
   }
 
   fetchEvents(date) {
-    this.setState({ currentDate: date })
-    return this.state.data.fetchMore({
-      variables: { date: date.toISOString() },
+    return this.state.fetchMore({
+      variables: { employeeId: this.props.employee.id, id: getFirstDayMonth(date) },
       updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult
     })
   }
 
   async changeSearchDate(e) {
     e.stopPropagation()
+    this.props.updateCurrentDate(new Date(e.target.value))
     await this.fetchEvents(new Date(e.target.value))
   }
 
@@ -128,39 +134,32 @@ class PdfSummary extends React.Component {
 
 PdfSummary.propTypes = {
   classes: PropTypes.object.isRequired,
-  employee: PropTypes.object.isRequired
+  employee: PropTypes.object.isRequired,
+  updateCurrentDate: PropTypes.func.isRequired
 }
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
   return {
-    setLoader: loading => dispatch(setLoader({ loading }))
+    user: state.auth
   }
 }
 
-export default graphql(gql`
-  fragment EventPart on Event {
-    title,
-    salary,
-    money
-    allDay,
-    start,
-    end
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setNotification: (notification = {}) => dispatch(setNotification(notification)),
+    setLoader: (loading) => dispatch(setLoader({ loading }))
   }
-  query getEvents($companyId: ID, $employeeId: ID, $date: String) {
-    employeeEvents(companyId: $companyId, employeeId: $employeeId, date: $date) {
-      pay {
-        ...EventPart
-      },
-      debt {
-        ...EventPart
-      }
-    }
-  }
-  `, {
-    options: ({ companyId, employee }) => ({ variables: { companyId, employeeId: employee.id, date: new Date().toISOString() } })
-  })(
-    connect(
-      null,
-      mapDispatchToProps
-    )(withStyles(styles)(PdfSummary))
-  )
+}
+
+export default (connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(compose(
+  graphql(getEvents, {
+    options: ({ employee: { id } }) => ({
+      variables: { employeeId: id, id: getFirstDayMonth(new Date()) },
+      fetchPolicy: 'network-only'
+    }),
+  })
+)(withStyles(styles)(PdfSummary)))
+)

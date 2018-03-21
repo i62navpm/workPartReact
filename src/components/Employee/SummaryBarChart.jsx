@@ -23,6 +23,13 @@ class SummaryBarChart extends React.Component {
       return obj
     }, {})
 
+    data = data.reduce((bef, curr) => {
+      let {pay, debt} = bef
+      bef.pay = [...pay, ...curr.pay]
+      bef.debt = [...debt, ...curr.debt]
+      return bef
+    }, {pay: [], debt: []})
+
     data.pay.forEach(({ start, money }) => {
       start = DateTime.fromISO(new Date(start).toISOString())
       months[start.toLocaleString({ month: 'long' })]['pay'] += money
@@ -55,7 +62,7 @@ class SummaryBarChart extends React.Component {
 
 SummaryBarChart.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.array.isRequired
 }
 
 export default withStyles(styles)(SummaryBarChart)

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
 import { withStyles } from 'material-ui/styles'
 import {
@@ -22,10 +23,10 @@ import {
   Mail,
   FormatQuote
 } from 'material-ui-icons'
-import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import SummaryBarChart from './SummaryBarChart'
 import PdfSummary from './PdfSummary'
+import getSummaryEmployee from '../../graphql/queries/getSummaryEmployee'
 
 const randomColor = function (obj) {
   const keys = Object.keys(obj)
@@ -71,29 +72,36 @@ const styles = theme => ({
 })
 
 class EmployeeSummary extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.props.setLoader(true)
 
     const { classes } = props
     this.classes = classes
 
-    const { loading, employeeSummary, ...data } = props.data
+    const { loading, getEmployee, ...data } = props.data
     this.state = {
       loading,
-      employeeSummary,
+      getEmployee,
+      currentDate: new Date(),
+      events: [],
       data
     }
+    
+    this.updateCurrentDate = this.updateCurrentDate.bind(this)
   }
 
-  componentWillReceiveProps (nextProps) {
-    const { data: { employeeSummary, loading } } = nextProps
-
-    this.setState({ loading, employeeSummary })
+  componentWillReceiveProps(nextProps) {
+    const { data: { getEmployee, getEventsByEmployeeIdIndexByYear: { items }, loading } } = nextProps
+    this.setState({ loading, getEmployee, events: items })
     this.props.setLoader(loading)
   }
 
-  render () {
+  updateCurrentDate(date) {
+    this.setState({currentDate: date})
+  }
+
+  render() {
     const { loading } = this.state
 
     if (loading) return null
@@ -130,21 +138,21 @@ class EmployeeSummary extends React.Component {
                       aria-label="employee-summary"
                       style={{ backgroundColor: randomColor(colors)[500] }}
                     >
-                      {this.state.employeeSummary.name[0]}
+                      {this.state.getEmployee.name[0]}
                     </Avatar>
                   </Grid>
                   <Grid item>
                     <Typography color="primary" type="headline">
-                      {this.state.employeeSummary.name}
+                      {this.state.getEmployee.name}
                     </Typography>
                     <Typography type="subheading">
-                      {this.state.employeeSummary.nif}
+                      {this.state.getEmployee.nif}
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
 
-              {this.state.employeeSummary.description && (
+              {this.state.getEmployee.description && (
                 <Grid item xs={12}>
                   <Grid
                     container
@@ -159,7 +167,7 @@ class EmployeeSummary extends React.Component {
                         align="center"
                       >
                         <FormatQuote />
-                        {this.state.employeeSummary.description}
+                        {this.state.getEmployee.description}
                       </Typography>
                       <Divider light />
                     </Grid>
@@ -168,38 +176,38 @@ class EmployeeSummary extends React.Component {
               )}
 
               <Grid item xs={12} sm={4} md={3}>
-                <Grid container>
+                {this.state.getEmployee.address && <Grid container>
                   <Grid item>
                     <Home className={this.classes.icons} />
                   </Grid>
                   <Grid item>
                     <Typography type="body1">
-                      {this.state.employeeSummary.address}
+                      {this.state.getEmployee.address}
                     </Typography>
                   </Grid>
-                </Grid>
-                <Grid container>
+                </Grid>}
+                {this.state.getEmployee.phone && <Grid container>
                   <Grid item>
                     <Phone className={this.classes.icons} />
                   </Grid>
                   <Grid item>
                     <Typography type="body1">
-                      {this.state.employeeSummary.phone}
+                      {this.state.getEmployee.phone}
                     </Typography>
                   </Grid>
-                </Grid>
-                <Grid container>
+                </Grid>}
+                {this.state.getEmployee.email && <Grid container>
                   <Grid item>
                     <Mail className={this.classes.icons} />
                   </Grid>
                   <Grid item>
                     <Typography type="body1">
-                      <a href={`mailto:${this.state.employeeSummary.nif}`}>
-                        {this.state.employeeSummary.email}
+                      <a href={`mailto:${this.state.getEmployee.email}`}>
+                        {this.state.getEmployee.email}
                       </a>
                     </Typography>
                   </Grid>
-                </Grid>
+                </Grid>}
               </Grid>
 
               <Grid item xs={12} sm={8} md={9}>
@@ -210,12 +218,12 @@ class EmployeeSummary extends React.Component {
                   justify={'center'}
                 >
                   <Grid item className={this.classes.monthLineChart}>
-                    <SummaryBarChart data={this.state.employeeSummary.events} />
+                    <SummaryBarChart data={this.state.events} />
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-            <PdfSummary companyId={this.props.companyId} employee={this.state.employeeSummary}/>
+            <PdfSummary companyId={this.props.businessId} employee={this.state.getEmployee} updateCurrentDate={this.updateCurrentDate} currentDate={this.state.currentDate}/>
           </Paper>
         </Grid>
       </Grid>
@@ -223,57 +231,33 @@ class EmployeeSummary extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setLoader: loading => dispatch(setLoader({ loading }))
-  }
-}
-
 EmployeeSummary.propTypes = {
   classes: PropTypes.object.isRequired,
-  companyId: PropTypes.string.isRequired
+  businessId: PropTypes.string.isRequired
 }
 
-export default graphql(
-  gql`
-    fragment EventSummary on Event {
-      money
-      start
-    }
-
-    query getEmployeeSummary($companyId: ID, $employeeId: ID, $date: String) {
-      employeeSummary(
-        companyId: $companyId
-        employeeId: $employeeId
-        date: $date
-      ) {
-        id
-        name
-        description
-        nif
-        address
-        email
-        phone
-        events {
-          pay {
-            ...EventSummary
-          }
-          debt {
-            ...EventSummary
-          }
-        }
-      }
-    }
-  `,
-  {
-    options: ({ match, companyId }) => {
-      return {
-        variables: {
-          companyId,
-          employeeId: match.params.employeeId,
-          date: new Date().toISOString()
-        }
-      }
-    }
+const mapStateToProps = state => {
+  return {
+    user: state.auth
   }
-)(connect(null, mapDispatchToProps)(withStyles(styles)(EmployeeSummary)))
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setNotification: (notification = {}) => dispatch(setNotification(notification)),
+    setLoader: (loading) => dispatch(setLoader({ loading }))
+  }
+}
+
+export default (connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(compose(
+  graphql(getSummaryEmployee, {
+    options: ({ match, businessId }) => ({
+      variables: { id: match.params.employeeId, businessId, yearId: new Date().getFullYear() },
+      fetchPolicy: 'network-only'
+    }),
+  }),
+)(withStyles(styles)(EmployeeSummary)))
+)

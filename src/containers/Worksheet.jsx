@@ -57,7 +57,7 @@ class Worksheet extends React.Component {
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={() => <WorksheetPresentational company={company} />} />
         <Route path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.updateEmployee} businessId={company.id} closeForm={() => history.push(`${this.props.match.url}`)} history={history} {...rest} />)} />
-        <Route path={`${this.props.match.url}/summary/:employeeId`} render={withRouter(({ history, ...rest }) => <EmployeeSummary closeForm={() => history.push(`${this.props.match.url}`)} history={history} companyId={company.id} {...rest} />)} />
+        <Route path={`${this.props.match.url}/summary/:employeeId`} render={withRouter(({ history, ...rest }) => <EmployeeSummary closeForm={() => history.push(`${this.props.match.url}`)} history={history} businessId={company.id} {...rest} />)} />
       </Switch>
     )
   }
