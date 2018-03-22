@@ -90,8 +90,10 @@ class EmployeeCalendar extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let { data: { loading, getEvents } } = nextProps
-    if (!getEvents) getEvents = { pay: [], debt: [] }
-    this.setState({ loading, events: getEvents, initialEvents: getEvents, discardChanges: !this.state.discardChanges })
+    
+    if (!loading && getEvents.employeeId === this.props.employee.id) 
+      this.setState({ loading, events: getEvents, initialEvents: getEvents, discardChanges: !this.state.discardChanges })
+    
     this.props.setLoader(loading)
   }
 
@@ -137,21 +139,24 @@ class EmployeeCalendar extends React.Component {
     return JSON.parse(JSON.stringify(obj), this.omitTypename)
   }
 
-  async createEvents(data) {
+  createEvents(data) {
     this.props.setLoader(true)
-
-    this.props.setLoader(true)
-    await this.props.createEvents({ variables: { input: data } })
-    return this.fetchEvents(new Date(data.id))
+    return this.props.createEvents({
+      variables: { input: data },
+      update: (proxy, { data: { createEvents } }) => {
+        this.props.data.getEvents = { id: createEvents }
+        this.props.setLoader(false)
+      }
+    })
   }
 
   async updateEvents(data) {
     this.props.setLoader(true)
-    
+
     data = this.removeNull({ ...data })
-    this.props.setLoader(true)
-    await this.props.updateEvents({ variables: { input: data } })
-    return this.fetchEvents(new Date(data.id))
+    return this.props.updateEvents({ variables: { input: data } }).then(
+      () => this.props.setLoader(false)
+    )
   }
 
   async saveEvents(events) {
