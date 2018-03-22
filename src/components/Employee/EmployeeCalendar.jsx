@@ -90,10 +90,12 @@ class EmployeeCalendar extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let { data: { loading, getEvents } } = nextProps
-    
-    if (!loading && getEvents.employeeId === this.props.employee.id) 
+
+    if (!getEvents) getEvents = { employeeId: this.props.employee.id, pay: [], debt: [] }
+
+    if (!loading && getEvents.employeeId === this.props.employee.id)
       this.setState({ loading, events: getEvents, initialEvents: getEvents, discardChanges: !this.state.discardChanges })
-    
+
     this.props.setLoader(loading)
   }
 
