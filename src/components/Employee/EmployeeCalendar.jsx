@@ -18,6 +18,8 @@ import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
 import imageEmployee from '../../assets/images/employeeDefault.jpg'
 import getEvents from '../../graphql/queries/getEvents'
+import createEvents from '../../graphql/mutations/createEvents'
+import updateEvents from '../../graphql/mutations/updateEvents'
 import { getFirstDayMonth } from '../../utils/calendar.service'
 
 const styles = theme => ({
@@ -82,6 +84,8 @@ class EmployeeCalendar extends React.Component {
     this.restoreEvents = this.restoreEvents.bind(this)
     this.saveEvents = this.saveEvents.bind(this)
     this.fetchEvents = this.fetchEvents.bind(this)
+    this.createEvents = this.createEvents.bind(this)
+    this.updateEvents = this.updateEvents.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -123,7 +127,37 @@ class EmployeeCalendar extends React.Component {
     })
   }
 
-  saveEvents(events) {
+  omitTypename(key, value) {
+    return (key === '__typename' || !value)
+      ? undefined
+      : value
+  }
+
+  removeNull(obj) {
+    return JSON.parse(JSON.stringify(obj), this.omitTypename)
+  }
+
+  async createEvents(data) {
+    this.props.setLoader(true)
+
+    this.props.setLoader(true)
+    await this.props.createEvents({ variables: { input: data } })
+    return this.fetchEvents(new Date(data.id))
+  }
+
+  async updateEvents(data) {
+    this.props.setLoader(true)
+    
+    data = this.removeNull({ ...data })
+    this.props.setLoader(true)
+    await this.props.updateEvents({ variables: { input: data } })
+    return this.fetchEvents(new Date(data.id))
+  }
+
+  async saveEvents(events) {
+    const fn = this.props.data.getEvents && this.props.data.getEvents.id ? this.updateEvents : this.createEvents
+    await fn({ employeeId: this.props.employee.id, id: getFirstDayMonth(this.state.currentDate), yearId: this.state.currentDate.getFullYear(), ...this.state.events, [this.mapModality[this.state.modality]]: events })
+
     this.setState({
       initialEvents: {
         ...this.state.initialEvents, [this.mapModality[this.state.modality]]: events
@@ -275,8 +309,7 @@ export default (connect(
       fetchPolicy: 'network-only'
     }),
   }),
-  // graphql(createBusiness, { name: 'createBusiness' }),
-  // graphql(updateBusiness, { name: 'updateBusiness' }),
-  // graphql(deleteBusiness, { name: 'deleteBusiness' }),
+  graphql(createEvents, { name: 'createEvents' }),
+  graphql(updateEvents, { name: 'updateEvents' }),
 )(withStyles(styles)(EmployeeCalendar)))
 )

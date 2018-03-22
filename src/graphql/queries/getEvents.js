@@ -11,6 +11,7 @@ export default gql(`
   }
   query($id: ID! $employeeId: ID!) {
     getEvents(id: $id employeeId: $employeeId) {
+      id
       pay {
         ...EventPart
       },
