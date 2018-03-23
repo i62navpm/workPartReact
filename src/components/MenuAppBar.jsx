@@ -81,11 +81,11 @@ class MenuAppBar extends React.Component {
                 Work Part App
               </Typography>
             </Link>
-            <Hidden xsDown>
-              <Typography type="body1" color="inherit" align="right" className={classes.flex}>
-                {this.props.user.email}
-              </Typography>
-            </Hidden>
+            <Typography type="body1" color="inherit" align="right" className={classes.flex}>
+              <Hidden xsDown>
+                  {this.props.user.email}
+              </Hidden>
+            </Typography>
             {auth && (
               <div id="menu-appbar">
                 <IconButton
