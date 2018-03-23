@@ -37,6 +37,7 @@ input CreateEmployeeInput {
 	name: String!
 	nif: String
 	address: String
+	date: String
 	phone: String
 	email: String
 	description: String
@@ -100,6 +101,7 @@ type Employee {
 	name: String!
 	nif: String
 	address: String
+	date: String
 	phone: String
 	email: String
 	description: String
@@ -310,6 +312,7 @@ input UpdateEmployeeInput {
 	name: String
 	nif: String
 	address: String
+	date: String
 	phone: String
 	email: String
 	description: String
