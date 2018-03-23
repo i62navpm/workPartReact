@@ -22,6 +22,9 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap'
   },
+  uploadImage: {
+    marginBottom: theme.spacing.unit * 2,
+  },
   flex: {
     flex: 1
   },
@@ -134,7 +137,7 @@ class BusinessForm extends React.Component {
               <Grid container
                 justify="center"
               >
-                <Grid item xs={10} sm={6}>
+                <Grid className={this.classes.uploadImage} item xs={10} sm={6}>
                   <UploadImage image={formData.image} folder="business" name="image" handleChange={this.handleChange} />
                 </ Grid>
               </ Grid>
