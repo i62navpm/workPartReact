@@ -26,7 +26,7 @@ class Workforce extends React.Component {
     this.submitForm = this.submitForm.bind(this)
     this.removeEmployee = this.removeEmployee.bind(this)
   }
-  
+
   updateEmployee(data) {
     this.props.setLoader(true)
     return this.props.updateEmployee({
@@ -85,7 +85,9 @@ class Workforce extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data: { loading, queryEmployeesByBusinessIdIndex: { items } } } = nextProps
+    const { data: { loading, queryEmployeesByBusinessIdIndex } } = nextProps
+    const { items } = queryEmployeesByBusinessIdIndex || { items: [] }
+
     this.setState({ loading, workforce: items })
     this.props.setLoader(loading)
   }

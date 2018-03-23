@@ -64,7 +64,7 @@ class Business extends React.Component {
 
   removeBusiness(data) {
     this.props.setLoader(true)
-    data = {userId: this.props.user.email, ...data}
+    data = { userId: this.props.user.email, ...data }
     return this.props.deleteBusiness({
       variables: { input: data },
       update: (proxy, { data: { deleteBusiness } }) => {
@@ -89,7 +89,9 @@ class Business extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data: { loading, queryBusinessesByUserIdIndex: { items } } } = nextProps
+    const { data: { loading, queryBusinessesByUserIdIndex } } = nextProps
+    const { items } = queryBusinessesByUserIdIndex || { items: [] }
+
     this.setState({ loading, business: items })
     this.props.setLoader(loading)
   }

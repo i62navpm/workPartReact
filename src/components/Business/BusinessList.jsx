@@ -25,7 +25,7 @@ class Business extends React.Component {
   }
 
   getBusiness() {
-    if (this.business.length) {
+    if (this.business && this.business.length) {
       return this.business.map(value => (
         <Grid key={value.id} xs={12} sm={6} md={4} item>
           <BusinessCard data={value} onRemove={this.props.onRemove}/>
