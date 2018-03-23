@@ -46,7 +46,8 @@ class WorksheetPresentational extends React.Component {
 
   getEmployees() {
     const { workforce, company } = this.state
-    if (this.workforce && this.workforce.length) {
+    
+    if (workforce && workforce.length) {
       return workforce.map(employee => (
         <EmployeeCalendar
           key={employee.id}
