@@ -7,6 +7,7 @@ export default gql(`
         id
         name
         image
+        date
       }
     }
   }

@@ -6,6 +6,7 @@ import Card, { CardHeader, CardMedia, CardActions } from 'material-ui/Card'
 import { Avatar, IconButton } from 'material-ui'
 import { colors } from 'material-ui'
 import { Edit, Delete } from 'material-ui-icons'
+import { DateTime } from 'luxon'
 import imageEmployee from '../../assets/images/employeeDefault.jpg'
 import EmployeeRemoveModal from './EmployeeRemoveModal'
 
@@ -30,7 +31,6 @@ class Employee extends React.Component {
     const { classes, data } = props
     this.classes = classes
     this.data = data
-
     this.openRemoveModal = this.openRemoveModal.bind(this)
   }
 
@@ -50,7 +50,7 @@ class Employee extends React.Component {
               </Avatar>
             }
             title={this.data.name}
-            subheader={this.data.date}
+            subheader={this.data.date && DateTime.fromISO(this.data.date).toLocaleString(DateTime.DATE_HUGE)}
           />
           <Link to="/">
             <CardMedia

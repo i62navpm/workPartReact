@@ -56,6 +56,7 @@ class EmployeeForm extends React.Component {
         nif: '',
         image: '',
         address: '',
+        date: new Date().toISOString(),
         phone: '',
         email: '',
         description: '',

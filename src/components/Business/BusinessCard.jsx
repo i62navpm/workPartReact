@@ -6,6 +6,7 @@ import Card, { CardHeader, CardMedia, CardActions } from 'material-ui/Card'
 import { Avatar, IconButton } from 'material-ui'
 import { colors } from 'material-ui'
 import { Edit, Delete, People } from 'material-ui-icons'
+import { DateTime } from 'luxon'
 import imageBusiness from '../../assets/images/businessDefault.png'
 import BusinessRemoveModal from './BusinessRemoveModal'
 
@@ -50,7 +51,7 @@ class BusinessCard extends React.Component {
               </Avatar>
             }
             title={this.data.name}
-            subheader={this.data.date}
+            subheader={this.data.date && DateTime.fromISO(this.data.date).toLocaleString(DateTime.DATE_HUGE)}
           />
           <Link to={`/worksheet/${this.data.id}`}>
             <CardMedia
