@@ -1,5 +1,6 @@
 import React from 'react'
-import { Grid } from 'material-ui'
+import { Grid, Typography } from 'material-ui'
+import { withStyles } from 'material-ui/styles'
 import { BusinessCardSummary } from '../Business'
 import { EmployeeCalendar } from '../Employee'
 import SearchInput from '../SearchInput'
@@ -9,6 +10,12 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'moment/locale/en-gb'
 
 BigCalendar.momentLocalizer(moment)
+
+const styles = theme => ({
+  noEmployees: {
+    marginTop: theme.spacing.unit * 4
+  }
+})
 
 class WorksheetPresentational extends React.Component {
   constructor(props) {
@@ -37,8 +44,33 @@ class WorksheetPresentational extends React.Component {
     })
   }
 
-  render() {
+  getEmployees() {
     const { workforce, company } = this.state
+    if (this.workforce && this.workforce.length) {
+      return workforce.map(employee => (
+        <EmployeeCalendar
+          key={employee.id}
+          employee={employee}
+          companyId={company.id}
+        />
+      ))
+    } else {
+      return (
+        <div className={this.props.classes.noEmployees}>
+          <Typography align="center" type="title" color="primary">
+            There is no employees yet.
+          </Typography>
+          <Typography align="center" type="subheading">
+            Please add new employees.
+          </Typography>
+        </div>
+      )
+    }
+  }
+
+  render() {
+    const { company } = this.state
+
     return (
       <React.Fragment>
         <Grid justify="center" direction="row" spacing={40} container>
@@ -53,13 +85,7 @@ class WorksheetPresentational extends React.Component {
             </Grid>
           </Grid>
           <Grid xs={12} sm={10} item>
-            {workforce.map(employee => (
-              <EmployeeCalendar
-                key={employee.id}
-                employee={employee}
-                companyId={company.id}
-              />
-            ))}
+            {this.getEmployees()}
           </Grid>
         </Grid>
       </React.Fragment>
@@ -67,4 +93,4 @@ class WorksheetPresentational extends React.Component {
   }
 }
 
-export default WorksheetPresentational
+export default withStyles(styles)(WorksheetPresentational)
