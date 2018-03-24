@@ -146,7 +146,7 @@ class EmployeeCalendar extends React.Component {
     return this.props.createEvents({
       variables: { input: data },
       update: (proxy, { data: { createEvents } }) => {
-        this.props.data.getEvents = { id: createEvents }
+        this.props.data.getEvents = { ...createEvents }
         this.props.setLoader(false)
       }
     })
