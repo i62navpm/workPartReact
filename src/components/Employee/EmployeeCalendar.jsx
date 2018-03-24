@@ -103,7 +103,13 @@ class EmployeeCalendar extends React.Component {
     this.setState({ currentDate: date })
     return this.state.fetchMore({
       variables: { employeeId: this.props.employee.id, id: getFirstDayMonth(date) },
-      updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult.getEvents) {
+          const getEvents = { employeeId: this.props.employee.id, pay: [], debt: [] }
+          return this.componentWillReceiveProps({ data: { getEvents } })
+        }
+        return fetchMoreResult
+      }
     })
   }
 
@@ -162,7 +168,7 @@ class EmployeeCalendar extends React.Component {
   }
 
   async saveEvents(events) {
-    const fn = this.props.data.getEvents && this.props.data.getEvents.id ? this.updateEvents : this.createEvents
+    const fn = (this.state.initialEvents.pay.length || this.state.initialEvents.debt.length) ? this.updateEvents : this.createEvents
     await fn({ employeeId: this.props.employee.id, id: getFirstDayMonth(this.state.currentDate), yearId: this.state.currentDate.getFullYear(), ...this.state.events, [this.mapModality[this.state.modality]]: events })
 
     this.setState({
