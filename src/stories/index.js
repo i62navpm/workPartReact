@@ -7,6 +7,7 @@ import { MemoryRouter } from 'react-router'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import storeApp from '../reducers'
+import { setUser } from '../actions/auth'
 import Login from '../components/Login'
 import Register from '../components/Register'
 import Verification from '../components/Verification'
@@ -45,6 +46,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 })
 
+store.dispatch(setUser({ email: 'test@test.com' }))
+
 storiesOf('Button', module)
   .add('Add button', () => <AddButton onClick={action('clicked')} />)
   .add('with some emoji', () => (
@@ -57,7 +60,7 @@ storiesOf('Menu Bars', module)
       <MemoryRouter initialEntries={['/']}>{story()}</MemoryRouter>
     </Provider>
   ))
-  .add('App bar', () => <MenuAppBar onLogoutClick={action('clicked')} />)
+  .add('App bar', () => <MenuAppBar history={{ push: action('clicked') }} />)
   .add('Drawer', () => <DrawerBar history={{ push: action('clicked') }} />)
 
 storiesOf('Upload', module).add('Upload image', () => (
@@ -66,7 +69,9 @@ storiesOf('Upload', module).add('Upload image', () => (
 
 storiesOf('Auth', module)
   .addDecorator(story => (
-    <MemoryRouter initialEntries={['/auth']}>{story()}</MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/auth']}>{story()}</MemoryRouter>
+    </Provider>
   ))
   .add('Login', () => <Login onSubmit={action('clicked')} />)
   .add('Register', () => <Register onSubmit={action('clicked')} />)
