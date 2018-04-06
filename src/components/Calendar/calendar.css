@@ -9,17 +9,53 @@
   right: 5px;
   font-size: 12px;
 }
+
 .calendar-event .event-work {
   position: absolute;
   bottom: 2px;
   left: 5px;
   font-size: 12px;
 }
+
 .calendar-event .money-detail {
   position: absolute;
   bottom: 7px;
   right: 5px;
   font-size: 12px;
+}
+
+@media (max-width: 960px) {
+  .calendar-event .event-work {
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .calendar-event .money-detail {
+    bottom: 2px;
+    right: 2px;
+  }
+
+  .calendar-event .event-money {
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .calendar-event svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .calendar-event svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .calendar-event svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .calendar-event.fullSalary .rbc-event-allday {
