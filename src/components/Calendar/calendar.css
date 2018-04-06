@@ -5,7 +5,19 @@
 
 .calendar-event .event-money {
   position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 12px;
+}
+.calendar-event .event-work {
+  position: absolute;
   bottom: 2px;
+  left: 5px;
+  font-size: 12px;
+}
+.calendar-event .money-detail {
+  position: absolute;
+  bottom: 7px;
   right: 5px;
   font-size: 12px;
 }
