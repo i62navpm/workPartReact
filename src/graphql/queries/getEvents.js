@@ -7,7 +7,8 @@ export default gql(`
     money
     allDay,
     start,
-    end
+    end,
+    works
   }
   query($id: ID! $employeeId: ID!) {
     getEvents(id: $id employeeId: $employeeId) {
