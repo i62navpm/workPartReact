@@ -60,14 +60,13 @@ class PdfSummary extends React.Component {
     this.doc.setProperties({
       title: 'Employee summary'
     })
-    this.columns = ['Date', 'Pay', 'Debt']
+    this.columns = ['Date', 'Pay', 'Debt', 'Works']
     this.createTablesFn = createTables(this.doc, this.props.employee)
 
     let rows = calcChart(employeeEvents, this.currentDate)
-
     const totalAdd = calcTotalRow(rows)
 
-    rows = [...rows, totalAdd].map(([date, pay, debt]) => ([date, pay + ' €', debt + ' €']))
+    rows = [...rows, totalAdd].map(([date, pay, debt, works]) => ([date, pay + ' €', debt + ' €', works]))
 
     this.createTablesFn.createMainTable(rows, this.columns, this.currentDate)
     this.createTablesFn.createTotalTable(totalAdd)

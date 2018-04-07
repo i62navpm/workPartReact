@@ -18,10 +18,12 @@ export default gql(`
         pay {
           money
           start
+          works
         }
         debt {
           money
           start
+          works
         }
       }
     }

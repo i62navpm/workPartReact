@@ -17,8 +17,17 @@ export function calcChart(data, date = new Date()) {
 
     if (!payEvents) payEvents = {}
     if (!debtEvents) debtEvents = {}
-    return [rest.name, payEvents.money || 0, debtEvents.money || 0]
+    return [
+      rest.name,
+      payEvents.money || 0,
+      debtEvents.money || 0,
+      parseWorks(payEvents.works || [])
+    ]
   })
+}
+
+function parseWorks(works = []) {
+  return works.join(', ')
 }
 
 export function daysInMonth(date) {
