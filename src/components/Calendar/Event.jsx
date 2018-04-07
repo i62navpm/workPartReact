@@ -3,7 +3,7 @@ import React from 'react'
 import { IconButton } from 'material-ui'
 import { LocalShipping, Face } from 'material-ui-icons'
 
-export default function Event({ event, classes, onSetEvent }) {
+export default function Event({ event, classes, onSetEvent, onSetWork }) {
   return (
     <React.Fragment>
       <span className={'event-title'}>{event.title}</span>
@@ -12,7 +12,7 @@ export default function Event({ event, classes, onSetEvent }) {
           variant="raised"
           color="primary"
           className={classes.smallIconButton}
-          onClick={() => { }}
+          onClick={e => onSetWork(e, event)}
         >
           <LocalShipping className={classes.smallIcon} />
         </IconButton>

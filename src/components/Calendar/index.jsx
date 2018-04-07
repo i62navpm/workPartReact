@@ -6,7 +6,8 @@ import { DateTime } from 'luxon'
 import Event from './Event'
 import EventWrapper from './EventWrapper'
 import BigCalendar from 'react-big-calendar'
-import Modal from './modal'
+import ModalCustomEvent from './ModalCustomEvent'
+import ModalWork from './ModalWork'
 import Toolbar from './Toolbar'
 import Loading from '../Loading'
 import './calendar.css'
@@ -51,6 +52,7 @@ class Calendar extends React.Component {
       events: [],
       status: this.statusOptions[data.modality],
       openModal: false,
+      openModalWork: false,
       currentDate: new Date(),
       updatingEvents: false,
       customEvent: {},
@@ -60,8 +62,11 @@ class Calendar extends React.Component {
     this.onSelectEvent = this.onSelectEvent.bind(this)
     this.onSelectSlot = this.onSelectSlot.bind(this)
     this.onSetEvent = this.onSetEvent.bind(this)
+    this.onSetWork = this.onSetWork.bind(this)
     this.handleModalOpen = this.handleModalOpen.bind(this)
     this.handleModalClose = this.handleModalClose.bind(this)
+    this.handleModalWorkOpen = this.handleModalWorkOpen.bind(this)
+    this.handleModalWorkClose = this.handleModalWorkClose.bind(this)
     this.wrapFetchEvent = this.wrapFetchEvent.bind(this)
     this.getSearchDate = this.getSearchDate.bind(this)
     this.changeSearchDate = this.changeSearchDate.bind(this)
@@ -105,6 +110,30 @@ class Calendar extends React.Component {
     this.setState({ events, openModal: false, customEvent: {} })
     this.props.onChangeCalendar(true)
   }
+
+  handleModalWorkOpen() {
+    this.setState({ openModalWork: true })
+  }
+
+  handleModalWorkClose(works = []) {
+    if(works && works.length) {
+      works = works.map(({value}) => value)
+    }
+    const events = this.state.events.map(event => {
+      if (event.end === this.state.customEvent.end) {
+        const newData = {
+          ...event.data,
+          works
+        }
+        return { ...event, ...newData }
+      }
+      return event
+    })
+
+    this.setState({ events, openModal: false, customEvent: {} })
+    this.setState({ openModalWork: false })
+    this.props.onChangeCalendar(true)
+  }  
 
   onSelectEvent(event) {
     let index = this.state.status.findIndex(
@@ -165,6 +194,13 @@ class Calendar extends React.Component {
     this.handleModalOpen()
     this.setState({ customEvent: eventCalendar })
   }
+  
+  onSetWork(e, eventCalendar) {
+    e.stopPropagation()
+
+    this.setState({ customEvent: eventCalendar })
+    this.handleModalWorkOpen()
+  }
 
   async wrapFetchEvent(date) {
     this.setState({ updatingEvents: true })
@@ -208,7 +244,7 @@ class Calendar extends React.Component {
             views={['month']}
             components={{
               event: withStyles(styles)(({ ...rest }) => (
-                <Event onSetEvent={this.onSetEvent} {...rest} />
+                <Event onSetEvent={this.onSetEvent} onSetWork={this.onSetWork} {...rest} />
               )),
               eventWrapper: EventWrapper,
               toolbar: ({ ...rest }) => <Toolbar modality={this.state.modality} fetchEvents={this.wrapFetchEvent} calendarChanged={this.state.calendarChanged} {...rest} />
@@ -232,9 +268,14 @@ class Calendar extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <Modal
+            <ModalCustomEvent
               openModal={this.state.openModal}
               handleModalClose={this.handleModalClose}
+            />
+            <ModalWork
+              works={this.state.customEvent.works}
+              openModal={this.state.openModalWork}
+              handleModalClose={this.handleModalWorkClose}
             />
           </Grid>
         </Grid>
