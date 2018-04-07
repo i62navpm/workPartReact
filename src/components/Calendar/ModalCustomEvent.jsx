@@ -29,7 +29,7 @@ const styles = theme => ({
   }
 })
 
-class SimpleModal extends React.Component {
+class ModalCustomEvent extends React.Component {
   constructor(props) {
     super(props)
 
@@ -76,10 +76,10 @@ class SimpleModal extends React.Component {
   }
 }
 
-SimpleModal.propTypes = {
+ModalCustomEvent.propTypes = {
   classes: PropTypes.object.isRequired,
   openModal: PropTypes.bool.isRequired,
   handleModalClose: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(SimpleModal)
+export default withStyles(styles)(ModalCustomEvent)
