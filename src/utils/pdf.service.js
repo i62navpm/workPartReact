@@ -26,6 +26,11 @@ export function createTables(doc, employee) {
         startY: 40,
         bodyStyles: { fontSize: 8 },
         margin: { horizontal: 30 },
+        columnStyles: {
+          1: { columnWidth: 20 },
+          2: { columnWidth: 20 },
+          3: { overflow: 'linebreak' }
+        },
         drawCell: (cell, data) => {
           if (data.row.index === data.table.rows.length - 1) {
             doc.setFontSize(12)
