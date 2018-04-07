@@ -3,11 +3,11 @@ import React from 'react'
 import { IconButton } from 'material-ui'
 import { LocalShipping, Face } from 'material-ui-icons'
 
-export default function Event({ event, classes, onSetEvent, onSetWork }) {
+export default function Event({ event, classes, onSetEvent, onSetWork, modality }) {
   return (
     <React.Fragment>
       <span className={'event-title'}>{event.title}</span>
-      <span className={'event-work'}>
+      {modality === 'pay' && <span className={'event-work'}>
         <IconButton
           variant="raised"
           color="primary"
@@ -16,7 +16,7 @@ export default function Event({ event, classes, onSetEvent, onSetWork }) {
         >
           <LocalShipping className={classes.smallIcon} />
         </IconButton>
-      </span>
+      </span>}
       {!event.money ? (
         <IconButton
           variant="raised"

@@ -244,7 +244,7 @@ class Calendar extends React.Component {
             views={['month']}
             components={{
               event: withStyles(styles)(({ ...rest }) => (
-                <Event onSetEvent={this.onSetEvent} onSetWork={this.onSetWork} {...rest} />
+                <Event onSetEvent={this.onSetEvent} onSetWork={this.onSetWork} modality={this.state.modality} {...rest} />
               )),
               eventWrapper: EventWrapper,
               toolbar: ({ ...rest }) => <Toolbar modality={this.state.modality} fetchEvents={this.wrapFetchEvent} calendarChanged={this.state.calendarChanged} {...rest} />
