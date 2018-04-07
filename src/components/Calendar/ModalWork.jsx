@@ -170,11 +170,6 @@ class Option extends React.Component {
 }
 
 class SelectWrapped extends React.Component {
-  constructor(props) {
-    super(props)
-
-  }
-
   render() {
     const { classes, ...other } = this.props
     return (
