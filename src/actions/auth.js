@@ -18,9 +18,9 @@ export function setUser(user) {
 
 export function loginUser({ username, password }) {
   return async dispatch => {
-    dispatch({ type: LOGOUT_USER })
     try {
       let email = await cognito.login(username, password)
+      dispatch({ type: LOGOUT_USER })
       dispatch({ type: LOGIN_USER })
       dispatch(setUser({ email }))
     } catch (error) {
