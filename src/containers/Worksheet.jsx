@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import WorksheetPresentational from '../components/Worksheet'
 import { setLoader } from '../actions/loader'
+import { setNotification } from '../actions/notification'
 import { EmployeeForm } from '../components/Employee'
 import { EmployeeSummary } from '../components/Employee'
 import getBusinessWithEmployees from '../graphql/queries/getBusinessWithEmployees'
@@ -56,7 +57,7 @@ class Worksheet extends React.Component {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={() => <WorksheetPresentational company={company} />} />
-        <Route path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.updateEmployee} businessId={company.id} closeForm={() => history.push(`${this.props.match.url}`)} history={history} {...rest} />)} />
+        <Route path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.updateEmployee} businessId={company.id} setNotification={this.props.setNotification}  closeForm={() => history.push(`${this.props.match.url}`)} history={history} {...rest} />)} />
         <Route path={`${this.props.match.url}/summary/:employeeId`} render={withRouter(({ history, ...rest }) => <EmployeeSummary closeForm={() => history.push(`${this.props.match.url}`)} history={history} businessId={company.id} {...rest} />)} />
       </Switch>
     )
@@ -71,7 +72,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLoader: (loading) => dispatch(setLoader({ loading }))
+    setLoader: (loading) => dispatch(setLoader({ loading })),
+    setNotification: (notification = {}) => dispatch(setNotification(notification)),
   }
 }
 
