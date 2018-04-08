@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { BusinessList, BusinessForm } from '../components/Business'
 import { setLoader } from '../actions/loader'
+import { setNotification } from '../actions/notification'
 import { graphql, compose } from 'react-apollo'
 import Loadable from 'react-loadable'
 import Loading from '../components/Loading'
@@ -104,7 +105,7 @@ class Business extends React.Component {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history }) => <BusinessList business={business} onRemove={this.removeBusiness} history={history} />)} />
-        <Route exact path={`${this.props.match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={this.submitForm} closeForm={() => history.push('/business')} history={history} {...rest} />)} />
+        <Route exact path={`${this.props.match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={this.submitForm} setNotification={this.props.setNotification} closeForm={() => history.push('/business')} history={history} {...rest} />)} />
         <Route path={`${this.props.match.url}/company/:companyId/workforce`} render={withRouter(({ history, ...rest }) => <Workforce history={history} {...rest} />)} />
       </Switch>
     )
@@ -119,7 +120,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLoader: (loading) => dispatch(setLoader({ loading }))
+    setLoader: (loading) => dispatch(setLoader({ loading })),
+    setNotification: (notification = {}) => dispatch(setNotification(notification)),
   }
 }
 

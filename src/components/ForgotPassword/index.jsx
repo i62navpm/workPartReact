@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
-import { Button, Grid, Paper, AppBar, Stepper, Step, StepLabel, Toolbar, Typography } from 'material-ui'
+import { Button, CircularProgress, Grid, Paper, AppBar, Stepper, Step, StepLabel, Toolbar, Typography } from 'material-ui'
+import green from 'material-ui/colors/green'
 import { MoodBad, Send } from 'material-ui-icons'
 const debug = require('debug')
 const error = debug('authForgotPassword:error')
@@ -30,7 +31,19 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 32,
     height: 32,
-  }
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 })
 
 class ForgotPassword extends React.Component {
@@ -118,13 +131,16 @@ class ForgotPassword extends React.Component {
     switch (step) {
       case 0:
         return [
-          <Button
-            onClick={this.handleNext}
-            color="primary"
-            disabled={submitted}
-          >
-            Next Step
-          </Button>,
+          <span className={this.classes.wrapper}>
+            <Button
+              onClick={this.handleNext}
+              color="primary"
+              disabled={submitted}
+            >
+              Next Step
+            </Button>
+            {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
+          </span>,
           <Button component={Link} to="login" color="primary">
             Have you an account?
           </Button>
@@ -138,15 +154,18 @@ class ForgotPassword extends React.Component {
           >
             Back Step
           </Button>,
-          <Button
-            type="submit"
-            raised
-            color="primary"
-            disabled={submitted}
-          >
-            Verificate
-          <Send className={this.classes.iconRight} />
-          </Button>]
+          <span className={this.classes.wrapper}>
+            <Button
+              type="submit"
+              raised
+              color="primary"
+              disabled={submitted}
+            >
+              Verificate
+            <Send className={this.classes.iconRight} />
+            </Button>
+            { submitted && <CircularProgress size={24} className={this.classes.buttonProgress} /> }
+          </span >]
       default:
         return 'Unknown step'
     }

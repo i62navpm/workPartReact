@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { EmployeeList, EmployeeForm } from '../components/Employee'
 import { setLoader } from '../actions/loader'
+import { setNotification } from '../actions/notification'
 import { graphql, compose } from 'react-apollo'
 import queryEmployeesByBusinessIdIndex from '../graphql/queries/queryEmployeesByBusinessIdIndex'
 import createEmployee from '../graphql/mutations/createEmployee'
@@ -100,7 +101,7 @@ class Workforce extends React.Component {
     return (
       <Switch>
         <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history, ...rest }) => <EmployeeList workforce={workforce} onRemove={this.removeEmployee} history={history} {...rest} />)} />
-        <Route exact path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.submitForm} businessId={this.props.match.params.companyId} closeForm={() => history.push(this.props.match.url)} history={history} {...rest} />)} />
+        <Route exact path={`${this.props.match.url}/employee/:employeeId?`} render={withRouter(({ history, ...rest }) => <EmployeeForm onSubmit={this.submitForm} businessId={this.props.match.params.companyId} setNotification={this.props.setNotification} closeForm={() => history.push(this.props.match.url)} history={history} {...rest} />)} />
       </Switch>
     )
   }
@@ -114,7 +115,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLoader: (loading) => dispatch(setLoader({ loading }))
+    setLoader: (loading) => dispatch(setLoader({ loading })),
+    setNotification: (notification = {}) => dispatch(setNotification(notification)),
   }
 }
 

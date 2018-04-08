@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
-import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
+import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
+import green from 'material-ui/colors/green'
 import { Mood, Send } from 'material-ui-icons'
 const debug = require('debug')
 const error = debug('authLogin:error')
@@ -33,7 +34,19 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 32,
     height: 32,
-  }
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 })
 
 class Login extends React.Component {
@@ -71,13 +84,15 @@ class Login extends React.Component {
           type: 'success',
           message: 'Login Ok!'
         })
-      } catch ({message}) {
+      } catch ({ message }) {
         this.props.setNotification({
           open: true,
           type: 'error',
           message
         })
         error(message)
+      } finally {
+        this.setState({ submitted: false })
       }
     })
   }
@@ -136,7 +151,7 @@ class Login extends React.Component {
                   justify="flex-end"
                   alignItems="center"
                 >
-                  <Grid item>
+                  <Grid item className={this.classes.wrapper}>
                     <Button
                       type="submit"
                       raised
@@ -146,6 +161,7 @@ class Login extends React.Component {
                       Login
                       <Send className={this.classes.iconRight} />
                     </Button>
+                    {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
                   </Grid>
                 </Grid>
                 <Grid

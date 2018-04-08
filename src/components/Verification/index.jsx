@@ -5,7 +5,8 @@ import { graphql } from 'react-apollo'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
-import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
+import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
+import green from 'material-ui/colors/green'
 import { VerifiedUser, Send } from 'material-ui-icons'
 import createUser from '../../graphql/mutations/createUser'
 const debug = require('debug')
@@ -32,7 +33,19 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 32,
     height: 32,
-  }
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 })
 
 class Verification extends React.Component {
@@ -77,8 +90,9 @@ class Verification extends React.Component {
           type: 'error',
           message
         })
-        this.setState({ submitted: false })
         error(message)
+      } finally {
+        this.setState({ submitted: false })
       }
     })
   }
@@ -123,7 +137,7 @@ class Verification extends React.Component {
                   justify="flex-end"
                   alignItems="center"
                 >
-                  <Grid item>
+                  <Grid item className={this.classes.wrapper}>
                     <Button
                       type="submit"
                       raised
@@ -133,6 +147,7 @@ class Verification extends React.Component {
                       Verificate
                       <Send className={this.classes.iconRight} />
                     </Button>
+                    {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
                   </Grid>
                 </Grid>
               </ValidatorForm>

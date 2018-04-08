@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
-import { Grid, Button, TextField } from 'material-ui'
+import { Grid, Button, CircularProgress, TextField } from 'material-ui'
+import green from 'material-ui/colors/green'
 import { DateTime } from 'luxon'
 import Event from './Event'
 import EventWrapper from './EventWrapper'
@@ -28,7 +29,18 @@ const styles = () => ({
   smallIconButton: {
     width: 'auto',
     height: 'auto'
-  }
+  },
+  wrapper: {
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 })
 
 class Calendar extends React.Component {
@@ -56,6 +68,7 @@ class Calendar extends React.Component {
       currentDate: new Date(),
       updatingEvents: false,
       customEvent: {},
+      submitted: false,
       ...data
     }
 
@@ -70,6 +83,7 @@ class Calendar extends React.Component {
     this.wrapFetchEvent = this.wrapFetchEvent.bind(this)
     this.getSearchDate = this.getSearchDate.bind(this)
     this.changeSearchDate = this.changeSearchDate.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   hasChanged(stateCalendar, nextCalendar) {
@@ -116,8 +130,8 @@ class Calendar extends React.Component {
   }
 
   handleModalWorkClose(works = []) {
-    if(works && works.length) {
-      works = works.map(({value}) => value)
+    if (works && works.length) {
+      works = works.map(({ value }) => value)
     }
     const events = this.state.events.map(event => {
       if (event.end === this.state.customEvent.end) {
@@ -133,7 +147,7 @@ class Calendar extends React.Component {
     this.setState({ events, openModal: false, customEvent: {} })
     this.setState({ openModalWork: false })
     this.props.onChangeCalendar(true)
-  }  
+  }
 
   onSelectEvent(event) {
     let index = this.state.status.findIndex(
@@ -194,12 +208,19 @@ class Calendar extends React.Component {
     this.handleModalOpen()
     this.setState({ customEvent: eventCalendar })
   }
-  
+
   onSetWork(e, eventCalendar) {
     e.stopPropagation()
 
     this.setState({ customEvent: eventCalendar })
     this.handleModalWorkOpen()
+  }
+
+  async onSubmit() {
+    this.setState({submitted: true})
+    await this.props.saveEvents(this.state.events)
+    this.setState({ submitted: false })
+    
   }
 
   async wrapFetchEvent(date) {
@@ -261,10 +282,11 @@ class Calendar extends React.Component {
                     Discard
                   </Button>
                 </Grid>
-                <Grid item>
-                  <Button onClick={() => this.props.saveEvents(this.state.events)} raised color="primary" disabled={!this.state.calendarChanged[this.state.modality]}>
+                <Grid item className={this.classes.wrapper}>
+                  <Button onClick={this.onSubmit} raised color="primary" disabled={!this.state.calendarChanged[this.state.modality] || this.state.submitted}>
                     Save
                   </Button>
+                  {this.state.submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
                 </Grid>
               </Grid>
             </Grid>

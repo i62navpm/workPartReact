@@ -169,25 +169,33 @@ class EmployeeCalendar extends React.Component {
 
   async saveEvents(events) {
     const fn = (this.state.initialEvents.pay.length || this.state.initialEvents.debt.length) ? this.updateEvents : this.createEvents
-    await fn({ employeeId: this.props.employee.id, id: getFirstDayMonth(this.state.currentDate), yearId: this.state.currentDate.getFullYear(), ...this.state.events, [this.mapModality[this.state.modality]]: events })
+    try {
+      await fn({ employeeId: this.props.employee.id, id: getFirstDayMonth(this.state.currentDate), yearId: this.state.currentDate.getFullYear(), ...this.state.events, [this.mapModality[this.state.modality]]: events })
 
-    this.setState({
-      initialEvents: {
-        ...this.state.initialEvents, [this.mapModality[this.state.modality]]: events
-      },
-      events: {
-        ...this.state.events, [this.mapModality[this.state.modality]]: events
-      },
-      calendarChanged: {
-        ...this.state.calendarChanged, [this.mapModality[this.state.modality]]: false
-      },
-      discardChanges: !this.state.discardChanges
-    })
-    this.props.setNotification({
-      open: true,
-      type: 'success',
-      message: 'Calendar saved correctly!'
-    })
+      this.setState({
+        initialEvents: {
+          ...this.state.initialEvents, [this.mapModality[this.state.modality]]: events
+        },
+        events: {
+          ...this.state.events, [this.mapModality[this.state.modality]]: events
+        },
+        calendarChanged: {
+          ...this.state.calendarChanged, [this.mapModality[this.state.modality]]: false
+        },
+        discardChanges: !this.state.discardChanges
+      })
+      this.props.setNotification({
+        open: true,
+        type: 'success',
+        message: 'Calendar saved correctly!'
+      })
+    } catch ({ message }) {
+      this.props.setNotification({
+        open: true,
+        type: 'error',
+        message
+      })
+    }
   }
 
   showWarning() {

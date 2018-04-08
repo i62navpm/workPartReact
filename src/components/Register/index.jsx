@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
-import { Button, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
+import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
+import green from 'material-ui/colors/green'
 import { GroupAdd, Send } from 'material-ui-icons'
 const debug = require('debug')
 const error = debug('authRegister:error')
@@ -30,7 +31,19 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 32,
     height: 32,
-  }
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 })
 
 class Register extends React.Component {
@@ -140,7 +153,7 @@ class Register extends React.Component {
                       Have you an account?
                     </Button>
                   </Grid>
-                  <Grid item>
+                  <Grid item className={this.classes.wrapper}>
                     <Button
                       type="submit"
                       raised
@@ -150,6 +163,7 @@ class Register extends React.Component {
                       Register
                       <Send className={this.classes.iconRight} />
                     </Button>
+                    {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
                   </Grid>
                 </Grid>
               </ValidatorForm>

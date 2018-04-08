@@ -5,7 +5,8 @@ import { setLoader } from '../../actions/loader'
 import { ValidatorForm } from 'react-form-validator-core'
 import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
-import { Button, Grid, Paper, AppBar, Toolbar, Typography, IconButton } from 'material-ui'
+import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography, IconButton } from 'material-ui'
+import green from 'material-ui/colors/green'
 import { Domain, Save, Close } from 'material-ui-icons'
 import UploadImage from '../UploadImage'
 import { graphql } from 'react-apollo'
@@ -40,7 +41,19 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 32,
     height: 32,
-  }
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 })
 
 class BusinessForm extends React.Component {
@@ -81,16 +94,27 @@ class BusinessForm extends React.Component {
       try {
         await this.props.onSubmit(this.removeNull(this.state.formData))
         this.props.history.push('/business')
-      } catch (err) {
+        this.props.setNotification({
+          open: true,
+          type: 'success',
+          message: 'Business created/edited succesfully!'
+        })
+      } catch ({ message }) {
+        error(message)
+        this.props.setNotification({
+          open: true,
+          type: 'error',
+          message
+        })
+      } finally {
         this.setState({ submitted: false })
-        error(err.message)
       }
     })
   }
 
   omitTypename(key, value) {
     return (key === '__typename' || !value)
-      ? undefined 
+      ? undefined
       : value
   }
 
@@ -100,7 +124,7 @@ class BusinessForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let { data: { getBusiness, loading } } = nextProps
-    getBusiness = this.removeNull({...getBusiness})
+    getBusiness = this.removeNull({ ...getBusiness })
     this.setState({ loading, formData: { ...this.state.formData, ...getBusiness } })
     this.props.setLoader(loading)
   }
@@ -232,7 +256,7 @@ class BusinessForm extends React.Component {
                 justify="flex-end"
                 alignItems="center"
               >
-                <Grid item>
+                <Grid item className={this.classes.wrapper}>
                   <Button
                     type="submit"
                     raised
@@ -242,6 +266,7 @@ class BusinessForm extends React.Component {
                     Save
                     <Save className={this.classes.iconRight} />
                   </Button>
+                  {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
                 </Grid>
               </Grid>
             </ValidatorForm>
@@ -265,7 +290,8 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 BusinessForm.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  setNotification: PropTypes.func
 }
 
 export default connect(
