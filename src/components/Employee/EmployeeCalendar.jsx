@@ -149,6 +149,8 @@ class EmployeeCalendar extends React.Component {
 
   createEvents(data) {
     this.props.setLoader(true)
+    
+    data = this.removeNull({ ...data })
     return this.props.createEvents({
       variables: { input: data },
       update: (proxy, { data: { createEvents } }) => {
