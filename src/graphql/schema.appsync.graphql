@@ -56,6 +56,7 @@ input CreateEventInfoInput {
 	salary: String!
 	title: String!
 	money: Float
+	works: [String]
 }
 
 input CreateEventsInput {
@@ -123,6 +124,7 @@ type EventData {
 	salary: String!
 	title: String!
 	money: Float
+	works: [String]
 }
 
 input EventDataInput {
@@ -132,6 +134,7 @@ input EventDataInput {
 	salary: String!
 	title: String!
 	money: Float
+	works: [String]
 }
 
 type EventInfo {
@@ -144,6 +147,7 @@ type EventInfo {
 	salary: String!
 	title: String!
 	money: Float
+	works: [String]
 }
 
 type EventInfoConnection {
@@ -330,6 +334,7 @@ input UpdateEventInfoInput {
 	salary: String
 	title: String
 	money: Float
+	works: [String]
 }
 
 input UpdateEventsInput {
