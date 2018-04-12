@@ -20,7 +20,7 @@ import appSyncConfig from './config/appSync'
 import { Settings } from 'luxon'
 import i18n from './i18n'
 
-Settings.defaultLocale = 'en-gb'
+Settings.defaultLocale = i18n.language
 
 // const client = new ApolloClient({
 //   // link: new HttpLink({ uri: 'https://1jzxrj179.lp.gql.zone/graphql' }),

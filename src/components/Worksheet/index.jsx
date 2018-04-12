@@ -7,7 +7,7 @@ import SearchInput from '../SearchInput'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import 'moment/locale/en-gb'
+import 'moment/locale/es'
 
 BigCalendar.momentLocalizer(moment)
 
@@ -46,7 +46,7 @@ class WorksheetPresentational extends React.Component {
 
   getEmployees() {
     const { workforce, company } = this.state
-    
+
     if (workforce && workforce.length) {
       return workforce.map(employee => (
         <EmployeeCalendar
