@@ -133,6 +133,7 @@ class BusinessForm extends React.Component {
   render() {
     let { formData, submitted, loading } = this.state
     const { t } = this.props
+    
     if (loading) return null
 
     return (

@@ -10,6 +10,7 @@ import green from 'material-ui/colors/green'
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input'
 import { FormControl } from 'material-ui/Form'
 import { Face, Save, Close } from 'material-ui-icons'
+import { translate } from 'react-i18next'
 import UploadImage from '../UploadImage'
 import { graphql } from 'react-apollo'
 import getEmployee from '../../graphql/queries/getEmployee'
@@ -101,7 +102,7 @@ class EmployeeForm extends React.Component {
         this.props.setNotification({
           open: true,
           type: 'success',
-          message: 'Employee created/edited succesfully!'
+          message: this.props.t('Employee created/edited succesfully!')
         })
       } catch ({ message }) {
         error(message)
@@ -135,6 +136,7 @@ class EmployeeForm extends React.Component {
 
   render() {
     let { formData, submitted, loading } = this.state
+    const { t } = this.props
 
     if (loading) return null
 
@@ -145,7 +147,7 @@ class EmployeeForm extends React.Component {
             <Toolbar>
               <Face className={this.classes.iconLeft} />
               <Typography type="title" color="inherit" className={this.classes.flex}>
-                Employee form
+                {t('Employee form')}
                 </Typography>
               <IconButton
                 onClick={this.props.closeForm}
@@ -175,11 +177,11 @@ class EmployeeForm extends React.Component {
                     id="name"
                     name="name"
                     autoComplete="name"
-                    label="Name"
+                    label={t('Name')}
                     onChange={this.handleChange}
                     value={formData.name}
                     validators={['required']}
-                    errorMessages={['Name is required']}
+                    errorMessages={[t('Name is required')]}
                     fullWidth
                     required
                   />
@@ -189,12 +191,12 @@ class EmployeeForm extends React.Component {
                     id="nif"
                     name="nif"
                     autoComplete="nif"
-                    label="Nif"
+                    label={t('Nif')}
                     type="text"
                     onChange={this.handleChange}
                     value={formData.nif}
                     validators={['required', 'matchRegexp:^.{9,}$']}
-                    errorMessages={['Nif is required', 'The length must be 9 characters']}
+                    errorMessages={[t('Nif is required'), t('The length must be 9 characters')]}
                     fullWidth
                     required
                   />
@@ -206,9 +208,9 @@ class EmployeeForm extends React.Component {
                     id="email"
                     name="email"
                     autoComplete="email"
-                    label="Email"
+                    label={t('Email')}
                     validators={['isEmail']}
-                    errorMessages={['Email is not valid']}
+                    errorMessages={[t('Email is not valid')]}
                     onChange={this.handleChange}
                     value={formData.email}
                     fullWidth
@@ -219,12 +221,12 @@ class EmployeeForm extends React.Component {
                     id="phone"
                     name="phone"
                     autoComplete="phone"
-                    label="Phone"
+                    label={t('Phone')}
                     type="phone"
                     onChange={this.handleChange}
                     value={formData.phone}
                     validators={['matchRegexp:^\\d{9}$']}
-                    errorMessages={['The length must be 9 numbers']}
+                    errorMessages={[t('The length must be 9 numbers')]}
                     fullWidth
                   />
                 </ Grid>
@@ -235,7 +237,7 @@ class EmployeeForm extends React.Component {
                     id="address"
                     name="address"
                     autoComplete="address"
-                    label="Address"
+                    label={t('Address')}
                     onChange={this.handleChange}
                     value={formData.address}
                     fullWidth
@@ -248,7 +250,7 @@ class EmployeeForm extends React.Component {
                     id="description"
                     name="description"
                     autoComplete="description"
-                    label="Description"
+                    label={t('Description')}
                     onChange={this.handleChange}
                     value={formData.description}
                     multiline
@@ -260,7 +262,7 @@ class EmployeeForm extends React.Component {
               <Grid container>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth margin="normal">
-                    <InputLabel htmlFor="fullSalary">Full Salary</InputLabel>
+                    <InputLabel htmlFor="fullSalary">{t('Full Salary')}</InputLabel>
                     <Input
                       id="fullSalary"
                       type="number"
@@ -273,7 +275,7 @@ class EmployeeForm extends React.Component {
                 </ Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth margin="normal">
-                    <InputLabel htmlFor="halfSalary">Half Salary</InputLabel>
+                    <InputLabel htmlFor="halfSalary">{t('Half Salary')}</InputLabel>
                     <Input
                       id="halfSalary"
                       type="number"
@@ -298,7 +300,7 @@ class EmployeeForm extends React.Component {
                     color="primary"
                     disabled={submitted}
                   >
-                    Save
+                    {t('Save')}
                     <Save className={this.classes.iconRight} />
                   </Button>
                   {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
@@ -337,4 +339,4 @@ export default connect(
     fetchPolicy: 'network-only'
   }),
   skip: ({ match }) => !match.params.employeeId
-})(withStyles(styles)(EmployeeForm)))
+})(withStyles(styles)(translate('translations')(EmployeeForm))))
