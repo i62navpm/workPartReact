@@ -8,6 +8,7 @@ import { withStyles } from 'material-ui/styles'
 import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography, IconButton } from 'material-ui'
 import green from 'material-ui/colors/green'
 import { Domain, Save, Close } from 'material-ui-icons'
+import { translate } from 'react-i18next'
 import UploadImage from '../UploadImage'
 import { graphql } from 'react-apollo'
 import getBusiness from '../../graphql/queries/getBusiness'
@@ -97,7 +98,7 @@ class BusinessForm extends React.Component {
         this.props.setNotification({
           open: true,
           type: 'success',
-          message: 'Business created/edited succesfully!'
+          message: this.props.t('Business created/edited succesfully!')
         })
       } catch ({ message }) {
         error(message)
@@ -131,7 +132,7 @@ class BusinessForm extends React.Component {
 
   render() {
     let { formData, submitted, loading } = this.state
-
+    const { t } = this.props
     if (loading) return null
 
     return (
@@ -141,8 +142,8 @@ class BusinessForm extends React.Component {
             <Toolbar>
               <Domain className={this.classes.iconLeft} />
               <Typography type="title" color="inherit" className={this.classes.flex}>
-                Business form
-                </Typography>
+                {t('Business form')}
+              </Typography>
               <IconButton
                 onClick={this.props.closeForm}
                 color="contrast"
@@ -171,11 +172,11 @@ class BusinessForm extends React.Component {
                     id="name"
                     name="name"
                     autoComplete="name"
-                    label="Name"
+                    label={t('Name')}
                     onChange={this.handleChange}
                     value={formData.name}
                     validators={['required']}
-                    errorMessages={['Name is required']}
+                    errorMessages={[t('Name is required')]}
                     fullWidth
                     required
                   />
@@ -185,12 +186,12 @@ class BusinessForm extends React.Component {
                     id="cif"
                     name="cif"
                     autoComplete="cif"
-                    label="Cif"
+                    label={t('Cif')}
                     type="text"
                     onChange={this.handleChange}
                     value={formData.cif}
                     validators={['required', 'matchRegexp:^.{9,}$']}
-                    errorMessages={['Cif is required', 'The length must be 9 characters']}
+                    errorMessages={[t('Cif is required'), t('The length must be 9 characters')]}
                     fullWidth
                     required
                   />
@@ -202,7 +203,7 @@ class BusinessForm extends React.Component {
                     id="address"
                     name="address"
                     autoComplete="address"
-                    label="Address"
+                    label={t('Address')}
                     onChange={this.handleChange}
                     value={formData.address}
                     fullWidth
@@ -213,12 +214,12 @@ class BusinessForm extends React.Component {
                     id="phone"
                     name="phone"
                     autoComplete="phone"
-                    label="Phone"
+                    label={t('Phone')}
                     type="phone"
                     onChange={this.handleChange}
                     value={formData.phone}
                     validators={['matchRegexp:^\\d{9}$']}
-                    errorMessages={['The length must be 9 numbers']}
+                    errorMessages={[t('The length must be 9 numbers')]}
                     fullWidth
                   />
                 </ Grid>
@@ -229,9 +230,9 @@ class BusinessForm extends React.Component {
                     id="email"
                     name="email"
                     autoComplete="email"
-                    label="Email"
+                    label={t('Email')}
                     validators={['isEmail']}
-                    errorMessages={['Email is not valid']}
+                    errorMessages={[t('Email is not valid')]}
                     onChange={this.handleChange}
                     value={formData.email}
                     fullWidth
@@ -242,7 +243,7 @@ class BusinessForm extends React.Component {
                     id="web"
                     name="web"
                     autoComplete="web"
-                    label="Web"
+                    label={t('Web')}
                     type="web"
                     onChange={this.handleChange}
                     value={formData.web}
@@ -263,7 +264,7 @@ class BusinessForm extends React.Component {
                     color="primary"
                     disabled={submitted}
                   >
-                    Save
+                    {t('Save')}
                     <Save className={this.classes.iconRight} />
                   </Button>
                   {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
@@ -303,4 +304,4 @@ export default connect(
     fetchPolicy: 'network-only'
   }),
   skip: ({ match }) => !match.params.companyId
-})(withStyles(styles)(BusinessForm)))
+})(withStyles(styles)(translate('translations')(BusinessForm))))
