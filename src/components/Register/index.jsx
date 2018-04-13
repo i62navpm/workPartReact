@@ -7,6 +7,7 @@ import { withStyles } from 'material-ui/styles'
 import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
 import green from 'material-ui/colors/green'
 import { GroupAdd, Send } from 'material-ui-icons'
+import { translate } from 'react-i18next'
 const debug = require('debug')
 const error = debug('authRegister:error')
 
@@ -96,6 +97,7 @@ class Register extends React.Component {
 
   render() {
     const { formData, submitted } = this.state
+    const { t } = this.props
 
     return (
       <div>
@@ -105,7 +107,7 @@ class Register extends React.Component {
               <Toolbar>
                 <GroupAdd className={this.classes.iconLeft} />
                 <Typography type="title" color="inherit">
-                  Register
+                  {t('Register')}
                 </Typography>
               </Toolbar>
             </AppBar>
@@ -120,7 +122,7 @@ class Register extends React.Component {
                   id="email"
                   name="username"
                   autoComplete="email"
-                  label="Email"
+                  label={t('Email')}
                   onChange={this.handleChange}
                   value={formData.username}
                   validators={['required', 'isEmail']}
@@ -132,12 +134,12 @@ class Register extends React.Component {
                   id="password"
                   name="password"
                   autoComplete="password"
-                  label="Password"
+                  label={t('Password')}
                   type="password"
                   onChange={this.handleChange}
                   value={formData.password}
                   validators={['required', 'matchRegexp:^.{8,}$']}
-                  errorMessages={['Password is required', 'The length must be more than 8 characters']}
+                  errorMessages={[t('Password is required'), t('The length must be more than 8 characters')]}
                   margin="normal"
                   fullWidth
                   required
@@ -150,7 +152,7 @@ class Register extends React.Component {
                 >
                   <Grid item>
                     <Button component={Link} to="login" color="primary">
-                      Have you an account?
+                      {t('Have you an account?')}
                     </Button>
                   </Grid>
                   <Grid item className={this.classes.wrapper}>
@@ -160,7 +162,7 @@ class Register extends React.Component {
                       color="primary"
                       disabled={submitted}
                     >
-                      Register
+                      {t('Send')}
                       <Send className={this.classes.iconRight} />
                     </Button>
                     {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
@@ -180,4 +182,4 @@ Register.propTypes = {
   setNotification: PropTypes.func
 }
 
-export default withStyles(styles)(Register)
+export default withStyles(styles)(translate('translations')(Register))

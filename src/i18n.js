@@ -34,7 +34,10 @@ i18n.use(LanguageDetector).init({
         Login: 'Entra',
         Password: 'Contraseña',
         'You don\'t have an account yet?': '¿No tienes cuenta?',
-        'Forgot the password?': '¿Has olvidado la contraseña?'
+        'Forgot the password?': '¿Has olvidado la contraseña?',
+        'Have you an account?': 'Ya tienes una cuenta',
+        Register: 'Registro',
+        Send: 'Enviar'
       }
     }
   },
