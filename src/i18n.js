@@ -55,7 +55,17 @@ i18n.use(LanguageDetector).init({
         'Login Ok!': 'Login Ok!',
         'Your email is verificated!, Login now!':
           'Tu email está verificado!, entra ahora!',
-        'Verificate email': 'Verificación de email'
+        'Verificate email': 'Verificación de email',
+        'Do you want to remove this employee?':
+          '¿Quieres eliminar a este empleado?',
+        'Do you want to remove the business?':
+          '¿Quieres eliminar esta empresa?',
+        Close: 'Cerrar',
+        Delete: 'Eliminar',
+        removeEmployee:
+          'Si elminas al empleado <1><0>{{name}}</0></1> se perderá toda su información.',
+        removeBusiness:
+          'Si elminas la empresa <1><0>{{name}}</0></1> se perderá toda su información.'
       }
     }
   },

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Dialog, { DialogTitle, DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog'
 import { Button } from 'material-ui'
+import { translate, Trans } from 'react-i18next'
 
 class EmployeeRemoveModal extends React.Component {
   constructor(props) {
@@ -22,13 +23,16 @@ class EmployeeRemoveModal extends React.Component {
   handleClickClose() {
     this.setState({ open: false })
   }
-  
+
   async handleClickRemove() {
     this.handleClickClose()
-    await this.props.onRemove({id: this.props.data.id})
+    await this.props.onRemove({ id: this.props.data.id })
   }
 
   render() {
+    const { t } = this.props
+    const name = this.props.data.name
+
     return (
       <Dialog
         open={this.state.open}
@@ -37,19 +41,21 @@ class EmployeeRemoveModal extends React.Component {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Do you want to remove this employee?'}
+          {t('Do you want to remove this employee?')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            If you remove the employee <strong>{this.props.data.name}</strong> all your information will be lost.
+            <Trans i18nKey="removeEmployee">
+              If you remove the employee <strong>{{name}}</strong> all your information will be lost.
+            </Trans>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClickClose} color="primary">
-            Close
+            {t('Close')}
           </Button>
           <Button onClick={this.handleClickRemove} color="accent" autoFocus>
-            Delete
+            {t('Delete')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -61,4 +67,4 @@ EmployeeRemoveModal.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default EmployeeRemoveModal
+export default translate('translations', { withRef: true })(EmployeeRemoveModal)

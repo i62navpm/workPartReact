@@ -35,7 +35,7 @@ class Employee extends React.Component {
   }
 
   openRemoveModal() {
-    this.refs.removeModal.handleClickOpen()
+    this.refs.removeModal.getWrappedInstance().handleClickOpen()
   }
 
   render() {

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Dialog, { DialogTitle, DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog'
 import { Button } from 'material-ui'
+import { translate, Trans } from 'react-i18next'
 
 class BusinessRemoveModal extends React.Component {
   constructor(props) {
@@ -29,6 +30,9 @@ class BusinessRemoveModal extends React.Component {
   }
 
   render() {
+    const { t } = this.props
+    const name = this.props.data.name
+
     return (
       <Dialog
         open={this.state.open}
@@ -37,19 +41,21 @@ class BusinessRemoveModal extends React.Component {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Do you want to remove the business?'}
+          {t('Do you want to remove the business?')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            If you remove the business <strong>{this.props.data.name}</strong> all your information will be lost.
+            <Trans i18nKey="removeEmployee">
+              If you remove the business <strong>{{ name }}</strong> all your information will be lost.
+            </Trans>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClickClose} color="primary">
-            Close
+            {t('Close')}
           </Button>
           <Button onClick={this.handleClickRemove} color="accent" autoFocus>
-            Delete
+            {t('Delete')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -61,4 +67,4 @@ BusinessRemoveModal.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default BusinessRemoveModal
+export default translate('translations', { withRef: true })(BusinessRemoveModal)
