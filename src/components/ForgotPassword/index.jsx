@@ -7,6 +7,7 @@ import { withStyles } from 'material-ui/styles'
 import { Button, CircularProgress, Grid, Paper, AppBar, Stepper, Step, StepLabel, Toolbar, Typography } from 'material-ui'
 import green from 'material-ui/colors/green'
 import { MoodBad, Send } from 'material-ui-icons'
+import { translate } from 'react-i18next'
 const debug = require('debug')
 const error = debug('authForgotPassword:error')
 
@@ -70,11 +71,12 @@ class ForgotPassword extends React.Component {
   }
 
   getSteps() {
-    return ['Enter the email', 'Enter the new password']
+    return [this.props.t('Enter the email'), this.props.t('Enter the new password')]
   }
 
   getStepContent(step) {
     const { formData } = this.state
+    const { t } = this.props
 
     switch (step) {
       case 0:
@@ -82,11 +84,11 @@ class ForgotPassword extends React.Component {
           id="email"
           name="email"
           autoComplete="email"
-          label="Email"
+          label={t('Email')}
           onChange={this.handleChange}
           value={formData.email}
           validators={['required', 'isEmail']}
-          errorMessages={['Email is required', 'Email is not valid']}
+          errorMessages={[t('Email is required'), t('Email is not valid')]}
           fullWidth
           required
         />
@@ -97,11 +99,11 @@ class ForgotPassword extends React.Component {
               id="verificationCode"
               name="code"
               autoComplete="verificationCode"
-              label="Verification Code"
+              label={t('Verification Code')}
               onChange={this.handleChange}
               value={formData.code}
               validators={['required']}
-              errorMessages={['Code is required']}
+              errorMessages={[t('Code is required')]}
               fullWidth
               required
             />
@@ -109,12 +111,12 @@ class ForgotPassword extends React.Component {
               id="password"
               name="password"
               autoComplete="new-password"
-              label="New password"
+              label={t('New password')}
               type="password"
               onChange={this.handleChange}
               value={formData.password}
               validators={['required', 'matchRegexp:^.{8,}$']}
-              errorMessages={['Password is required', 'The length must be more than 8 characters']}
+              errorMessages={[t('Password is required'), t('The length must be more than 8 characters')]}
               margin="normal"
               fullWidth
               required
@@ -127,6 +129,7 @@ class ForgotPassword extends React.Component {
   }
   getStepButton(step) {
     const { submitted } = this.state
+    const { t } = this.props
 
     switch (step) {
       case 0:
@@ -137,12 +140,12 @@ class ForgotPassword extends React.Component {
               color="primary"
               disabled={submitted}
             >
-              Next Step
+              {t('Next Step')}
             </Button>
             {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
           </span>,
           <Button component={Link} to="login" color="primary">
-            Have you an account?
+            {t('Have you an account?')}
           </Button>
         ]
       case 1:
@@ -152,7 +155,7 @@ class ForgotPassword extends React.Component {
             color="primary"
             disabled={submitted}
           >
-            Back Step
+            {t('Back Step')}
           </Button>,
           <span className={this.classes.wrapper}>
             <Button
@@ -161,7 +164,7 @@ class ForgotPassword extends React.Component {
               color="primary"
               disabled={submitted}
             >
-              Verificate
+              {t('Verificate')}
             <Send className={this.classes.iconRight} />
             </Button>
             { submitted && <CircularProgress size={24} className={this.classes.buttonProgress} /> }
@@ -179,7 +182,7 @@ class ForgotPassword extends React.Component {
         this.props.setNotification({
           open: true,
           type: 'success',
-          message: 'We send you an email with a verification code!'
+          message: this.props.t('We send you an email with a verification code!')
         })
       } catch ({ message }) {
         this.props.setNotification({
@@ -215,7 +218,7 @@ class ForgotPassword extends React.Component {
         this.props.setNotification({
           open: true,
           type: 'success',
-          message: 'Your password have been changed!'
+          message: this.props.t('Your password have been changed!')
         })
       } catch ({ message }) {
         this.props.setNotification({
@@ -232,7 +235,7 @@ class ForgotPassword extends React.Component {
 
   render() {
     const { activeStep } = this.state
-
+    const { t } = this.props
     return (
       <div>
         <Grid container justify="center" alignItems="center">
@@ -241,7 +244,7 @@ class ForgotPassword extends React.Component {
               <Toolbar>
                 <MoodBad className={this.classes.iconLeft} />
                 <Typography type="title" color="inherit">
-                  Forgot the password
+                  {t('Forgot the password?')}
                 </Typography>
               </Toolbar>
             </AppBar>
@@ -291,4 +294,4 @@ ForgotPassword.propTypes = {
   setNotification: PropTypes.func
 }
 
-export default withStyles(styles)(ForgotPassword)
+export default withStyles(styles)(translate('translations')(ForgotPassword))

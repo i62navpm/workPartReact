@@ -19,6 +19,7 @@ i18n.use(LanguageDetector).init({
         'Password is required': 'La contraseña es obligatoria',
         'The length must be more than 8 characters':
           'La longitudo debe de ser de más de 8 caracteres',
+        'Email is required': 'Email es obligatorio',
         'Cif is required': 'El Cif es obligatorio',
         'Nif is required': 'El Nif es obligatorio',
         'The length must be 9 characters':
@@ -37,7 +38,18 @@ i18n.use(LanguageDetector).init({
         'Forgot the password?': '¿Has olvidado la contraseña?',
         'Have you an account?': 'Ya tienes una cuenta',
         Register: 'Registro',
-        Send: 'Enviar'
+        Send: 'Enviar',
+        'Enter the email': 'Introduce el email',
+        'Enter the new password': 'Introduce la nueva contraseña',
+        'Verification Code': 'Código de verificación',
+        'Code is required': 'El código es obligatorio',
+        'New password': 'Nueva contraseña',
+        'Next Step': 'Siguiente',
+        'Back Step': 'Atrás',
+        Verificate: 'Verificar',
+        'Your password have been changed!': 'Tu contraseña ha sido cambiada',
+        'We send you an email with a verification code!':
+          'Te hemos enviado un código de verificación a tu correo'
       }
     }
   },
