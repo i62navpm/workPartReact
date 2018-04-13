@@ -52,7 +52,10 @@ i18n.use(LanguageDetector).init({
           'Te hemos enviado un código de verificación a tu correo',
         'Register Ok!, Verificate your email now!':
           'Regristro Ok!, comprueba ahora tu correo!',
-        'Login Ok!': 'Login Ok!'
+        'Login Ok!': 'Login Ok!',
+        'Your email is verificated!, Login now!':
+          'Tu email está verificado!, entra ahora!',
+        'Verificate email': 'Verificación de email'
       }
     }
   },

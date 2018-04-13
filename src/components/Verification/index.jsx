@@ -9,6 +9,7 @@ import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography } fr
 import green from 'material-ui/colors/green'
 import { VerifiedUser, Send } from 'material-ui-icons'
 import createUser from '../../graphql/mutations/createUser'
+import { translate } from 'react-i18next'
 const debug = require('debug')
 const error = debug('verification:error')
 
@@ -82,7 +83,7 @@ class Verification extends React.Component {
         this.props.setNotification({
           open: true,
           type: 'success',
-          message: 'Your email is verificated!, Login now!'
+          message: this.props.t('Your email is verificated!, Login now!')
         })
       } catch ({ message }) {
         this.props.setNotification({
@@ -99,7 +100,7 @@ class Verification extends React.Component {
 
   render() {
     const { formData, submitted } = this.state
-
+    const { t } = this.props
     return (
       <div>
         <Grid container justify="center" alignItems="center">
@@ -108,7 +109,7 @@ class Verification extends React.Component {
               <Toolbar>
                 <VerifiedUser className={this.classes.iconLeft} />
                 <Typography type="title" color="inherit">
-                  Verificate email
+                  {t('Verificate email')}
                 </Typography>
               </Toolbar>
             </AppBar>
@@ -123,11 +124,11 @@ class Verification extends React.Component {
                   id="verificationCode"
                   name="code"
                   autoComplete="verificationCode"
-                  label="Verification Code"
+                  label={t('Verification Code')}
                   onChange={this.handleChange}
                   value={formData.code}
                   validators={['required']}
-                  errorMessages={['Code is required']}
+                  errorMessages={[t('Code is required')]}
                   fullWidth
                   required
                 />
@@ -144,7 +145,7 @@ class Verification extends React.Component {
                       color="primary"
                       disabled={submitted}
                     >
-                      Verificate
+                      {t('Verificate')}
                       <Send className={this.classes.iconRight} />
                     </Button>
                     {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
@@ -174,5 +175,5 @@ export default graphql(createUser)(
   connect(
     mapStateToProps,
     null
-  )(withStyles(styles)(Verification))
+  )(withStyles(styles)(translate('translations')(Verification)))
 )
