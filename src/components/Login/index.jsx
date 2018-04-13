@@ -7,6 +7,7 @@ import { withStyles } from 'material-ui/styles'
 import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
 import green from 'material-ui/colors/green'
 import { Mood, Send } from 'material-ui-icons'
+import { translate } from 'react-i18next'
 const debug = require('debug')
 const error = debug('authLogin:error')
 
@@ -99,6 +100,7 @@ class Login extends React.Component {
 
   render() {
     const { formData, submitted } = this.state
+    const { t } = this.props
 
     return (
       <div>
@@ -108,7 +110,7 @@ class Login extends React.Component {
               <Toolbar>
                 <Mood className={this.classes.iconLeft} />
                 <Typography type="title" color="inherit">
-                  Login
+                  {t('Login')}
                 </Typography>
               </Toolbar>
             </AppBar>
@@ -123,7 +125,7 @@ class Login extends React.Component {
                   id="username"
                   name="username"
                   autoComplete="username"
-                  label="Email"
+                  label={t('Email')}
                   onChange={this.handleChange}
                   value={formData.username}
                   validators={['required', 'isEmail']}
@@ -135,12 +137,12 @@ class Login extends React.Component {
                   id="password"
                   name="password"
                   autoComplete="password"
-                  label="Password"
+                  label={t('Password')}
                   type="password"
                   onChange={this.handleChange}
                   value={formData.password}
                   validators={['required', 'matchRegexp:^.{8,}$']}
-                  errorMessages={['Password is required', 'The length must be more than 8 characters']}
+                  errorMessages={[t('Password is required'), t('The length must be more than 8 characters')]}
                   margin="normal"
                   fullWidth
                   required
@@ -158,7 +160,7 @@ class Login extends React.Component {
                       color="primary"
                       disabled={submitted}
                     >
-                      Login
+                      {t('Login')}
                       <Send className={this.classes.iconRight} />
                     </Button>
                     {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
@@ -172,12 +174,13 @@ class Login extends React.Component {
                 >
                   <Grid item>
                     <Button component={Link} to="register" color="primary">
-                      You don't have an account yet?
+                      {t('You don\'t have an account yet?')}
+                      
                     </Button>
                   </Grid>
                   <Grid item>
                     <Button component={Link} to="forgotPassword" color="primary">
-                      Forgot the password?
+                      {t('Forgot the password?')}
                     </Button>
                   </Grid>
                 </Grid>
@@ -195,4 +198,4 @@ Login.propTypes = {
   setNotification: PropTypes.func
 }
 
-export default withStyles(styles)(Login)
+export default withStyles(styles)(translate('translations')(Login))

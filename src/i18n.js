@@ -16,6 +16,9 @@ i18n.use(LanguageDetector).init({
         Save: 'Guardar',
         Description: 'Descripción',
         'Name is required': 'El nombre es obligatorio',
+        'Password is required': 'La contraseña es obligatoria',
+        'The length must be more than 8 characters':
+          'La longitudo debe de ser de más de 8 caracteres',
         'Cif is required': 'El Cif es obligatorio',
         'Nif is required': 'El Nif es obligatorio',
         'The length must be 9 characters':
@@ -27,7 +30,11 @@ i18n.use(LanguageDetector).init({
         'Employee created/edited succesfully!':
           'Empleado creado/edito correctamente',
         'Full Salary': 'Salario completo',
-        'Half Salary': 'Salario reducido'
+        'Half Salary': 'Salario reducido',
+        Login: 'Entra',
+        Password: 'Contraseña',
+        'You don\'t have an account yet?': '¿No tienes cuenta?',
+        'Forgot the password?': '¿Has olvidado la contraseña?'
       }
     }
   },
