@@ -80,7 +80,7 @@ class Register extends React.Component {
         this.props.setNotification({
           open: true,
           type: 'success',
-          message: 'Register Ok!, Verificate your email now!'
+          message: this.props.t('Register Ok!, Verificate your email now!')
         })
       } catch ({message}) {
         this.props.setNotification({

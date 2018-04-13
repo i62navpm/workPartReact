@@ -49,7 +49,10 @@ i18n.use(LanguageDetector).init({
         Verificate: 'Verificar',
         'Your password have been changed!': 'Tu contraseña ha sido cambiada',
         'We send you an email with a verification code!':
-          'Te hemos enviado un código de verificación a tu correo'
+          'Te hemos enviado un código de verificación a tu correo',
+        'Register Ok!, Verificate your email now!':
+          'Regristro Ok!, comprueba ahora tu correo!',
+        'Login Ok!': 'Login Ok!'
       }
     }
   },

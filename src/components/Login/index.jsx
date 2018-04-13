@@ -83,7 +83,7 @@ class Login extends React.Component {
         this.props.setNotification({
           open: true,
           type: 'success',
-          message: 'Login Ok!'
+          message: this.props.t('Login Ok!')
         })
       } catch ({ message }) {
         this.props.setNotification({
