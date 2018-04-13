@@ -6,9 +6,12 @@ import { EmployeeCalendar } from '../Employee'
 import SearchInput from '../SearchInput'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
+import i18n from '../../i18n'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'moment/locale/es'
+import 'moment/locale/en-gb'
 
+moment.locale(i18n.language)
 BigCalendar.momentLocalizer(moment)
 
 const styles = theme => ({
