@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
+import { translate } from 'react-i18next'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import { DateTime, Info } from 'luxon'
 import i18n from './../../i18n'
@@ -40,7 +41,7 @@ class SummaryBarChart extends React.Component {
     })
     return Info.months('long', { locale: i18n.language })
       .map(month => ({ name: month, pay: 0, debt: 0 }))
-      .map(({ name }) => ({ name, pay: months[name]['pay'], debt: months[name]['debt'] }))
+      .map(({ name }) => ({ name, [this.props.t('Pay')]: months[name]['pay'], [this.props.t('Debt')]: months[name]['debt'] }))
   }
 
   render() {
@@ -52,8 +53,8 @@ class SummaryBarChart extends React.Component {
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
-          <Bar type="monotone" dataKey="pay" fill="#4caf50" />
-          <Bar type="monotone" dataKey="debt" fill="#e91e63" />
+          <Bar type="monotone" dataKey={this.props.t('Pay')} fill="#4caf50" />
+          <Bar type="monotone" dataKey={this.props.t('Debt')} fill="#e91e63" />
         </BarChart>
       </ResponsiveContainer>
     )
@@ -65,4 +66,4 @@ SummaryBarChart.propTypes = {
   data: PropTypes.array.isRequired
 }
 
-export default withStyles(styles)(SummaryBarChart)
+export default withStyles(styles)(translate('translations')(SummaryBarChart))

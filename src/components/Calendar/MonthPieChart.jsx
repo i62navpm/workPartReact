@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
+import { translate } from 'react-i18next'
 import { ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from 'recharts'
 
 const styles = () => ({
@@ -16,8 +17,8 @@ class MonthPieChart extends React.Component {
   }
 
   calcChart(data) {
-    const dataPay = { name: 'pay', color: '#4caf50' }
-    const dataDebt = { name: 'debt', color: '#e91e63' }
+    const dataPay = { name: this.props.t('Pay'), color: '#4caf50' }
+    const dataDebt = { name: this.props.t('Debt'), color: '#e91e63' }
 
     dataPay.value = data.pay.reduce((bef, curr) => ({ money: (curr.money || 0) + (bef.money || 0) } ), { money: 0 } ).money
     dataDebt.value = data.debt.reduce((bef, curr) => ({ money: (curr.money || 0) + (bef.money || 0) } ), { money: 0 } ).money
@@ -49,4 +50,4 @@ MonthPieChart.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(MonthPieChart)
+export default withStyles(styles)(translate('translations')(MonthPieChart))

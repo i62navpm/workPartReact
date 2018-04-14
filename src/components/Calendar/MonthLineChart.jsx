@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
+import { translate } from 'react-i18next'
 import {
   ResponsiveContainer,
   LineChart,
@@ -16,7 +17,7 @@ import { DateTime } from 'luxon'
 const styles = () => ({})
 
 class MonthLineChart extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -25,7 +26,7 @@ class MonthLineChart extends React.Component {
     }
   }
 
-  calcChart (data, date = new Date()) {
+  calcChart(data, date = new Date()) {
     let daysMonth = this.daysInMonth(date)
     const format = { month: 'numeric', day: 'numeric', year: 'numeric' }
 
@@ -40,17 +41,17 @@ class MonthLineChart extends React.Component {
         return start.toLocaleString(format) === date.toLocaleString(format)
       })
 
-      if (!payEvents) payEvents = { }
-      if (!debtEvents) debtEvents = { }
+      if (!payEvents) payEvents = {}
+      if (!debtEvents) debtEvents = {}
       return {
         ...rest,
-        pay: payEvents.money || 0,
-        debt: debtEvents.money || 0
+        [this.props.t('Pay')]: payEvents.money || 0,
+        [this.props.t('Debt')]: debtEvents.money || 0
       }
     })
   }
 
-  daysInMonth (date) {
+  daysInMonth(date) {
     date = DateTime.fromISO(new Date(date).toISOString())
     let monthDate = date.startOf('month')
 
@@ -62,7 +63,7 @@ class MonthLineChart extends React.Component {
       }))
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const format = { month: 'numeric', day: 'numeric', year: 'numeric' }
     const next = DateTime.fromISO(new Date(nextProps.currentDate).toISOString())
     const current = DateTime.fromISO(
@@ -80,7 +81,7 @@ class MonthLineChart extends React.Component {
     }
   }
 
-  render () {
+  render() {
     return (
       <ResponsiveContainer>
         <LineChart data={this.state.data}>
@@ -89,8 +90,8 @@ class MonthLineChart extends React.Component {
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="pay" stroke="#4caf50" />
-          <Line type="monotone" dataKey="debt" stroke="#e91e63" />
+          <Line type="monotone" dataKey={this.props.t('Pay')} stroke="#4caf50" />
+          <Line type="monotone" dataKey={this.props.t('Debt')} stroke="#e91e63" />
         </LineChart>
       </ResponsiveContainer>
     )
@@ -102,4 +103,4 @@ MonthLineChart.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(MonthLineChart)
+export default withStyles(styles)(translate('translations')(MonthLineChart))
