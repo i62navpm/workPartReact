@@ -49,7 +49,7 @@ export function calcTotalRow(rows) {
       const [, pay2, debt2] = curr
       return [title, pay1 + pay2, debt1 + debt2]
     },
-    ['Sum:   ', 0, 0]
+    ['', 0, 0]
   )
 }
 

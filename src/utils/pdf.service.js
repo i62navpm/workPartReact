@@ -1,13 +1,13 @@
 import { DateTime } from 'luxon'
 
-export function createTables(doc, employee) {
+export function createTables(doc, employee, t) {
   return {
     createMainTable(rows, columns, date) {
       doc.setTextColor('#3f51b5')
       doc.text(employee.name, 15, 15)
       doc.setFontSize(18)
       doc.text(
-        `Paysheet ${DateTime.fromISO(
+        `${t('Paysheet')} ${DateTime.fromISO(
           new Date(date).toISOString()
         ).toLocaleString({ month: 'long', year: 'numeric' })}`,
         115,
@@ -15,10 +15,11 @@ export function createTables(doc, employee) {
       )
       doc.setFontSize(10)
       doc.setTextColor()
-      doc.text(`Nif: ${employee.nif}`, 15, 20)
-      doc.text(`Address: ${employee.address}`, 15, 25)
-      doc.text(`Phone: ${employee.phone}`, 15, 30)
-      doc.text(`Email: ${employee.email}`, 15, 35)
+      employee.nif && doc.text(`${t('Nif')}: ${employee.nif}`, 15, 20)
+      employee.address &&
+        doc.text(`${t('Address')}: ${employee.address}`, 15, 25)
+      employee.phone && doc.text(`${t('Phone')}: ${employee.phone}`, 15, 30)
+      employee.email && doc.text(`${t('Email')}: ${employee.email}`, 15, 35)
       doc.setFontSize(16)
 
       doc.autoTable(columns, rows, {
