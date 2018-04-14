@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { FormControl, InputLabel, Input, InputAdornment } from 'material-ui'
 import { Search } from 'material-ui-icons'
+import { translate } from 'react-i18next'
 import { debounce } from 'lodash'
 
 const styles = () => ({
@@ -32,9 +33,10 @@ class SearchInput extends React.Component {
   }
 
   render() {
+    const { t } = this.props
     return (
       <FormControl fullWidth>
-        <InputLabel htmlFor="search-input">Search</InputLabel>
+        <InputLabel htmlFor="search-input">{t('Search')}</InputLabel>
         <Input
           id="search-input"
           onChange={this.handleTextChange}
@@ -54,4 +56,4 @@ SearchInput.propTypes = {
   filterFn: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(SearchInput)
+export default withStyles(styles)(translate('translations')(SearchInput))

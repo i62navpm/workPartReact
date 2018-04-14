@@ -14,6 +14,7 @@ import MonthPieChart from '../Calendar/MonthPieChart'
 import { Typography, Avatar, IconButton, Grid, Paper, Hidden } from 'material-ui'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import { ExpandMore, Edit, TrendingUp, TrendingDown, Warning, FolderShared } from 'material-ui-icons'
+import { translate } from 'react-i18next'
 import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
 import imageEmployee from '../../assets/images/employeeDefault.jpg'
@@ -149,7 +150,7 @@ class EmployeeCalendar extends React.Component {
 
   createEvents(data) {
     this.props.setLoader(true)
-    
+
     data = this.removeNull({ ...data })
     return this.props.createEvents({
       variables: { input: data },
@@ -189,7 +190,7 @@ class EmployeeCalendar extends React.Component {
       this.props.setNotification({
         open: true,
         type: 'success',
-        message: 'Calendar saved correctly!'
+        message: this.props.t('Calendar saved correctly!')
       })
     } catch ({ message }) {
       this.props.setNotification({
@@ -210,7 +211,7 @@ class EmployeeCalendar extends React.Component {
 
   render() {
     let { loading } = this.state
-
+    const { t } = this.props
     if (loading) return null
 
     return (
@@ -257,12 +258,12 @@ class EmployeeCalendar extends React.Component {
                     <Tab
                       className={this.props.classes.tab}
                       icon={this.state.calendarChanged['pay'] ? <Warning className={this.props.classes.warning} /> : <TrendingUp />}
-                      label="Pay"
+                      label={t('Pay')}
                     />
                     <Tab
                       className={this.props.classes.tab}
                       icon={this.state.calendarChanged['debt'] ? <Warning className={this.props.classes.warning} /> : <TrendingDown />}
-                      label="Debt"
+                      label={t('Debt')}
                     />
                   </Tabs>
                 </Paper>
@@ -334,5 +335,5 @@ export default (connect(
   }),
   graphql(createEvents, { name: 'createEvents' }),
   graphql(updateEvents, { name: 'updateEvents' }),
-)(withStyles(styles)(EmployeeCalendar)))
+)(withStyles(styles)(translate('translations')(EmployeeCalendar))))
 )

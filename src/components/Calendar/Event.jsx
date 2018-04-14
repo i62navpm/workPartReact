@@ -1,12 +1,12 @@
 import React from 'react'
-
 import { IconButton } from 'material-ui'
+import { translate } from 'react-i18next'
 import { LocalShipping, Face } from 'material-ui-icons'
 
-export default function Event({ event, classes, onSetEvent, onSetWork, modality }) {
+function Event({ event, classes, onSetEvent, onSetWork, modality, t }) {
   return (
     <React.Fragment>
-      <span className={'event-title'}>{event.title}</span>
+      <span className={'event-title'}>{t(event.title)}</span>
       {modality === 'pay' && <span className={'event-work'}>
         <IconButton
           variant="raised"
@@ -34,3 +34,5 @@ export default function Event({ event, classes, onSetEvent, onSetWork, modality 
     </React.Fragment>
   )
 }
+
+export default (translate('translations')(Event))

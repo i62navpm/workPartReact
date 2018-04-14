@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { Grid, Button, CircularProgress, TextField } from 'material-ui'
 import green from 'material-ui/colors/green'
+import { translate } from 'react-i18next'
 import { DateTime } from 'luxon'
 import Event from './Event'
 import EventWrapper from './EventWrapper'
@@ -217,10 +218,10 @@ class Calendar extends React.Component {
   }
 
   async onSubmit() {
-    this.setState({submitted: true})
+    this.setState({ submitted: true })
     await this.props.saveEvents(this.state.events)
     this.setState({ submitted: false })
-    
+
   }
 
   async wrapFetchEvent(date) {
@@ -239,13 +240,14 @@ class Calendar extends React.Component {
   }
 
   render() {
+    const { t } = this.props
     return (
       <Grid container>
         <Grid item xs={12} className={this.classes.calendarGrid}>
           {this.state.updatingEvents && <Loading />}
           <Grid item xs={12}>
             <TextField
-              label="Search date"
+              label={t('Search date')}
               type="date"
               onChange={this.changeSearchDate}
               defaultValue={this.getSearchDate()}
@@ -279,12 +281,12 @@ class Calendar extends React.Component {
               <Grid container spacing={24} justify="flex-end">
                 <Grid item>
                   <Button onClick={this.props.restoreEvents} raised color="accent" disabled={!this.state.calendarChanged[this.state.modality]}>
-                    Discard
+                    {t('Discard')}
                   </Button>
                 </Grid>
                 <Grid item className={this.classes.wrapper}>
                   <Button onClick={this.onSubmit} raised color="primary" disabled={!this.state.calendarChanged[this.state.modality] || this.state.submitted}>
-                    Save
+                    {t('Save')}
                   </Button>
                   {this.state.submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
                 </Grid>
@@ -315,4 +317,4 @@ Calendar.propTypes = {
   saveEvents: PropTypes.func
 }
 
-export default withStyles(styles)(Calendar)
+export default withStyles(styles)(translate('translations')(Calendar))
