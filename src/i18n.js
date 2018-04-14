@@ -65,12 +65,29 @@ i18n.use(LanguageDetector).init({
         removeEmployee:
           'Si elminas al empleado <1><0>{{name}}</0></1> se perderá toda su información.',
         removeBusiness:
-          'Si elminas la empresa <1><0>{{name}}</0></1> se perderá toda su información.'
+          'Si elminas la empresa <1><0>{{name}}</0></1> se perderá toda su información.',
+        Search: 'Buscar',
+        'Calendar saved correctly!': 'Calendario guardado correctamente!',
+        Pay: 'Pagos',
+        Debt: 'A cuenta',
+        'Search date': 'Buscar fecha',
+        Discard: 'Descartar',
+        'Custom Salary': 'Salario personalizado',
+        'Debt Salary': 'Salario a cuenta',
+        'Insert a custom salary': 'Inserta un salario personalizado',
+        'No results found': 'No hay resultados',
+        'Insert a work': 'Inserta una obra',
+        'Select or insert a work place': 'Selecciona o inserta una obra',
+        'Employee Summary': 'Resumen del empleado',
+        Date: 'Fecha',
+        Works: 'Obras',
+        Download: 'Descargar',
+        Paysheet: 'Nómina'
       }
     }
   },
   fallbackLng: 'es',
-  debug: true,
+  debug: false,
   ns: ['translations'],
   defaultNS: 'translations',
   keySeparator: false,
