@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
+import { translate } from 'react-i18next'
 import {
   Typography,
   Modal,
@@ -50,14 +51,15 @@ class ModalCustomEvent extends React.Component {
   }
 
   render() {
+    const { t } = this.props
     return (
       <Modal open={this.props.openModal} onClose={this.handleClose}>
         <div className={this.props.classes.paper}>
           <Typography type="title" id="modal-title">
-            Insert a custom salary
+            {t('Insert a custom salary')}
           </Typography>
           <FormControl fullWidth margin="normal">
-            <InputLabel htmlFor="fullSalary">Custom Salary</InputLabel>
+            <InputLabel htmlFor="fullSalary">{t('Custom Salary')}</InputLabel>
             <Input
               id="fullSalary"
               type="number"
@@ -68,7 +70,7 @@ class ModalCustomEvent extends React.Component {
             />
           </FormControl>
           <Button className={this.props.classes.button} raised color="primary" onClick={this.handleClose}>
-            Save
+            {t('Save')}
           </Button>
         </div>
       </Modal>
@@ -82,4 +84,4 @@ ModalCustomEvent.propTypes = {
   handleModalClose: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(ModalCustomEvent)
+export default withStyles(styles)(translate('translations')(ModalCustomEvent))

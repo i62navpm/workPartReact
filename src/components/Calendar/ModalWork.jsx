@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
+import { translate } from 'react-i18next'
 import {
   Typography,
   Modal,
@@ -171,11 +172,11 @@ class Option extends React.Component {
 
 class SelectWrapped extends React.Component {
   render() {
-    const { classes, ...other } = this.props
+    const { classes, t, ...other } = this.props
     return (
       <Select.Creatable
         optionComponent={Option}
-        noResultsText={<Typography>{'No results found'}</Typography>}
+        noResultsText={<Typography>{t('No results found')}</Typography>}
         arrowRenderer={arrowProps => {
           return arrowProps.isOpen ? <ArrowDropUp /> : <ArrowDropDown />
         }}
@@ -239,19 +240,20 @@ class ModalWork extends React.Component {
   }
 
   render() {
+    const { t } = this.props
     return (
       <Modal open={this.props.openModal} onClose={this.handleClose}>
         <div className={this.props.classes.paper}>
           <Typography type="title" id="modal-title">
-            Insert a work
+            {t('Insert a work')}
           </Typography>
           <Input
             fullWidth
             className={this.props.classes.select}
-            inputComponent={SelectWrapped}
+            inputComponent={translate('translations')(SelectWrapped)}
             value={this.state.works}
             onChange={this.handleChange}
-            placeholder="Select or insert a work place"
+            placeholder={t('Select or insert a work place')}
             name="react-select-chip"
             inputProps={{
               classes: this.props.classes,
@@ -268,7 +270,7 @@ class ModalWork extends React.Component {
             color="primary"
             onClick={this.handleClose}
           >
-            Save
+            {t('Save')}
           </Button>
         </div>
       </Modal>
@@ -283,4 +285,4 @@ ModalWork.propTypes = {
   handleModalClose: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(ModalWork)
+export default withStyles(styles)(translate('translations')(ModalWork))
