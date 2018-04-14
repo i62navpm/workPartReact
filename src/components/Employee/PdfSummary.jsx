@@ -7,6 +7,7 @@ import { graphql, compose } from 'react-apollo'
 import { Typography, Hidden, TextField, Button } from 'material-ui'
 import { FileDownload } from 'material-ui-icons'
 import { withStyles } from 'material-ui/styles'
+import { translate } from 'react-i18next'
 import { DateTime } from 'luxon'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
@@ -56,12 +57,13 @@ class PdfSummary extends React.Component {
   }
 
   createPdf(employeeEvents) {
+    const { t } = this.props
     this.doc = new jsPDF()
     this.doc.setProperties({
-      title: 'Employee summary'
+      title: t('Employee Summary')
     })
-    this.columns = ['Date', 'Pay', 'Debt', 'Works']
-    this.createTablesFn = createTables(this.doc, this.props.employee)
+    this.columns = [t('Date'), t('Pay'), t('Debt'), t('Works')]
+    this.createTablesFn = createTables(this.doc, this.props.employee, t)
 
     let rows = calcChart(employeeEvents, this.currentDate)
     const totalAdd = calcTotalRow(rows)
@@ -77,7 +79,7 @@ class PdfSummary extends React.Component {
 
     if (!getEvents) getEvents = { pay: [], debt: [] }
     if (!loading) this.createPdf(getEvents)
-    
+
     this.setState({ loading, getEvents })
     this.props.setLoader(loading)
   }
@@ -104,6 +106,7 @@ class PdfSummary extends React.Component {
 
   render() {
     const { loading } = this.state
+    const { t } = this.props
 
     if (loading) return null
 
@@ -111,10 +114,10 @@ class PdfSummary extends React.Component {
       <React.Fragment>
         <Hidden xsDown>
           <Typography className={this.props.classes.titleSummary} align="center" type="headline" color="primary">
-            Employee Summary
+            {t('Employee Summary')}
           </Typography>
           <TextField
-            label="Search date"
+            label={t('Search date')}
             type="date"
             className={this.props.classes.searchDate}
             onChange={this.changeSearchDate}
@@ -128,7 +131,7 @@ class PdfSummary extends React.Component {
         <Hidden smUp>
           <Button onClick={() => this.doc.save(`${this.props.employee.name}-${this.getSearchDate()}.pdf`)} raised className={this.props.classes.downloadButton} color="primary" size="small">
             <FileDownload />
-            Download
+            {t('Download')}
           </Button>
         </Hidden>
       </React.Fragment>
@@ -165,5 +168,5 @@ export default (connect(
       fetchPolicy: 'network-only'
     }),
   })
-)(withStyles(styles)(PdfSummary)))
+)(withStyles(styles)(translate('translations')(PdfSummary))))
 )

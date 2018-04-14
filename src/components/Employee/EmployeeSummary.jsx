@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { setNotification } from '../../actions/notification'
 import { setLoader } from '../../actions/loader'
 import { withStyles } from 'material-ui/styles'
+import { translate } from 'react-i18next'
 import {
   Grid,
   Paper,
@@ -96,6 +97,7 @@ class EmployeeSummary extends React.Component {
 
   render() {
     const { loading } = this.state
+    const { t } = this.props
 
     if (loading) return null
 
@@ -110,7 +112,7 @@ class EmployeeSummary extends React.Component {
                 color="inherit"
                 className={this.classes.flex}
               >
-                Employee Summary
+                {t('Employee Summary')}
               </Typography>
               <IconButton onClick={this.props.closeForm} color="contrast">
                 <Close />
@@ -216,7 +218,7 @@ class EmployeeSummary extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <PdfSummary companyId={this.props.businessId} employee={this.state.getEmployee}/>
+            <PdfSummary companyId={this.props.businessId} employee={this.state.getEmployee} />
           </Paper>
         </Grid>
       </Grid>
@@ -252,5 +254,5 @@ export default (connect(
       fetchPolicy: 'network-only'
     }),
   }),
-)(withStyles(styles)(EmployeeSummary)))
+)(withStyles(styles)(translate('translations')(EmployeeSummary))))
 )
