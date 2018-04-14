@@ -82,7 +82,8 @@ i18n.use(LanguageDetector).init({
         Date: 'Fecha',
         Works: 'Obras',
         Download: 'Descargar',
-        Paysheet: 'Nómina'
+        Paysheet: 'Nómina',
+        Workforce: 'Plantilla'
       }
     }
   },

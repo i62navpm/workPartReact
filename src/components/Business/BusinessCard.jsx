@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import Card, { CardHeader, CardMedia, CardActions } from 'material-ui/Card'
-import { Avatar, IconButton } from 'material-ui'
+import { Avatar, Button, IconButton } from 'material-ui'
 import { colors } from 'material-ui'
 import { Edit, Delete, People } from 'material-ui-icons'
+import { translate } from 'react-i18next'
 import { DateTime } from 'luxon'
 import imageBusiness from '../../assets/images/businessDefault.png'
 import BusinessRemoveModal from './BusinessRemoveModal'
@@ -15,13 +16,18 @@ const randomColor = function (obj) {
   return obj[keys[keys.length * Math.random() << 0]]
 }
 
-const styles = () => ({
+const styles = theme => ({
   media: {
     height: 194,
   },
   flexGrow: {
     flex: '1 1 auto'
-  }
+  },
+  iconRight: {
+    marginLeft: theme.spacing.unit,
+    width: 20,
+    height: 20
+  },
 })
 
 class BusinessCard extends React.Component {
@@ -61,12 +67,12 @@ class BusinessCard extends React.Component {
             />
           </Link>
           <CardActions disableActionSpacing>
+            <Button component={Link} to={`/business/company/${this.data.id}/workforce`} className={this.classes.button} raised color="primary">
+              {this.props.t('Workforce')}
+              <People className={this.classes.iconRight}/>
+            </Button>
+
             <div className={this.classes.flexGrow} />
-            <Link to={`/business/company/${this.data.id}/workforce`}>
-              <IconButton className="edit-business" color="primary">
-                <People />
-              </IconButton>
-            </Link>
             <Link to={`/business/company/${this.data.id}`}>
               <IconButton className="edit-business" color="primary">
                 <Edit />
@@ -88,4 +94,4 @@ BusinessCard.propTypes = {
   onRemove: PropTypes.func
 }
 
-export default withStyles(styles)(BusinessCard)
+export default withStyles(styles)(translate('translations')(BusinessCard))
