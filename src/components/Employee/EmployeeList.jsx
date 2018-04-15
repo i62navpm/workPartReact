@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { Grid, Typography } from 'material-ui'
+import { translate } from 'react-i18next'
 import EmployeeCard from './EmployeeCard'
 import AddButton from '../AddButton'
 
@@ -34,10 +35,10 @@ class Employee extends React.Component {
       return (
         <div className={this.classes.noEmployees}>
           <Typography align="center" type="title" color="primary">
-            There is no employees yet.
+            {this.props.t('There is no employees yet.')}
           </Typography>
           <Typography align="center" type="subheading">
-            Please add new employees.
+            {this.props.t('Please add new employees.')}
           </Typography>
         </div>
       )
@@ -63,4 +64,4 @@ Employee.propTypes = {
   workforce: PropTypes.array.isRequired
 }
 
-export default withStyles(styles)(Employee)
+export default withStyles(styles)(translate('translations')(Employee))
