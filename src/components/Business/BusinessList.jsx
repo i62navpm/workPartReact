@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import { Grid } from 'material-ui'
+import { translate } from 'react-i18next'
 import BusinessCard from './BusinessCard'
 import AddButton from '../AddButton'
 import { Typography } from 'material-ui'
@@ -35,10 +36,10 @@ class Business extends React.Component {
       return (
         <div className={this.classes.noBusiness}>
           <Typography align="center" type="title" color="primary">
-            There is no bussiness yet.
+            {this.props.t('There is no bussiness yet.')}
           </Typography>
           <Typography align="center" type="subheading">
-            Please add new companies.
+            {this.props.t('Please add new companies.')}
           </Typography>
         </div>
       )
@@ -64,4 +65,4 @@ Business.propTypes = {
   business: PropTypes.array.isRequired
 }
 
-export default withStyles(styles)(Business)
+export default withStyles(styles)(translate('translations')(Business))
