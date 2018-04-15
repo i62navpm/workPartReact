@@ -83,7 +83,13 @@ i18n.use(LanguageDetector).init({
         Works: 'Obras',
         Download: 'Descargar',
         Paysheet: 'Nómina',
-        Workforce: 'Plantilla'
+        Workforce: 'Plantilla',
+        Logout: 'Salir',
+        'There is no employees yet.': 'Aún no hay empleados.',
+        'Please add new employees.': 'Por favor añade nuevos empleados.',
+        'There is no bussiness yet.': 'Aún no hay empresas.',
+        'Please add new companies.': 'Por favor añade nuevas empresas.',
+        'Work Part App': 'Programa de partes'
       }
     }
   },

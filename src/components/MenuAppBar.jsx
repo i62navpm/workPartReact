@@ -6,6 +6,7 @@ import { withStyles } from 'material-ui/styles'
 import { AppBar, Toolbar, Typography, IconButton, LinearProgress, Hidden } from 'material-ui'
 import { AccountCircle } from 'material-ui-icons'
 import Menu, { MenuItem } from 'material-ui/Menu'
+import { translate } from 'react-i18next'
 import { setDrawer } from '../actions/drawer'
 import { logoutUser } from '../actions/auth'
 const debug = require('debug')
@@ -68,7 +69,7 @@ class MenuAppBar extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, t } = this.props
     const { auth, anchorEl } = this.state
     const open = Boolean(anchorEl)
 
@@ -78,7 +79,7 @@ class MenuAppBar extends React.Component {
           <Toolbar>
             <Link to={'/business'} className={classes.link}>
               <Typography type="title" color="inherit" className={classes.flex}>
-                Work Part App
+                {t('Work Part App')}
               </Typography>
             </Link>
             <Typography type="body1" color="inherit" align="right" className={classes.flex}>
@@ -109,7 +110,7 @@ class MenuAppBar extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.logout}>Logout</MenuItem>
+                  <MenuItem onClick={this.logout}>{t('Logout')}</MenuItem>
                 </Menu>
               </div>
             )}
@@ -143,6 +144,6 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(MenuAppBar))
+)(withStyles(styles)(translate('translations')(MenuAppBar)))
 
 
