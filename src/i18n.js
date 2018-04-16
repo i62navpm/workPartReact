@@ -7,6 +7,7 @@ i18n
   .use(LanguageDetector)
   .init({
     fallbackLng: 'es',
+    load: 'languageOnly',
     debug: false,
     ns: ['translations'],
     defaultNS: 'translations',
