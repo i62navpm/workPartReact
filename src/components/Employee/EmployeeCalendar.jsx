@@ -171,7 +171,7 @@ class EmployeeCalendar extends React.Component {
   }
 
   async saveEvents(events) {
-    const fn = (this.state.initialEvents.pay.length || this.state.initialEvents.debt.length) ? this.updateEvents : this.createEvents
+    const fn = this.state.initialEvents.id ? this.updateEvents : this.createEvents
     try {
       await fn({ employeeId: this.props.employee.id, id: getFirstDayMonth(this.state.currentDate), yearId: this.state.currentDate.getFullYear(), ...this.state.events, [this.mapModality[this.state.modality]]: events })
 
