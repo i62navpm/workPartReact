@@ -44,6 +44,7 @@ class PdfSummary extends React.Component {
     this.state = {
       currentDate: new Date(),
       loading,
+      disableButton: false,
       events: getEvents,
       ...data
     }
@@ -100,8 +101,14 @@ class PdfSummary extends React.Component {
   }
 
   async changeSearchDate(e) {
+    this.props.setLoader(true)
+    this.setState({ disableButton: true })
+    
     e.stopPropagation()
     await this.fetchEvents(new Date(e.target.value))
+    
+    this.props.setLoader(false)
+    this.setState({ disableButton: false })
   }
 
   render() {
@@ -112,24 +119,25 @@ class PdfSummary extends React.Component {
 
     return (
       <React.Fragment>
+
+        <Typography className={this.props.classes.titleSummary} align="center" type="headline" color="primary">
+          {t('Employee Summary')}
+        </Typography>
+        <TextField
+          label={t('Search date')}
+          type="date"
+          className={this.props.classes.searchDate}
+          onChange={this.changeSearchDate}
+          defaultValue={this.getSearchDate()}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
         <Hidden xsDown>
-          <Typography className={this.props.classes.titleSummary} align="center" type="headline" color="primary">
-            {t('Employee Summary')}
-          </Typography>
-          <TextField
-            label={t('Search date')}
-            type="date"
-            className={this.props.classes.searchDate}
-            onChange={this.changeSearchDate}
-            defaultValue={this.getSearchDate()}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
           <iframe title="Summary employee pdf" src={this.doc.output('datauristring')} type="application/pdf" width="100%" height="842px" />
         </Hidden>
         <Hidden smUp>
-          <Button onClick={() => this.doc.save(`${this.props.employee.name}-${this.getSearchDate()}.pdf`)} raised className={this.props.classes.downloadButton} color="primary" size="small">
+          <Button disabled={this.state.disableButton} onClick={() => this.doc.save(`${this.props.employee.name}-${this.getSearchDate()}.pdf`)} raised className={this.props.classes.downloadButton} color="primary" size="small">
             <FileDownload />
             {t('Download')}
           </Button>
