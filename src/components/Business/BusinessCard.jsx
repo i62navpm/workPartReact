@@ -19,6 +19,7 @@ const randomColor = function (obj) {
 const styles = theme => ({
   media: {
     height: 194,
+    backgroundSize: 'contain'
   },
   flexGrow: {
     flex: '1 1 auto'

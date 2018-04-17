@@ -19,6 +19,7 @@ const styles = () => ({
   cover: {
     width: 151,
     height: 151,
+    backgroundSize: 'contain'
   },
   playIcon: {
     height: 38,
