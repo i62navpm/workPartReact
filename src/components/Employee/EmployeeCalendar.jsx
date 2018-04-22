@@ -109,7 +109,7 @@ class EmployeeCalendar extends React.Component {
           const getEvents = { employeeId: this.props.employee.id, pay: [], debt: [] }
           return this.componentWillReceiveProps({ data: { getEvents } })
         }
-        return fetchMoreResult
+        return this.componentWillReceiveProps({ data: {...fetchMoreResult} })
       }
     })
   }
