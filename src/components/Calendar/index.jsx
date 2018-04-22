@@ -272,7 +272,6 @@ class Calendar extends React.Component {
               eventWrapper: EventWrapper,
               toolbar: ({ ...rest }) => <Toolbar modality={this.state.modality} fetchEvents={this.wrapFetchEvent} calendarChanged={this.state.calendarChanged} {...rest} />
             }}
-            longPressThreshold={10}
             onSelectEvent={this.onSelectEvent}
             onSelectSlot={this.onSelectSlot}
           />
