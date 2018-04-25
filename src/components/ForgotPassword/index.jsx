@@ -12,6 +12,9 @@ const debug = require('debug')
 const error = debug('authForgotPassword:error')
 
 const styles = theme => ({
+  root: {
+    height: '100vh',
+  },
   paper: {
     padding: 16,
     textAlign: 'center'
@@ -165,9 +168,9 @@ class ForgotPassword extends React.Component {
               disabled={submitted}
             >
               {t('Verificate')}
-            <Send className={this.classes.iconRight} />
+              <Send className={this.classes.iconRight} />
             </Button>
-            { submitted && <CircularProgress size={24} className={this.classes.buttonProgress} /> }
+            {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
           </span >]
       default:
         return 'Unknown step'
@@ -237,54 +240,52 @@ class ForgotPassword extends React.Component {
     const { activeStep } = this.state
     const { t } = this.props
     return (
-      <div>
-        <Grid container justify="center" alignItems="center">
-          <Grid item xs={12} sm={6}>
-            <AppBar position="static" color="primary">
-              <Toolbar>
-                <MoodBad className={this.classes.iconLeft} />
-                <Typography type="title" color="inherit">
-                  {t('Forgot the password?')}
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <Paper className={this.classes.paper}>
-              <Stepper activeStep={activeStep}>
-                {this.getSteps().map((label) => {
+      <Grid container justify="center" alignItems="center" className={this.classes.root}>
+        <Grid item xs={12} sm={6}>
+          <AppBar position="static" color="primary">
+            <Toolbar>
+              <MoodBad className={this.classes.iconLeft} />
+              <Typography type="title" color="inherit">
+                {t('Forgot the password?')}
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Paper className={this.classes.paper}>
+            <Stepper activeStep={activeStep}>
+              {this.getSteps().map((label) => {
+                return (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                )
+              })}
+            </Stepper>
+            <ValidatorForm
+              className={this.classes.form}
+              ref="form"
+              onSubmit={this.handleSubmit}
+              noValidate
+            >
+              {this.getStepContent(activeStep)}
+              <Grid
+                className={this.classes.rowButtons}
+                container
+                justify="space-between"
+                alignItems="center"
+              >
+                {this.getStepButton(activeStep).map((button, index) => {
                   return (
-                    <Step key={label}>
-                      <StepLabel>{label}</StepLabel>
-                    </Step>
+                    <Grid key={index} item>
+                      {button}
+                    </Grid>
                   )
                 })}
-              </Stepper>
-              <ValidatorForm
-                className={this.classes.form}
-                ref="form"
-                onSubmit={this.handleSubmit}
-                noValidate
-              >
-                {this.getStepContent(activeStep)}
-                <Grid
-                  className={this.classes.rowButtons}
-                  container
-                  justify="space-between"
-                  alignItems="center"
-                >
-                  {this.getStepButton(activeStep).map((button, index) => {
-                    return (
-                      <Grid key={index} item>
-                        {button}
-                      </Grid>
-                    )
-                  })}
-                </Grid>
-              </ValidatorForm>
+              </Grid>
+            </ValidatorForm>
 
-            </Paper>
-          </Grid>
+          </Paper>
         </Grid>
-      </div>
+      </Grid>
     )
   }
 }

@@ -12,6 +12,9 @@ const debug = require('debug')
 const error = debug('authRegister:error')
 
 const styles = theme => ({
+  root: {
+    height: '100vh',
+  },
   paper: {
     padding: 16,
     textAlign: 'center'
@@ -101,7 +104,7 @@ class Register extends React.Component {
 
     return (
       <div>
-        <Grid container justify="center" alignItems="center">
+        <Grid container justify="center" alignItems="center" className={this.classes.root}>
           <Grid item xs={12} sm={6}>
             <AppBar position="static" color="primary">
               <Toolbar>

@@ -14,6 +14,9 @@ const debug = require('debug')
 const error = debug('verification:error')
 
 const styles = theme => ({
+  root: {
+    height: '100vh',
+  },
   paper: {
     padding: 16,
     textAlign: 'center'
@@ -102,60 +105,58 @@ class Verification extends React.Component {
     const { formData, submitted } = this.state
     const { t } = this.props
     return (
-      <div>
-        <Grid container justify="center" alignItems="center">
-          <Grid item xs={12} sm={6}>
-            <AppBar position="static" color="primary">
-              <Toolbar>
-                <VerifiedUser className={this.classes.iconLeft} />
-                <Typography type="title" color="inherit">
-                  {t('Verificate email')}
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <Paper className={this.classes.paper}>
-              <ValidatorForm
-                className={this.classes.form}
-                ref="form"
-                onSubmit={this.handleSubmit}
-                noValidate
+      <Grid container justify="center" alignItems="center" className={this.classes.root}>
+        <Grid item xs={12} sm={6}>
+          <AppBar position="static" color="primary">
+            <Toolbar>
+              <VerifiedUser className={this.classes.iconLeft} />
+              <Typography type="title" color="inherit">
+                {t('Verificate email')}
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Paper className={this.classes.paper}>
+            <ValidatorForm
+              className={this.classes.form}
+              ref="form"
+              onSubmit={this.handleSubmit}
+              noValidate
+            >
+              <TextValidator
+                id="verificationCode"
+                name="code"
+                autoComplete="verificationCode"
+                label={t('Verification Code')}
+                onChange={this.handleChange}
+                value={formData.code}
+                validators={['required']}
+                errorMessages={[t('Code is required')]}
+                fullWidth
+                required
+              />
+              <Grid
+                className={this.classes.rowButtons}
+                container
+                justify="flex-end"
+                alignItems="center"
               >
-                <TextValidator
-                  id="verificationCode"
-                  name="code"
-                  autoComplete="verificationCode"
-                  label={t('Verification Code')}
-                  onChange={this.handleChange}
-                  value={formData.code}
-                  validators={['required']}
-                  errorMessages={[t('Code is required')]}
-                  fullWidth
-                  required
-                />
-                <Grid
-                  className={this.classes.rowButtons}
-                  container
-                  justify="flex-end"
-                  alignItems="center"
-                >
-                  <Grid item className={this.classes.wrapper}>
-                    <Button
-                      type="submit"
-                      raised
-                      color="primary"
-                      disabled={submitted}
-                    >
-                      {t('Verificate')}
-                      <Send className={this.classes.iconRight} />
-                    </Button>
-                    {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
-                  </Grid>
+                <Grid item className={this.classes.wrapper}>
+                  <Button
+                    type="submit"
+                    raised
+                    color="primary"
+                    disabled={submitted}
+                  >
+                    {t('Verificate')}
+                    <Send className={this.classes.iconRight} />
+                  </Button>
+                  {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
                 </Grid>
-              </ValidatorForm>
-            </Paper>
-          </Grid>
+              </Grid>
+            </ValidatorForm>
+          </Paper>
         </Grid>
-      </div>
+      </Grid>
     )
   }
 }

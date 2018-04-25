@@ -6,12 +6,15 @@ import { TextValidator } from 'react-material-ui-form-validator'
 import { withStyles } from 'material-ui/styles'
 import { Button, CircularProgress, Grid, Paper, AppBar, Toolbar, Typography } from 'material-ui'
 import green from 'material-ui/colors/green'
-import { Mood, Send } from 'material-ui-icons'
+import { People, Send } from 'material-ui-icons'
 import { translate } from 'react-i18next'
 const debug = require('debug')
 const error = debug('authLogin:error')
 
 const styles = theme => ({
+  root: {
+    height: '100vh',
+  },
   paper: {
     padding: 16,
     textAlign: 'center'
@@ -103,92 +106,90 @@ class Login extends React.Component {
     const { t } = this.props
 
     return (
-      <div>
-        <Grid container justify="center" alignItems="center">
-          <Grid item xs={12} sm={6}>
-            <AppBar position="static" color="primary">
-              <Toolbar>
-                <Mood className={this.classes.iconLeft} />
-                <Typography type="title" color="inherit">
-                  {t('Login')}
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <Paper className={this.classes.paper}>
-              <ValidatorForm
-                className={this.classes.form}
-                ref="form"
-                onSubmit={this.handleSubmit}
-                noValidate
+      <Grid container justify="center" alignItems="center" className={this.classes.root}>
+        <Grid item xs={12} sm={6}>
+          <AppBar position="static" color="primary">
+            <Toolbar>
+              <People className={this.classes.iconLeft} />
+              <Typography type="title" color="inherit">
+                {t('Login')}
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Paper className={this.classes.paper}>
+            <ValidatorForm
+              className={this.classes.form}
+              ref="form"
+              onSubmit={this.handleSubmit}
+              noValidate
+            >
+              <TextValidator
+                id="username"
+                name="username"
+                autoComplete="username"
+                label={t('Email')}
+                onChange={this.handleChange}
+                value={formData.username}
+                validators={['required', 'isEmail']}
+                errorMessages={[t('Email is required'), t('Email is not valid')]}
+                fullWidth
+                required
+              />
+              <TextValidator
+                id="password"
+                name="password"
+                autoComplete="password"
+                label={t('Password')}
+                type="password"
+                onChange={this.handleChange}
+                value={formData.password}
+                validators={['required', 'matchRegexp:^.{8,}$']}
+                errorMessages={[t('Password is required'), t('The length must be more than 8 characters')]}
+                margin="normal"
+                fullWidth
+                required
+              />
+              <Grid
+                className={this.classes.rowSubmit}
+                container
+                justify="flex-end"
+                alignItems="center"
               >
-                <TextValidator
-                  id="username"
-                  name="username"
-                  autoComplete="username"
-                  label={t('Email')}
-                  onChange={this.handleChange}
-                  value={formData.username}
-                  validators={['required', 'isEmail']}
-                  errorMessages={['Email is required', 'Email is not valid']}
-                  fullWidth
-                  required
-                />
-                <TextValidator
-                  id="password"
-                  name="password"
-                  autoComplete="password"
-                  label={t('Password')}
-                  type="password"
-                  onChange={this.handleChange}
-                  value={formData.password}
-                  validators={['required', 'matchRegexp:^.{8,}$']}
-                  errorMessages={[t('Password is required'), t('The length must be more than 8 characters')]}
-                  margin="normal"
-                  fullWidth
-                  required
-                />
-                <Grid
-                  className={this.classes.rowSubmit}
-                  container
-                  justify="flex-end"
-                  alignItems="center"
-                >
-                  <Grid item className={this.classes.wrapper}>
-                    <Button
-                      type="submit"
-                      raised
-                      color="primary"
-                      disabled={submitted}
-                    >
-                      {t('Login')}
-                      <Send className={this.classes.iconRight} />
-                    </Button>
-                    {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
-                  </Grid>
+                <Grid item className={this.classes.wrapper}>
+                  <Button
+                    type="submit"
+                    raised
+                    color="primary"
+                    disabled={submitted}
+                  >
+                    {t('Login')}
+                    <Send className={this.classes.iconRight} />
+                  </Button>
+                  {submitted && <CircularProgress size={24} className={this.classes.buttonProgress} />}
                 </Grid>
-                <Grid
-                  className={this.classes.rowButtons}
-                  container
-                  justify="space-between"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <Button component={Link} to="register" color="primary">
-                      {t('You don\'t have an account yet?')}
-                      
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button component={Link} to="forgotPassword" color="primary">
-                      {t('Forgot the password?')}
-                    </Button>
-                  </Grid>
+              </Grid>
+              <Grid
+                className={this.classes.rowButtons}
+                container
+                justify="space-between"
+                alignItems="center"
+              >
+                <Grid item>
+                  <Button component={Link} to="register" color="primary">
+                    {t('You don\'t have an account yet?')}
+
+                  </Button>
                 </Grid>
-              </ValidatorForm>
-            </Paper>
-          </Grid>
+                <Grid item>
+                  <Button component={Link} to="forgotPassword" color="primary">
+                    {t('Forgot the password?')}
+                  </Button>
+                </Grid>
+              </Grid>
+            </ValidatorForm>
+          </Paper>
         </Grid>
-      </div>
+      </Grid>
     )
   }
 }
