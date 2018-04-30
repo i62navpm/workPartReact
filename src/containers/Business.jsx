@@ -15,7 +15,7 @@ import { v4 as uuid } from 'uuid'
 
 const Workforce = Loadable({
   loader: () => import(/* webpackChunkName: "workforce" */ './Workforce'),
-  loading: Loading
+  loading: Loading,
 })
 
 class Business extends React.Component {
@@ -26,7 +26,7 @@ class Business extends React.Component {
     const { loading, business = [] } = props.data
     this.state = {
       loading,
-      business
+      business,
     }
     this.submitForm = this.submitForm.bind(this)
     this.removeBusiness = this.removeBusiness.bind(this)
@@ -36,14 +36,27 @@ class Business extends React.Component {
     this.props.setLoader(true)
     return this.props.updateBusiness({
       variables: { input: data },
-      update: (proxy) => {
+      optimisticResponse: {
+        updateBusiness: {
+          ...{
+            __typename: 'Business',
+            image: null,
+          },
+          ...data,
+        },
+      },
+      update: (proxy, { data: { updateBusiness } }) => {
         const options = {
           query: queryBusinessesByUserIdIndex,
-          variables: { userId: this.props.user.email }
+          variables: { userId: this.props.user.email },
         }
         const data = proxy.readQuery(options)
+        data.queryBusinessesByUserIdIndex.items = [
+          ...data.queryBusinessesByUserIdIndex.items.filter(item => item.id !== updateBusiness.id),
+          updateBusiness,
+        ]
         proxy.writeQuery({ ...options, data })
-      }
+      },
     })
   }
 
@@ -51,15 +64,28 @@ class Business extends React.Component {
     this.props.setLoader(true)
     return this.props.createBusiness({
       variables: { input: data },
+      optimisticResponse: {
+        createBusiness: {
+          ...{
+            __typename: 'Business',
+            date: new Date().toISOString(),
+            image: null,
+          },
+          ...data,
+        },
+      },
       update: (proxy, { data: { createBusiness } }) => {
         const options = {
           query: queryBusinessesByUserIdIndex,
-          variables: { userId: this.props.user.email }
+          variables: { userId: this.props.user.email },
         }
         const data = proxy.readQuery(options)
-        data.queryBusinessesByUserIdIndex.items.push(createBusiness)
+        data.queryBusinessesByUserIdIndex.items = [
+          ...data.queryBusinessesByUserIdIndex.items.filter(item => item.id !== createBusiness.id),
+          createBusiness,
+        ]
         proxy.writeQuery({ ...options, data })
-      }
+      },
     })
   }
 
@@ -68,21 +94,30 @@ class Business extends React.Component {
     data = { userId: this.props.user.email, ...data }
     return this.props.deleteBusiness({
       variables: { input: data },
+      optimisticResponse: {
+        deleteBusiness: {
+          ...{
+            __typename: 'Business',
+          },
+          ...data,
+        },
+      },
       update: (proxy, { data: { deleteBusiness } }) => {
         const options = {
           query: queryBusinessesByUserIdIndex,
-          variables: { userId: this.props.user.email }
+          variables: { userId: this.props.user.email },
         }
         const data = proxy.readQuery(options)
-        data.queryBusinessesByUserIdIndex.items = data.queryBusinessesByUserIdIndex.items.filter(item => item.id !== deleteBusiness.id)
+        data.queryBusinessesByUserIdIndex.items = data.queryBusinessesByUserIdIndex.items.filter(
+          item => item.id !== deleteBusiness.id
+        )
         proxy.writeQuery({ ...options, data })
-      }
+      },
     })
   }
 
   submitForm(businessData) {
-    if (businessData.id)
-      return this.updateBusiness(businessData)
+    if (businessData.id) return this.updateBusiness(businessData)
 
     const idInfo = { userId: this.props.user.email, id: uuid() }
     businessData = { ...idInfo, ...businessData }
@@ -90,7 +125,9 @@ class Business extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data: { loading, queryBusinessesByUserIdIndex } } = nextProps
+    const {
+      data: { loading, queryBusinessesByUserIdIndex },
+    } = nextProps
     const { items } = queryBusinessesByUserIdIndex || { items: [] }
 
     this.setState({ loading, business: items })
@@ -104,9 +141,30 @@ class Business extends React.Component {
 
     return (
       <Switch>
-        <Route exact path={`${this.props.match.url}/`} render={withRouter(({ history }) => <BusinessList business={business} onRemove={this.removeBusiness} history={history} />)} />
-        <Route exact path={`${this.props.match.url}/company/:companyId?`} render={withRouter(({ history, ...rest }) => <BusinessForm onSubmit={this.submitForm} setNotification={this.props.setNotification} closeForm={() => history.push('/business')} history={history} {...rest} />)} />
-        <Route path={`${this.props.match.url}/company/:companyId/workforce`} render={withRouter(({ history, ...rest }) => <Workforce history={history} {...rest} />)} />
+        <Route
+          exact
+          path={`${this.props.match.url}/`}
+          render={withRouter(({ history }) => (
+            <BusinessList business={business} onRemove={this.removeBusiness} history={history} />
+          ))}
+        />
+        <Route
+          exact
+          path={`${this.props.match.url}/company/:companyId?`}
+          render={withRouter(({ history, ...rest }) => (
+            <BusinessForm
+              onSubmit={this.submitForm}
+              setNotification={this.props.setNotification}
+              closeForm={() => history.push('/business')}
+              history={history}
+              {...rest}
+            />
+          ))}
+        />
+        <Route
+          path={`${this.props.match.url}/company/:companyId/workforce`}
+          render={withRouter(({ history, ...rest }) => <Workforce history={history} {...rest} />)}
+        />
       </Switch>
     )
   }
@@ -114,29 +172,26 @@ class Business extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.auth
+    user: state.auth,
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    setLoader: (loading) => dispatch(setLoader({ loading })),
+    setLoader: loading => dispatch(setLoader({ loading })),
     setNotification: (notification = {}) => dispatch(setNotification(notification)),
   }
 }
 
-export default (connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(compose(
-  graphql(queryBusinessesByUserIdIndex, {
-    options: ({ user: { email } }) => ({
-      variables: { userId: email },
-      fetchPolicy: 'network-only'
+export default connect(mapStateToProps, mapDispatchToProps)(
+  compose(
+    graphql(queryBusinessesByUserIdIndex, {
+      options: ({ user: { email } }) => ({
+        variables: { userId: email },
+      }),
     }),
-  }),
-  graphql(createBusiness, { name: 'createBusiness' }),
-  graphql(updateBusiness, { name: 'updateBusiness' }),
-  graphql(deleteBusiness, { name: 'deleteBusiness' }),
-)(Business))
+    graphql(createBusiness, { name: 'createBusiness' }),
+    graphql(updateBusiness, { name: 'updateBusiness' }),
+    graphql(deleteBusiness, { name: 'deleteBusiness' })
+  )(Business)
 )
