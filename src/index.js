@@ -59,7 +59,9 @@ if (module.hot) {
       <ApolloProvider client={client}>
         <Rehydrated>
           <Provider store={store}>
-            <NextApp />
+            <I18nextProvider i18n={i18n}>
+              <NextApp />
+            </I18nextProvider>
           </Provider>
         </Rehydrated>
       </ApolloProvider>,
