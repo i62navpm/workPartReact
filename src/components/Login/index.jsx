@@ -107,7 +107,7 @@ class Login extends React.Component {
 
     return (
       <Grid container justify="center" alignItems="center" className={this.classes.root}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={8} md={5}>
           <AppBar position="static" color="primary">
             <Toolbar>
               <People className={this.classes.iconLeft} />

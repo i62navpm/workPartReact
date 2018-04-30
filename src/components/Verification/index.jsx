@@ -106,7 +106,7 @@ class Verification extends React.Component {
     const { t } = this.props
     return (
       <Grid container justify="center" alignItems="center" className={this.classes.root}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={8} md={5}>
           <AppBar position="static" color="primary">
             <Toolbar>
               <VerifiedUser className={this.classes.iconLeft} />
