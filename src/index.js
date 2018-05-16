@@ -9,6 +9,8 @@ import './index.css'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 import storeApp from './reducers'
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
+import blue from 'material-ui/colors/blue'
 import { ApolloProvider } from 'react-apollo'
 import AWSAppSyncClient from 'aws-appsync'
 import { Rehydrated } from 'aws-appsync-react'
@@ -33,18 +35,26 @@ const client = new AWSAppSyncClient({
   region: appSyncConfig.region,
   auth: {
     type: appSyncConfig.authenticationType,
-    apiKey: appSyncConfig.apiKey
-  }
+    apiKey: appSyncConfig.apiKey,
+  },
 })
 
 const store = createStore(storeApp, compose(applyMiddleware(thunk, logger)))
+
+const theme = createMuiTheme({
+  palette: {
+    primary: blue,
+  },
+})
 
 ReactDOM.render(
   <ApolloProvider client={client}>
     <Rehydrated>
       <Provider store={store}>
         <I18nextProvider i18n={i18n}>
-          <App />
+          <MuiThemeProvider theme={theme}>
+            <App />
+          </MuiThemeProvider>
         </I18nextProvider>
       </Provider>
     </Rehydrated>
@@ -60,7 +70,9 @@ if (module.hot) {
         <Rehydrated>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
-              <NextApp />
+              <MuiThemeProvider theme={theme}>
+                <NextApp />
+              </MuiThemeProvider>
             </I18nextProvider>
           </Provider>
         </Rehydrated>
